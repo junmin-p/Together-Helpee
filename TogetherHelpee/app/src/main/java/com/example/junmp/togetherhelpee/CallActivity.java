@@ -30,6 +30,7 @@ public class CallActivity extends AppCompatActivity {
     SpeechRecognizer mRecognizer;
     TextView textView;
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
+    private final int CAMERA_PERMISSIONS_GRANTED = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +39,7 @@ public class CallActivity extends AppCompatActivity {
         setContentView(R.layout.activity_call);
 
         textView = (TextView) findViewById(R.id.textView);
-        textView.setText("예시) 오전 2시에 삼성역까지 데려다 주세요");
-
+        textView.setText("예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요");
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO)
@@ -65,11 +65,21 @@ public class CallActivity extends AppCompatActivity {
 
 
 
-        Button button = (Button) findViewById(R.id.btn_call);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button btn_call = (Button) findViewById(R.id.btn_call);
+        btn_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mRecognizer.startListening(intent);
+
+            }
+        });
+
+        Button btn_signup = (Button) findViewById(R.id.btn_signup);
+        btn_signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CallActivity.this, SignupActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -131,15 +141,42 @@ public class CallActivity extends AppCompatActivity {
         String[] words = message.split("\\s");
 
         StringBuffer result = new StringBuffer();
-
+        StringBuffer result_date = new StringBuffer();
         int temp_a = 0;
         int temp_b = 0;
         int temp_c = 0;
 
+        int temp_m = 0;
+        int temp_n = 0;
+
         String result_time = "";
         String result_vol = "";
+        String result_day = "";
 
+        int date_flag = 0;
         int end_flag = -1;
+
+        for (int i = 0; i<words.length; i++){
+            if (temp_m == 0 && words[i].contains("월")){
+                result_date.append(words[i]);
+                temp_m = 1;
+
+                continue;
+            }
+            if (temp_n ==0 && words[i].contains("일")){
+                result_date.append(" " + words[i]);
+                temp_n = 1;
+
+                continue;
+            }
+        }
+        if(temp_m == 1 && temp_n == 1){
+            date_flag = 1;
+            result_day = result_date.toString();
+        }
+        if (date_flag == 0){
+            Toast.makeText(CallActivity.this,"다시 한번 말씀해주세요. 날짜정보가 정확하지 않습니다.",Toast.LENGTH_SHORT).show();
+        }
 
         for (int i=0; i<words.length; i++) {
             if (temp_a == 0 && (words[i].equals("오전") || words[i].equals("오후"))) {
@@ -165,7 +202,7 @@ public class CallActivity extends AppCompatActivity {
         }
         int time_flag = 0;
 
-        if(temp_a==1 && temp_b==1) {
+        if(date_flag == 1 && temp_a==1 && temp_b==1) {
             result_time = result.toString();
             time_flag = 1;
         }
@@ -193,7 +230,7 @@ public class CallActivity extends AppCompatActivity {
                     }
                     result_vol = result_vol_temp;
 
-                    String result_msg = "봉사 시간 : " + result_time + "\n" + "봉사 종류 : " + result_vol;
+                    String result_msg = "봉사 날짜 : " + result_day + "\n" + "봉사 시간 : " + result_time + "\n" + "봉사 종류 : " + result_vol;
 
                     textView.setText(result_msg);
                 }
@@ -205,10 +242,28 @@ public class CallActivity extends AppCompatActivity {
 
                     result_vol = result_vol_temp + " 봉사";
 
-                    String result_msg = "봉사 시간 : " + result_time + "\n" + "봉사 종류 : " + result_vol;
+                    String result_msg = "봉사 날짜 : " + result_day + "\n" + "봉사 시간 : " + result_time + "\n" + "봉사 종류 : " + result_vol;
 
                     textView.setText(result_msg);
                 }
+            }
+        }
+    }
+    private boolean getCameraPermission() {
+        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            // 권한이 왜 필요한지 설명이 필요한가?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.CAMERA)) {
+                Toast.makeText(this, "카메라 사용을 위해 확인버튼을 눌러주세요!", Toast.LENGTH_SHORT).show();
+                return true;
+            } else {
+                // 설명이 필요하지 않음.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.CAMERA},
+                        CAMERA_PERMISSIONS_GRANTED);
+                return true;
             }
         }
     }
