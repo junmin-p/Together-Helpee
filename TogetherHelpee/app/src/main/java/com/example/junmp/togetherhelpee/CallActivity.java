@@ -3,6 +3,8 @@ package com.example.junmp.togetherhelpee;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -12,14 +14,17 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -29,6 +34,7 @@ public class CallActivity extends AppCompatActivity {
     Intent intent;
     SpeechRecognizer mRecognizer;
     TextView textView;
+    ImageView imgview;
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
     private final int CAMERA_PERMISSIONS_GRANTED = 1;
 
@@ -38,6 +44,29 @@ public class CallActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_call);
 
+        imgview = findViewById(R.id.imgview);
+
+        Intent intent1 = getIntent();
+
+
+
+
+        if(intent1.getStringExtra("data") != null){
+
+            String bm = (String)intent1.getStringExtra("data");
+
+            try {
+                File f=new File(bm, "profile.jpg");
+                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+                imgview.setImageBitmap(b);
+            }
+            catch (FileNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+
+            Log.d("Fadsfsaf","Afsdaf");
+        }
         textView = (TextView) findViewById(R.id.textView);
         textView.setText("예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요");
 

@@ -4,8 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +18,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.junmp.togetherhelpee.camera.CameraSourcePreview;
 import com.example.junmp.togetherhelpee.camera.GraphicOverlay;
@@ -26,12 +32,18 @@ import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.google.android.gms.vision.face.LargestFaceFocusingProcessor;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "FaceTracker";
 
     private CameraSource mCameraSource = null;
+
+    private Bitmap mBitmap;
 
     private CameraSourcePreview mPreview;
     private GraphicOverlay mGraphicOverlay;
@@ -40,6 +52,39 @@ public class SignupActivity extends AppCompatActivity {
     // permission request codes need to be < 256
     private static final int RC_HANDLE_CAMERA_PERM = 2;
 
+    private CameraSource.PictureCallback mPicture = new CameraSource.PictureCallback() {
+
+        @Override
+        public void onPictureTaken(byte[] bytes) {
+            //Log.d("Debug","OnPictureTaken method");
+
+
+            mBitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(output.toByteArray());
+
+            mCameraSource.release();
+
+
+            Intent intent = new Intent(SignupActivity.this, CallActivity.class);
+
+            intent.putExtra("data", saveToInternalStorage(mBitmap));
+
+            if(mBitmap != null){
+                Log.d("Fadsfdas","Fadsfsa");
+            }
+            Log.d("asdf", "adsf");
+            startActivity(intent);
+            finish();
+        }
+    };
+    private CameraSource.ShutterCallback mShutter = new CameraSource.ShutterCallback() {
+        @Override
+        public void onShutter() {
+            //Log.d("Debug","OnShutter method");
+        }
+    };
     //==============================================================================================
     // Activity Methods
     //==============================================================================================
@@ -52,6 +97,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(icicle);
         setContentView(R.layout.activity_signup);
 
+        Toast.makeText(getApplicationContext(),"얼굴인식 후 5초뒤에 자동으로 사진촬영됩니다.",Toast.LENGTH_SHORT).show();
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
 
@@ -271,8 +317,8 @@ public class SignupActivity extends AppCompatActivity {
         @Override
         public void onNewItem(int faceId, Face item) {
             mFaceGraphic.setId(faceId);
-        }
 
+        }
         /**
          * Update the position/characteristics of the face within the overlay.
          */
@@ -280,6 +326,8 @@ public class SignupActivity extends AppCompatActivity {
         public void onUpdate(FaceDetector.Detections<Face> detectionResults, Face face) {
             mOverlay.add(mFaceGraphic);
             mFaceGraphic.updateFace(face);
+
+            mCameraSource.takePicture(mShutter,mPicture);
         }
 
         /**
@@ -299,6 +347,42 @@ public class SignupActivity extends AppCompatActivity {
         @Override
         public void onDone() {
             mOverlay.remove(mFaceGraphic);
+            /*
+            mCameraSource.takePicture();
+            mOverlay.setDrawingCacheEnabled(true);
+            Bitmap tempBmp = Bitmap.createBitmap(mOverlay.getDrawingCache());
+            mOverlay.setDrawingCacheEnabled(false);
+
+            mCameraSource.release();
+            Toast.makeText(getApplicationContext(),"abc",Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(SignupActivity.this, CallActivity.class);
+            intent.putExtra("bm", tempBmp);
+            startActivity(intent);
+            finish();
+            */
         }
+    }
+    private String saveToInternalStorage(Bitmap bitmapImage){
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        // Create imageDir
+        File mypath=new File(directory,"profile.jpg");
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return directory.getAbsolutePath();
     }
 }
