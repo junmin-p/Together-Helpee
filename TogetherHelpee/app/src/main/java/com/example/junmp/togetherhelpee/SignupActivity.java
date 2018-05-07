@@ -3,6 +3,7 @@ package com.example.junmp.togetherhelpee;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
@@ -10,10 +11,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -24,6 +27,7 @@ import com.example.junmp.togetherhelpee.camera.CameraSourcePreview;
 import com.example.junmp.togetherhelpee.camera.GraphicOverlay;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.util.IOUtils;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.MultiProcessor;
@@ -32,13 +36,39 @@ import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 import com.google.android.gms.vision.face.LargestFaceFocusingProcessor;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
+
 
 public class SignupActivity extends AppCompatActivity {
+    public static final String UPLOAD_URL = "http://192.168.31.181:9001/helpee/test";
+    public static final String UPLOAD_KEY_IMAGE = "img";
+    public static final String TAG_2 = "MY MESSAGE";
+
     private static final String TAG = "FaceTracker";
 
     private CameraSource mCameraSource = null;
@@ -51,6 +81,8 @@ public class SignupActivity extends AppCompatActivity {
     private static final int RC_HANDLE_GMS = 9001;
     // permission request codes need to be < 256
     private static final int RC_HANDLE_CAMERA_PERM = 2;
+
+    UploadImage uploadimage;
 
     private CameraSource.PictureCallback mPicture = new CameraSource.PictureCallback() {
 
@@ -66,6 +98,8 @@ public class SignupActivity extends AppCompatActivity {
 
             mCameraSource.release();
 
+            uploadimage = new UploadImage();
+            uploadimage.execute(mBitmap);
 
             Intent intent = new Intent(SignupActivity.this, CallActivity.class);
 
@@ -384,5 +418,45 @@ public class SignupActivity extends AppCompatActivity {
             }
         }
         return directory.getAbsolutePath();
+    }
+
+    public String getStringImage(Bitmap bmp){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Bitmap bmp_temp = Bitmap.createScaledBitmap(bmp, 200, 200, true);
+        bmp_temp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
+    }
+
+    class UploadImage extends AsyncTask<Bitmap, Void, String> {
+        RequestHandler rh = new RequestHandler();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected String doInBackground(Bitmap... params) {
+            Bitmap bitmap = params[0];
+            String uploadImage = getStringImage(bitmap);
+            HashMap<String, String> data = new HashMap<>();
+
+            data.put("id", "보웡이");
+            data.put("pwd", "기여웡");
+            data.put("img", uploadImage);
+
+            Log.d("img",uploadImage);
+            String result = rh.sendPostRequest(UPLOAD_URL, data);
+
+            return result;
+        }
     }
 }
