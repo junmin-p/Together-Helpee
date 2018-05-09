@@ -26,8 +26,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
 
 public class CallActivity extends AppCompatActivity {
 
@@ -107,7 +105,7 @@ public class CallActivity extends AppCompatActivity {
         btn_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CallActivity.this, SignupActivity.class);
+                Intent intent = new Intent(CallActivity.this, FaceActivity.class);
                 startActivity(intent);
 
             }

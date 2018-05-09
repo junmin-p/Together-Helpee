@@ -2,24 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
-    tools:context=".SignupActivity"
-    android:id="@+id/topLayout"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:keepScreenOn="true">
+    android:orientation="vertical"
+    tools:context=".SignupActivity">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150px"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="300px"
+            android:layout_height="300px"
+            android:id="@+id/img_preview"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="다시 찍기"
+            android:layout_marginTop="100px"
+            android:layout_marginLeft="50px"
+            android:id="@+id/btn_recapture"/>
+    </LinearLayout>
 
-    <com.example.junmp.togetherhelpee.camera.CameraSourcePreview
-        android:id="@+id/preview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50px"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/text_phonenumber"/>
 
-        <com.example.junmp.togetherhelpee.camera.GraphicOverlay
-            android:id="@+id/faceOverlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </com.example.junmp.togetherhelpee.camera.CameraSourcePreview>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="회원가입"
+        android:layout_marginTop="100px"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/btn_signup"/>
 
 </LinearLayout>
