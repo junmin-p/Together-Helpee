@@ -25,7 +25,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
-    public static final String UPLOAD_URL = "http://192.168.31.181:9001/helpee/test";
+    public static final String UPLOAD_URL = "http://192.168.17.15:9001/helpee/test";
 
     TextView text_phonenumber;
     Button btn_recapture;
@@ -51,13 +51,7 @@ public class SignupActivity extends AppCompatActivity {
 
         TelephonyManager telManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return;
         }
         String PhoneNum = telManager.getLine1Number();
@@ -101,6 +95,10 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View view) {
                 uploadimage = new UploadImage();
                 uploadimage.execute(bmp_preview);
+
+                Intent toMain = new Intent(SignupActivity.this, MainActivity.class);
+                startActivity(toMain);
+                finish();
             }
         });
 
@@ -126,7 +124,7 @@ public class SignupActivity extends AppCompatActivity {
             HashMap<String, String> data = new HashMap<>();
 
             data.put("id", "보웡이");
-            data.put("pwd", phone_num);
+            data.put("user_phone", phone_num);
             data.put("img", uploadImage);
 
             Log.d("img",uploadImage);

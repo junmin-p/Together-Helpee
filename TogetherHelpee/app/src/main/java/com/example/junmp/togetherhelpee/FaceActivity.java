@@ -38,7 +38,7 @@ import java.util.HashMap;
 
 
 public class FaceActivity extends AppCompatActivity {
-    public static final String UPLOAD_URL = "http://192.168.31.181:9001/helpee/test";
+    public static final String UPLOAD_URL = "http://192.168.17.15:9001/helpee/test";
     public static final String UPLOAD_KEY_IMAGE = "img";
     public static final String TAG_2 = "MY MESSAGE";
 
@@ -423,7 +423,7 @@ public class FaceActivity extends AppCompatActivity {
             HashMap<String, String> data = new HashMap<>();
 
             data.put("id", "보웡이");
-            data.put("pwd", "기여웡");
+            data.put("user_phone", "000");
             data.put("img", uploadImage);
 
             Log.d("img",uploadImage);

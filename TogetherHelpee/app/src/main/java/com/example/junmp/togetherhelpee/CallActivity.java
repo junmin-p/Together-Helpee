@@ -1,10 +1,12 @@
 package com.example.junmp.togetherhelpee;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -22,9 +24,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.BufferedHttpEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class CallActivity extends AppCompatActivity {
@@ -32,38 +46,29 @@ public class CallActivity extends AppCompatActivity {
     Intent intent;
     SpeechRecognizer mRecognizer;
     TextView textView;
-    ImageView imgview;
+    ImageView profile_img;
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
     private final int CAMERA_PERMISSIONS_GRANTED = 1;
-
+    String phone_num;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_call);
 
-        imgview = findViewById(R.id.imgview);
+        profile_img = findViewById(R.id.profile_img);
 
-        Intent intent1 = getIntent();
-
-
+        Intent fromMain = getIntent();
 
 
-        if(intent1.getStringExtra("data") != null){
 
-            String bm = (String)intent1.getStringExtra("data");
 
-            try {
-                File f=new File(bm, "profile.jpg");
-                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                imgview.setImageBitmap(b);
-            }
-            catch (FileNotFoundException e)
-            {
-                e.printStackTrace();
-            }
-
-            Log.d("Fadsfsaf","Afsdaf");
+        if(fromMain.getStringExtra("phonenum") != null){
+            phone_num = (String)fromMain.getStringExtra("phonenum");
+            getImage();
+        }
+        else{
+            return;
         }
         textView = (TextView) findViewById(R.id.textView);
         textView.setText("예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요");
@@ -293,5 +298,45 @@ public class CallActivity extends AppCompatActivity {
                 return true;
             }
         }
+    }
+    private void getImage() {
+        class GetImage extends AsyncTask<String,Void,Bitmap> {
+            ProgressDialog loading;
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                loading = ProgressDialog.show(CallActivity.this, "Loading Data", "Please wait...", true, true);
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap b) {
+                super.onPostExecute(b);
+                loading.dismiss();
+                profile_img.setImageBitmap(b);
+                Toast.makeText(CallActivity.this,phone_num,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            protected Bitmap doInBackground(String... params) {
+                String phone_num = params[0];
+                String add = "http://192.168.17.15:9001/helpee/test/" + phone_num;
+                URL url;
+                Bitmap image = null;
+                try {
+                    url = new URL(add);
+
+                    image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return image;
+            }
+        }
+
+        GetImage gi = new GetImage();
+        gi.execute(phone_num);
     }
 }
