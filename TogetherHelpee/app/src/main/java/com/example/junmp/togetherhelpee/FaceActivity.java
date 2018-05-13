@@ -3,6 +3,7 @@ package com.example.junmp.togetherhelpee;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Service;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.internal.http.multipart.MultipartEntity;
 import com.example.junmp.togetherhelpee.camera.CameraSourcePreview;
 import com.example.junmp.togetherhelpee.camera.GraphicOverlay;
 import com.google.android.gms.common.ConnectionResult;
@@ -29,12 +32,31 @@ import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.HashMap;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 
 public class FaceActivity extends AppCompatActivity {
@@ -47,6 +69,7 @@ public class FaceActivity extends AppCompatActivity {
     private CameraSource mCameraSource = null;
 
     private Bitmap mBitmap;
+    private byte[] imageBytes;
 
     private CameraSourcePreview mPreview;
     private GraphicOverlay mGraphicOverlay;
@@ -55,7 +78,6 @@ public class FaceActivity extends AppCompatActivity {
     // permission request codes need to be < 256
     private static final int RC_HANDLE_CAMERA_PERM = 2;
 
-    UploadImage uploadimage;
 
     private CameraSource.PictureCallback mPicture = new CameraSource.PictureCallback() {
 
@@ -64,19 +86,36 @@ public class FaceActivity extends AppCompatActivity {
             //Log.d("Debug","OnPictureTaken method");
 
 
-            mBitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+            mBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(output.toByteArray());
+            imageBytes = output.toByteArray();
+            String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+            ContextWrapper wrapper = new ContextWrapper(getApplicationContext());
+            File file = wrapper.getDir("Images", MODE_PRIVATE);
+            file = new File(file, "UniqueFileName" + ".jpg");
+            try {
+                OutputStream stream = null;
+                stream = new FileOutputStream(file);
+                mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                stream.flush();
+                stream.close();
+            } catch (IOException e) // Catch the exception
+            {
+                e.printStackTrace();
+            }
+
+            Uri savedImageURI = Uri.parse(file.getAbsolutePath());
+
+            uploadFile(savedImageURI);
+
 
             mCameraSource.release();
 
-            uploadimage = new UploadImage();
-            uploadimage.execute(mBitmap);
 
             Intent intent = new Intent(FaceActivity.this, SignupActivity.class);
 
-            intent.putExtra("data", saveToInternalStorage(mBitmap));
 
             if(mBitmap != null){
                 Log.d("Fadsfdas","Fadsfsa");
@@ -208,7 +247,6 @@ public class FaceActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (mCameraSource != null) {
-            mCameraSource.release();
         }
     }
 
@@ -369,67 +407,34 @@ public class FaceActivity extends AppCompatActivity {
             */
         }
     }
-    private String saveToInternalStorage(Bitmap bitmapImage){
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        // path to /data/data/yourapp/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        // Create imageDir
-        File mypath=new File(directory,"profile.jpg");
 
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(mypath);
-            // Use the compress method on the BitMap object to write image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+    private void uploadFile(Uri fileUri) {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+// Change base URL to your upload server URL.
+        FileUploadService service = new Retrofit.Builder().baseUrl("http://192.168.0.47:9001").client(client).build().create(FileUploadService.class);
+
+
+        File file = new File(String.valueOf(fileUri));
+        RequestBody reqFile = RequestBody.create(MediaType.parse("file"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("userfile", file.getName(), reqFile);
+        RequestBody id = RequestBody.create(MediaType.parse("text"), "bowon");
+        RequestBody user_phone = RequestBody.create(MediaType.parse("text"), "01012341324");
+
+        Call<ResponseBody> req = service.upload(id, user_phone, body);
+        req.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
             }
-        }
-        return directory.getAbsolutePath();
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 
-    public String getStringImage(Bitmap bmp){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Bitmap bmp_temp = Bitmap.createScaledBitmap(bmp, 200, 200, true);
-        bmp_temp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return encodedImage;
-    }
-
-    class UploadImage extends AsyncTask<Bitmap, Void, String> {
-        RequestHandler rh = new RequestHandler();
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        protected String doInBackground(Bitmap... params) {
-            Bitmap bitmap = params[0];
-            String uploadImage = getStringImage(bitmap);
-            HashMap<String, String> data = new HashMap<>();
-
-            data.put("id", "보웡이");
-            data.put("user_phone", "000");
-            data.put("img", uploadImage);
-
-            Log.d("img",uploadImage);
-            String result = rh.sendPostRequest(UPLOAD_URL, data);
-
-            return result;
-        }
-    }
 }
