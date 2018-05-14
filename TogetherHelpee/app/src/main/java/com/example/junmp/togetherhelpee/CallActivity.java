@@ -50,20 +50,14 @@ public class CallActivity extends AppCompatActivity {
     Intent intent;
     SpeechRecognizer mRecognizer;
     TextView textView;
-    ImageView profile_img;
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
     private final int CAMERA_PERMISSIONS_GRANTED = 1;
     String phone_num;
-    String profile_url;
-    getURL getURL;
-    Bitmap bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_call);
-
-        profile_img = findViewById(R.id.profile_img);
 
         Intent fromMain = getIntent();
 
@@ -72,12 +66,8 @@ public class CallActivity extends AppCompatActivity {
 
         if(fromMain.getStringExtra("phonenum") != null){
             phone_num = (String)fromMain.getStringExtra("phonenum");
-            getURL = new getURL();
-            getURL.execute(phone_num);
         }
-        else{
-            return;
-        }
+        Log.d("fads",phone_num);
 
 
 
@@ -113,16 +103,6 @@ public class CallActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mRecognizer.startListening(intent);
-
-            }
-        });
-
-        Button btn_signup = (Button) findViewById(R.id.btn_signup);
-        btn_signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(CallActivity.this, FaceActivity.class);
-                startActivity(intent);
 
             }
         });
@@ -307,91 +287,6 @@ public class CallActivity extends AppCompatActivity {
                         new String[]{android.Manifest.permission.CAMERA},
                         CAMERA_PERMISSIONS_GRANTED);
                 return true;
-            }
-        }
-    }
-    private class getURL extends AsyncTask<String,Void,String> {
-
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected String doInBackground(String... arg0) {
-
-            try {
-                String phone_num =  arg0[0];
-
-                String link = "http://192.168.0.47:9001/helpee/getImage/" + phone_num;
-                URL url = new URL(link);
-                HttpClient client = new DefaultHttpClient();
-                HttpGet request = new HttpGet();
-                request.setURI(new URI(link));
-                HttpResponse response = client.execute(request);
-                BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-
-                StringBuffer sb = new StringBuffer("");
-                String line = "";
-
-                while ((line = in.readLine()) != null) {
-                    sb.append(line);
-                    break;
-                }
-                in.close();
-                return sb.toString();
-            } catch (Exception e) {
-                return new String("Exception: " + e.getMessage());
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            profile_url = result;
-
-            Thread mThread = new Thread() {
-
-                @Override
-                public void run() {
-
-                    try {
-                        Log.d("fadsfsads", profile_url);
-                        URL url = new URL(profile_url); // URL 주소를 이용해서 URL 객체 생성
-
-                        //  아래 코드는 웹에서 이미지를 가져온 뒤
-                        //  이미지 뷰에 지정할 Bitmap을 생성하는 과정
-
-                        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                        conn.setDoInput(true);
-                        conn.connect();
-
-                        InputStream is = conn.getInputStream();
-                        bitmap = BitmapFactory.decodeStream(is);
-
-                        Log.d("fadsfsads", String.valueOf(bitmap.getHeight()));
-
-                    } catch(IOException ex) {
-                        Log.d("fadsfsads", String.valueOf(ex));
-
-                    }
-                }
-            };
-
-            mThread.start(); // 웹에서 이미지를 가져오는 작업 스레드 실행.
-
-            try {
-
-                //  메인 스레드는 작업 스레드가 이미지 작업을 가져올 때까지
-                //  대기해야 하므로 작업스레드의 join() 메소드를 호출해서
-                //  메인 스레드가 작업 스레드가 종료될 까지 기다리도록 합니다.
-
-                mThread.join();
-
-                //  이제 작업 스레드에서 이미지를 불러오는 작업을 완료했기에
-                //  UI 작업을 할 수 있는 메인스레드에서 이미지뷰에 이미지를 지정합니다.
-                Log.d("fadsfsads","thread");
-                profile_img.setImageBitmap(bitmap);
-            } catch (InterruptedException e) {
-
             }
         }
     }

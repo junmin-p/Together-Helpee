@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,6 +47,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -60,9 +63,8 @@ import retrofit2.Retrofit;
 
 
 public class FaceActivity extends AppCompatActivity {
-    public static final String UPLOAD_URL = "http://192.168.17.15:9001/helpee/test";
-    public static final String UPLOAD_KEY_IMAGE = "img";
-    public static final String TAG_2 = "MY MESSAGE";
+    String phone_num;
+    String from;
 
     private static final String TAG = "FaceTracker";
 
@@ -106,21 +108,26 @@ public class FaceActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+            Log.d("fadsfsads", from);
             Uri savedImageURI = Uri.parse(file.getAbsolutePath());
 
-            uploadFile(savedImageURI);
+            Log.d("fadsfsads", "123");
+            if(from.equals("first")){
+                uploadFile(savedImageURI);
+            }
+            else if(from.equals("re")){
+                putFile(savedImageURI);
+            }
 
 
             mCameraSource.release();
 
 
+
             Intent intent = new Intent(FaceActivity.this, SignupActivity.class);
+            intent.putExtra("url", String.valueOf(savedImageURI));
+            intent.putExtra("phonenum", phone_num);
 
-
-            if(mBitmap != null){
-                Log.d("Fadsfdas","Fadsfsa");
-            }
-            Log.d("asdf", "adsf");
             startActivity(intent);
             finish();
         }
@@ -143,7 +150,17 @@ public class FaceActivity extends AppCompatActivity {
         super.onCreate(icicle);
         setContentView(R.layout.activity_face);
 
-        Toast.makeText(getApplicationContext(),"얼굴인식 후 5초뒤에 자동으로 사진촬영됩니다.",Toast.LENGTH_SHORT).show();
+        Intent intent = getIntent();
+        if(intent.getStringExtra("phonenum")!=null){
+            phone_num = intent.getStringExtra("phonenum");
+        }
+        if(intent.getStringExtra("from").equals("first")){
+            from = "first";
+        }
+        else if(intent.getStringExtra("from").equals("re")){
+            from = "re";
+        }
+        Toast.makeText(getApplicationContext(),"얼굴 인식 시 자동으로 사진 촬영됩니다.",Toast.LENGTH_SHORT).show();
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
 
@@ -372,7 +389,10 @@ public class FaceActivity extends AppCompatActivity {
             mOverlay.add(mFaceGraphic);
             mFaceGraphic.updateFace(face);
 
-            mCameraSource.takePicture(mShutter,mPicture);
+
+            mCameraSource.takePicture(mShutter, mPicture);
+
+
         }
 
         /**
@@ -414,26 +434,58 @@ public class FaceActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
 // Change base URL to your upload server URL.
-        FileUploadService service = new Retrofit.Builder().baseUrl("http://192.168.0.47:9001").client(client).build().create(FileUploadService.class);
+        FileUploadService service = new Retrofit.Builder().baseUrl("http://192.168.30.230:9001").client(client).build().create(FileUploadService.class);
 
 
         File file = new File(String.valueOf(fileUri));
         RequestBody reqFile = RequestBody.create(MediaType.parse("file"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("userfile", file.getName(), reqFile);
         RequestBody id = RequestBody.create(MediaType.parse("text"), "bowon");
-        RequestBody user_phone = RequestBody.create(MediaType.parse("text"), "01012341324");
+        RequestBody user_phone = RequestBody.create(MediaType.parse("text"), phone_num);
 
         Call<ResponseBody> req = service.upload(id, user_phone, body);
         req.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                Log.d("fadsfsads", "Success");
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                t.printStackTrace();
+                Log.d("fadsfsads", "afsdsdf");
             }
+
+        });
+    }
+
+    private void putFile(Uri fileUri) {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+// Change base URL to your upload server URL.
+        FilePutService service = new Retrofit.Builder().baseUrl("http://192.168.30.230:9001").client(client).build().create(FilePutService.class);
+
+
+        File file = new File(String.valueOf(fileUri));
+        RequestBody reqFile = RequestBody.create(MediaType.parse("file"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("userfile", file.getName(), reqFile);
+        RequestBody user_phone = RequestBody.create(MediaType.parse("text"), phone_num);
+
+        Call<ResponseBody> req = service.put(user_phone, body);
+        req.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                Log.d("fadsfsads", "Success");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("fadsfsads", "afsdsdf");
+            }
+
         });
     }
 
