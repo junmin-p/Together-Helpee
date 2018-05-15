@@ -434,7 +434,7 @@ public class FaceActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
 // Change base URL to your upload server URL.
-        FileUploadService service = new Retrofit.Builder().baseUrl("http://192.168.30.230:9001").client(client).build().create(FileUploadService.class);
+        FileUploadService service = new Retrofit.Builder().baseUrl("http://192.168.0.47:9001").client(client).build().create(FileUploadService.class);
 
 
         File file = new File(String.valueOf(fileUri));
@@ -465,7 +465,7 @@ public class FaceActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
 // Change base URL to your upload server URL.
-        FilePutService service = new Retrofit.Builder().baseUrl("http://192.168.30.230:9001").client(client).build().create(FilePutService.class);
+        FilePutService service = new Retrofit.Builder().baseUrl("http://192.168.0.47:9001").client(client).build().create(FilePutService.class);
 
 
         File file = new File(String.valueOf(fileUri));

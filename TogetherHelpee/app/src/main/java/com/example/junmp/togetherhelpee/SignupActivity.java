@@ -31,8 +31,6 @@ import java.net.URL;
 import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
-    public static final String UPLOAD_URL = "http://192.168.30.230:9001/helpee/test";
-
     TextView text_phonenumber;
     Button btn_recapture;
     ImageView img_preview;

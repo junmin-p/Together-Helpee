@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TogetherHelpee</string>
+    <string name="guide">-이용방법-\n1. 도움 요청 버튼을 누르고 예시와 같은 형식으로 말한다.\n2. 말한 내용이 적절히 나왔을 때 봉사예정시간과 봉사종류를 선택한다.\n3. 전송버튼을 누르고 도움요청을 완료한다.</string>
 </resources>
