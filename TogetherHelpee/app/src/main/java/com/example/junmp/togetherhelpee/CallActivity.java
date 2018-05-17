@@ -20,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -49,8 +50,12 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+
+import static java.lang.Integer.valueOf;
 
 public class CallActivity extends AppCompatActivity {
     private final int PERMISSIONS_ACCESS_FINE_LOCATION = 1000;
@@ -73,6 +78,12 @@ public class CallActivity extends AppCompatActivity {
     private String date;
     private String time;
     private String etc;
+
+    double latitude;
+    double longitude;
+
+    String dest_date;
+    String dest_time;
 
     Intent intent;
     SpeechRecognizer mRecognizer;
@@ -201,11 +212,14 @@ public class CallActivity extends AppCompatActivity {
                     // GPS 사용유무 가져오기
                     if (gps.isGetLocation()) {
 
-                        double latitude = gps.getLatitude();
-                        double longitude = gps.getLongitude();
+                        latitude = gps.getLatitude();
+                        longitude = gps.getLongitude();
 
                         Log.d("fdasds",String.valueOf(latitude));
                         Log.d("fdasds",String.valueOf(longitude));
+
+                        postRequest pR = new postRequest();
+                        pR.execute("http://192.168.20.65:9001/helpee/requestVolunteer");
 
                         Toast.makeText(
                                 getApplicationContext(),
@@ -265,6 +279,8 @@ public class CallActivity extends AppCompatActivity {
             String message = rs[0];
 
             messageSeparate(message);
+
+            messageCheck();
         }
 
         @Override
@@ -401,6 +417,69 @@ public class CallActivity extends AppCompatActivity {
         }
         flag_speech = flag;
     }
+    private void messageCheck(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Calendar c1 = Calendar.getInstance();
+        String strToday = sdf.format(c1.getTime());
+
+        String current_year = strToday.substring(0, 4);
+        String current_month = strToday.substring(4, 6);
+        String current_day = strToday.substring(6, 8);
+
+        String dest_year = current_year;
+        String dest_month = date.split("월")[0];
+        if(dest_month.equals("")){
+            dest_month = current_month;
+        }
+        String[] dest_days = date.split(" ");
+        String dest_day="";
+        for(int i = 0; i<dest_days.length; i++){
+            if(dest_days[i].contains("일")){
+                dest_day = dest_days[i].split("일")[0];
+            }
+        }
+
+        dest_date = dest_year+"-"+dest_month+"-"+dest_day;
+
+        String[] time_arr = time.split(" ");
+        int am_pm = 0;
+        if(time_arr[0].equals("오후")){
+            am_pm = 12;
+        }
+        String dest_hour_str = "";
+        String[] dest_hour_arr = time.split(" ");
+        for(int i = 0; i<dest_hour_arr.length; i++) {
+            if(dest_hour_arr[i].contains("시")){
+                dest_hour_str = dest_hour_arr[i].split("시")[0];
+            }
+        }
+        if(dest_hour_str.equals("")) {
+            textView.setText("예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요");
+            Toast.makeText(CallActivity.this,"시간을 정확히 말해주세요.",Toast.LENGTH_SHORT).show();
+        }
+        int dest_hour = valueOf(dest_hour_str) + am_pm;
+        int dest_min = 0;
+        String dest_min_str = time_arr[time_arr.length-1];
+        if(dest_min_str.contains("반")){
+            dest_min = 30;
+        }
+        else if(dest_min_str.contains("분")){
+            dest_min = valueOf(dest_min_str.split("분")[0]);
+        }
+
+        if(dest_hour<10 && dest_min<10){
+            dest_time = "0"+dest_hour+":"+"0"+dest_min;
+        }
+        else if(dest_hour<10){
+            dest_time = "0"+dest_hour+":"+dest_min;
+        }
+        else if(dest_min<10){
+            dest_time = dest_hour+":"+"0"+dest_min;
+        }
+        else{
+            dest_time = dest_hour+":"+dest_min;
+        }
+    }
 
     private void callPermission() {
         // Check the SDK version and whether the permission is already granted or not.
@@ -423,8 +502,8 @@ public class CallActivity extends AppCompatActivity {
             isPermission = true;
         }
     }
-/*
-    class postRequest extends AsyncTask<Bitmap, Void, String> {
+
+    class postRequest extends AsyncTask<String, Void, String> {
         RequestHandler rh = new RequestHandler();
 
         @Override
@@ -439,17 +518,25 @@ public class CallActivity extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground(Bitmap... params) {
-            Bitmap bitmap = params[0];
-            String uploadImage = getStringImage(bitmap);
-            HashMap<String, String, String, String, String, String, > data = new HashMap<>();
-            data.put(UPLOAD_KEY, uploadImage);
+        protected String doInBackground(String... params) {
+            String UPLOAD_URL = params[0];
+            HashMap<String, String> data = new HashMap<>();
+            data.put("type", type);
+            data.put("user_phone", phone_num);
+            data.put("longitude", String.valueOf(longitude));
+            data.put("latitude", String.valueOf(latitude));
+            data.put("content", etc);
+            data.put("date", dest_date);
+            data.put("time", dest_time);
+            data.put("duration", String.valueOf(checked));
 
-            String result = rh.sendPostRequest(UPLOAD_URL, data, userId);
+
+
+            String result = rh.sendPostRequest(UPLOAD_URL, data);
 
             return result;
         }
     }
-    */
+
 
 }
