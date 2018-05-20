@@ -10,10 +10,9 @@ import retrofit2.http.Part;
 
 public interface FileUploadService {
     @Multipart
-    @POST("/helpee/addUser")
+    @POST("/helpee/signup")
     Call<ResponseBody> upload(
-            @Part("id") RequestBody id,
-            @Part("user_phone") RequestBody user_phone,
+            @Part("userPhone") RequestBody user_phone,
             @Part MultipartBody.Part userfile
     );
 }

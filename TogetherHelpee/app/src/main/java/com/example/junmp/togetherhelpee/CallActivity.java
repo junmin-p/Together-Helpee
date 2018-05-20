@@ -37,6 +37,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -91,6 +94,11 @@ public class CallActivity extends AppCompatActivity {
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
     private final int CAMERA_PERMISSIONS_GRANTED = 1;
     String phone_num;
+
+    String mJsonString;
+    getVolunteer getVolunteer;
+    int haveRegisted = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +113,9 @@ public class CallActivity extends AppCompatActivity {
         Log.d("fads",phone_num);
 
         textView = (TextView) findViewById(R.id.textView);
+
+        getVolunteer = new getVolunteer();
+        getVolunteer.execute("http://210.89.191.125/helpee/volunteers/wait/");
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO)
@@ -219,7 +230,7 @@ public class CallActivity extends AppCompatActivity {
                         Log.d("fdasds",String.valueOf(longitude));
 
                         postRequest pR = new postRequest();
-                        pR.execute("http://192.168.20.65:9001/helpee/requestVolunteer");
+                        pR.execute("http://210.89.191.125/helpee/volunteer");
 
                         Toast.makeText(
                                 getApplicationContext(),
@@ -349,7 +360,7 @@ public class CallActivity extends AppCompatActivity {
                 temp_b = 1;
                 continue;
             }
-            if (temp_c == 0 && (words[i].contains("에") || words[i].contains("반"))) {
+            if (temp_c == 0 && (words[i].contains("시에") || words[i].contains("반에"))) {
                 words[i] = words[i].split("에")[0];
                 result.append(" "+words[i]);
                 end_flag = i;
@@ -522,7 +533,7 @@ public class CallActivity extends AppCompatActivity {
             String UPLOAD_URL = params[0];
             HashMap<String, String> data = new HashMap<>();
             data.put("type", type);
-            data.put("user_phone", phone_num);
+            data.put("userPhone", phone_num);
             data.put("longitude", String.valueOf(longitude));
             data.put("latitude", String.valueOf(latitude));
             data.put("content", etc);
@@ -538,5 +549,122 @@ public class CallActivity extends AppCompatActivity {
         }
     }
 
+    private class getVolunteer extends AsyncTask<String, Void, String> {
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            if (result.equals("[]")){
+                haveRegisted = 0;
+            }
+            else {
+                mJsonString = result;
+                try {
+                    showResult();
+                } catch (JSONException e) {
+                    Log.d("fda","asd");
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            String serverURL = params[0]+phone_num;
+
+            try {
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.connect();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d("fadsfsads", "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+
+                return sb.toString().trim();
+
+
+            } catch (Exception e) {
+
+                Log.d("fadsfsads", "InsertData: Error ", e);
+                errorString = e.toString();
+
+                return null;
+            }
+
+        }
+    }
+
+
+    private void showResult() throws JSONException {
+        try {
+            JSONArray jsonArray = new JSONArray(mJsonString);
+
+            for(int i=jsonArray.length()-1;i>=0;i--){
+                JSONObject item = jsonArray.getJSONObject(i);
+
+                int startStatus = item.getInt("startStatus");
+                if(startStatus == 0){
+                    String type = item.getString("type");
+                    String helperId = item.getString("helperId");
+                    int matchingStatus = item.getInt("matchingStatus");
+                    String content = item.getString("content");
+                    String time = item.getString("time");
+                    int duration = item.getInt("duration");
+                    String date = item.getString("date");
+
+                    Intent toMatch = new Intent(CallActivity.this, MatchActivity.class);
+                    toMatch.putExtra("type", type);
+                    toMatch.putExtra("helperId", helperId);
+                    toMatch.putExtra("matchingStatus", matchingStatus);
+                    toMatch.putExtra("content", content);
+                    toMatch.putExtra("time", time);
+                    toMatch.putExtra("duration", duration);
+                    toMatch.putExtra("date", date);
+                    startActivity(toMatch);
+
+                    finish();
+                }
+            }
+
+        } catch (JSONException e) {
+            Log.d("fadsfsads", "showResult : ", e);
+        }
+    }
 
 }

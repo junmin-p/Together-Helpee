@@ -10,9 +10,9 @@ import retrofit2.http.Part;
 
 public interface FilePutService {
     @Multipart
-    @PUT("/helpee/updatePhoto")
+    @PUT("/helpee/photo")
     Call<ResponseBody> put(
-            @Part("user_phone") RequestBody user_phone,
+            @Part("userPhone") RequestBody user_phone,
             @Part MultipartBody.Part userfile
     );
 }

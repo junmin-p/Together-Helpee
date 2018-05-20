@@ -434,16 +434,15 @@ public class FaceActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
 // Change base URL to your upload server URL.
-        FileUploadService service = new Retrofit.Builder().baseUrl("http://192.168.20.65:9001").client(client).build().create(FileUploadService.class);
+        FileUploadService service = new Retrofit.Builder().baseUrl("http://210.89.191.125").client(client).build().create(FileUploadService.class);
 
 
         File file = new File(String.valueOf(fileUri));
         RequestBody reqFile = RequestBody.create(MediaType.parse("file"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("userfile", file.getName(), reqFile);
-        RequestBody id = RequestBody.create(MediaType.parse("text"), "bowon");
         RequestBody user_phone = RequestBody.create(MediaType.parse("text"), phone_num);
 
-        Call<ResponseBody> req = service.upload(id, user_phone, body);
+        Call<ResponseBody> req = service.upload(user_phone, body);
         req.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -465,7 +464,7 @@ public class FaceActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
 // Change base URL to your upload server URL.
-        FilePutService service = new Retrofit.Builder().baseUrl("http://192.168.20.65:9001").client(client).build().create(FilePutService.class);
+        FilePutService service = new Retrofit.Builder().baseUrl("http://210.89.191.125").client(client).build().create(FilePutService.class);
 
 
         File file = new File(String.valueOf(fileUri));
