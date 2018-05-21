@@ -656,6 +656,7 @@ public class CallActivity extends AppCompatActivity {
                     toMatch.putExtra("time", time);
                     toMatch.putExtra("duration", duration);
                     toMatch.putExtra("date", date);
+                    toMatch.putExtra("phonenum", phone_num);
                     startActivity(toMatch);
 
                     finish();
