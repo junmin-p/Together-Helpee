@@ -1,11 +1,15 @@
 package com.example.junmp.togetherhelpee;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.HashMap;
 
 public class MatchActivity extends AppCompatActivity {
     String phone_num;
@@ -20,6 +24,10 @@ public class MatchActivity extends AppCompatActivity {
 
     Button btn_accept;
     Button btn_cancel;
+
+    String volunteerId;
+
+    //deleteRequest deleteRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +54,7 @@ public class MatchActivity extends AppCompatActivity {
         String time = fromCall.getStringExtra("time");
         int duration = fromCall.getIntExtra("duration", 0);
         String date = fromCall.getStringExtra("date");
+        volunteerId = fromCall.getStringExtra("volunteerId");
 
         phone_num = fromCall.getStringExtra("phonenum");
 
@@ -81,8 +90,35 @@ public class MatchActivity extends AppCompatActivity {
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                /*deleteRequest = new deleteRequest();
+                deleteRequest.execute("http://210.89.191.125/helpee/volunteer");*/
             }
         });
     }
+/*
+    class deleteRequest extends AsyncTask<String, Void, String> {
+        RequestHandler rh = new RequestHandler();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String UPLOAD_URL = params[0];
+            HashMap<String, String> data = new HashMap<>();
+            data.put("volunteerId", volunteerId);
+
+            String result = rh.sendDeleteRequest(UPLOAD_URL, data);
+
+            return result;
+        }
+    }*/
 }

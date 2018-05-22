@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
-        PhoneNum = "1";
+        PhoneNum = "6";
 
         checkdevice = new Check();
         checkdevice.execute("http://210.89.191.125/helpee/user");
@@ -76,10 +76,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Log.d("fads",result);
 
+            if(result == null){
+                Intent toError = new Intent(MainActivity.this, ErrorActivity.class);
+                startActivity(toError);
+                finish();
+            }
 
-            if (result.equals("true")) {
+            else if (result.equals("true")) {
                 Intent toCall = new Intent(MainActivity.this, CallActivity.class);
                 toCall.putExtra("phonenum", PhoneNum);
                 startActivity(toCall);
@@ -94,13 +98,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             String serverURL = params[0] + "/" + PhoneNum;
-
+            Log.d("ASD",serverURL);
             try {
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
-                httpURLConnection.setReadTimeout(5000);
-                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.setReadTimeout(15000);
+                httpURLConnection.setConnectTimeout(15000);
                 httpURLConnection.connect();
 
 

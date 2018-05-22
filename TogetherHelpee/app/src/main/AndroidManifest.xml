@@ -21,10 +21,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CallActivity" />
-        <activity android:name=".FaceActivity" />
-        <activity android:name=".SignupActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".CallActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".FaceActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SignupActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +38,10 @@
 
         <service android:name=".GpsInfo" />
 
-        <activity android:name=".MatchActivity"></activity>
+        <activity android:name=".MatchActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ErrorActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
