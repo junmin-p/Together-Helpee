@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -87,8 +88,11 @@ public class FaceActivity extends AppCompatActivity {
         public void onPictureTaken(byte[] bytes) {
             //Log.d("Debug","OnPictureTaken method");
 
-
             mBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            Matrix matrix = new Matrix();
+            matrix.postRotate(270);
+            Bitmap rotated = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(),
+                    matrix, true);
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
             imageBytes = output.toByteArray();
@@ -100,7 +104,7 @@ public class FaceActivity extends AppCompatActivity {
             try {
                 OutputStream stream = null;
                 stream = new FileOutputStream(file);
-                mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                rotated.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 stream.flush();
                 stream.close();
             } catch (IOException e) // Catch the exception

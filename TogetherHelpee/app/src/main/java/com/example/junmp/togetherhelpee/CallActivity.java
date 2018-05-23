@@ -91,6 +91,7 @@ public class CallActivity extends AppCompatActivity {
     Intent intent;
     SpeechRecognizer mRecognizer;
     TextView textView;
+    TextView textView2;
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
     private final int CAMERA_PERMISSIONS_GRANTED = 1;
     String phone_num;
@@ -113,6 +114,17 @@ public class CallActivity extends AppCompatActivity {
         Log.d("fads",phone_num);
 
         textView = (TextView) findViewById(R.id.textView);
+        textView2 = findViewById(R.id.textView2);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Calendar c1 = Calendar.getInstance();
+        String strToday = sdf.format(c1.getTime());
+
+        String current_year = strToday.substring(0, 4);
+        String current_month = strToday.substring(4, 6);
+        String current_day = strToday.substring(6, 8);
+
+        textView2.setText("오늘 날짜: "+current_month+"월 "+current_day+"일");
 
         getVolunteer = new getVolunteer();
         getVolunteer.execute("http://210.89.191.125/helpee/volunteers/wait/");
@@ -231,11 +243,11 @@ public class CallActivity extends AppCompatActivity {
 
                         postRequest pR = new postRequest();
                         pR.execute("http://210.89.191.125/helpee/volunteer");
-
+/*
                         Toast.makeText(
                                 getApplicationContext(),
                                 "당신의 위치 - \n위도: " + latitude + "\n경도: " + longitude,
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG).show();*/
                     } else {
                         // GPS 를 사용할수 없으므로
                         gps.showSettingsAlert();
@@ -291,7 +303,9 @@ public class CallActivity extends AppCompatActivity {
 
             messageSeparate(message);
 
-            messageCheck();
+            if(flag_speech==1) {
+                messageCheck();
+            }
         }
 
         @Override
@@ -449,6 +463,19 @@ public class CallActivity extends AppCompatActivity {
                 dest_day = dest_days[i].split("일")[0];
             }
         }
+        if(dest_day.equals("")){
+            dest_day = current_day;
+        }
+
+        if(Integer.valueOf(dest_month) < Integer.valueOf(current_month)){
+            int plusYear = Integer.valueOf(dest_year) + 1;
+            dest_year = String.valueOf(plusYear);
+        }
+        else if(Integer.valueOf(dest_month) == Integer.valueOf(current_month) && Integer.valueOf(dest_day) < Integer.valueOf(current_day)){
+            textView.setText("예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요");
+            Toast.makeText(CallActivity.this, "오늘 이후의 날짜로 신청해주세요!", Toast.LENGTH_SHORT).show();
+            flag_speech = 0;
+        }
 
         dest_date = dest_year+"-"+dest_month+"-"+dest_day;
 
@@ -467,6 +494,7 @@ public class CallActivity extends AppCompatActivity {
         if(dest_hour_str.equals("")) {
             textView.setText("예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요");
             Toast.makeText(CallActivity.this,"시간을 정확히 말해주세요.",Toast.LENGTH_SHORT).show();
+            flag_speech = 0;
         }
         int dest_hour = valueOf(dest_hour_str) + am_pm;
         int dest_min = 0;
@@ -490,6 +518,7 @@ public class CallActivity extends AppCompatActivity {
         else{
             dest_time = dest_hour+":"+dest_min;
         }
+
     }
 
     private void callPermission() {
@@ -526,6 +555,11 @@ public class CallActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+
+            Intent toCall = new Intent(CallActivity.this, CallActivity.class);
+            toCall.putExtra("phonenum", phone_num);
+            startActivity(toCall);
+            finish();
         }
 
         @Override
@@ -647,6 +681,7 @@ public class CallActivity extends AppCompatActivity {
                     String time = item.getString("time");
                     int duration = item.getInt("duration");
                     String date = item.getString("date");
+                    String volunteerId = item.getString("volunteerId");
 
                     Intent toMatch = new Intent(CallActivity.this, MatchActivity.class);
                     toMatch.putExtra("type", type);
@@ -656,7 +691,9 @@ public class CallActivity extends AppCompatActivity {
                     toMatch.putExtra("time", time);
                     toMatch.putExtra("duration", duration);
                     toMatch.putExtra("date", date);
+                    toMatch.putExtra("volunteerId", volunteerId);
                     toMatch.putExtra("phonenum", phone_num);
+
                     startActivity(toMatch);
 
                     finish();

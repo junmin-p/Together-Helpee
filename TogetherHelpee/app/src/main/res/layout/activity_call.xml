@@ -38,6 +38,14 @@
         android:text="예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요"
         android:textSize="10pt"
         app:layout_constraintTop_toBottomOf="@+id/text_guide"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/textView2"
+        android:textStyle="bold"
+        android:textSize="10pt"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
         app:layout_constraintBottom_toTopOf="@+id/layout_radio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -46,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
         android:id="@+id/layout_radio"
         tools:context=".MainActivity" >
 
@@ -102,7 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
         android:id="@+id/layout_radio2"
         tools:context=".MainActivity" >
 
