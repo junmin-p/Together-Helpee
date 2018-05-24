@@ -4,11 +4,23 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telecom.Call;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.HashMap;
 
 public class MatchActivity extends AppCompatActivity {
@@ -27,7 +39,7 @@ public class MatchActivity extends AppCompatActivity {
 
     String volunteerId;
 
-    //deleteRequest deleteRequest;
+    deleteRequest deleteRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,12 +102,63 @@ public class MatchActivity extends AppCompatActivity {
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*deleteRequest = new deleteRequest();
-                deleteRequest.execute("http://210.89.191.125/helpee/volunteer");*/
+                deleteRequest = new deleteRequest();
+                deleteRequest.execute("http://210.89.191.125/helpee/volunteer/"+volunteerId);
+
+
+
             }
         });
     }
-/*
+
+    /*private class deleteRequest extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Toast.makeText(getApplicationContext(),"요청이 취소됩니다.", Toast.LENGTH_SHORT).show();
+            Intent toCall = new Intent(MatchActivity.this, CallActivity.class);
+            toCall.putExtra("phonenum", phone_num);
+            finish();
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            URL url = null;
+            try {
+                url = new URL(params[0]);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            HttpURLConnection connection = null;
+            try {
+                connection = (HttpURLConnection) url.openConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            connection.setDoInput(true);
+            connection.setInstanceFollowRedirects(false);
+            try {
+                connection.setRequestMethod("DELETE");
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            }
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            connection.setRequestProperty("charset", "utf-8");
+            connection.setUseCaches(false);
+
+
+
+            return "FINISH";
+        }
+    }*/
+
     class deleteRequest extends AsyncTask<String, Void, String> {
         RequestHandler rh = new RequestHandler();
 
@@ -107,18 +170,18 @@ public class MatchActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"요청이 취소됩니다.", Toast.LENGTH_SHORT).show();
+            Intent toCall = new Intent(MatchActivity.this, CallActivity.class);
+            toCall.putExtra("phonenum", phone_num);
+            startActivity(toCall);
+            finish();
         }
 
         @Override
         protected String doInBackground(String... params) {
-            String UPLOAD_URL = params[0];
-            HashMap<String, String> data = new HashMap<>();
-            data.put("volunteerId", volunteerId);
-
-            String result = rh.sendDeleteRequest(UPLOAD_URL, data);
+            String result = rh.sendDeleteRequest(params[0]);
 
             return result;
         }
-    }*/
+    }
 }

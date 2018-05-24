@@ -4,12 +4,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 
 import com.example.junmp.togetherhelpee.MatchActivity;
 import com.example.junmp.togetherhelpee.R;
@@ -32,6 +32,7 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
         }
         if (remoteMessage.getNotification() != null) {
             sendNotification(remoteMessage.getNotification().getBody());
+
         }
     }
 
@@ -51,6 +52,7 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri).setLights(000000255,500,2000)
                 .setContentIntent(pendingIntent);
+
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 

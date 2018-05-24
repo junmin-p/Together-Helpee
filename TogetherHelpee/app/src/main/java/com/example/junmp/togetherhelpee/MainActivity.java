@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         TelephonyManager mgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        String idByTelephonyManager = mgr.getDeviceId();
+        Log.d("Asd",idByTelephonyManager);
         try{
             PhoneNum = mgr.getLine1Number();//mgr.getLine1Number();
             PhoneNum = PhoneNum.replace("+82", "0");

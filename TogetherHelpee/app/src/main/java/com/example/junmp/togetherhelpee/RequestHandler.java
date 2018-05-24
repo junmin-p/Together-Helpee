@@ -1,5 +1,15 @@
 package com.example.junmp.togetherhelpee;
 
+import android.util.Log;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -129,5 +139,64 @@ public class RequestHandler {
 
         return response;
     }
+    public String sendDeleteRequest(String requestURL) {
 
+        URL url;
+        String response = "";
+        try {
+            url = new URL(requestURL);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("DELETE");
+            conn.setDoInput(true);
+
+
+
+            int responseCode = conn.getResponseCode();
+
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                response = br.readLine();
+            } else {
+                response = "Error Registering";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return response;
+    }
+
+    String callHttpDelete(String url){
+
+        try {
+            HttpParams httpParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpParams, 15000);
+            HttpConnectionParams.setSoTimeout(httpParams, 15000);
+
+            //HttpClient httpClient = getNewHttpClient();
+            HttpClient httpClient = new DefaultHttpClient();// httpParams);
+
+
+            HttpResponse response = null;
+            HttpDelete httpDelete = new HttpDelete(url);
+            response = httpClient.execute(httpDelete);
+
+            String sResponse;
+
+            StringBuilder s = new StringBuilder();
+
+            /*while ((sResponse = readLine()) != null) {
+                s = s.append(sResponse);
+            }*/
+
+            Log.v("Asd", "Yo! Response recvd ["+s.toString()+"]");
+            return s.toString();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return "finish";
+    }
 }
