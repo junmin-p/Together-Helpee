@@ -41,6 +41,11 @@ public class GpsInfo extends Service implements LocationListener {
 
     protected LocationManager locationManager;
 
+    public GpsInfo() {
+        this.mContext = getApplicationContext();
+        getLocation();
+    }
+
     public GpsInfo(Context context) {
         this.mContext = context;
         getLocation();

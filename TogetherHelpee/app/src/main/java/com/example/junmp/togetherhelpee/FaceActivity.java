@@ -191,6 +191,7 @@ public class FaceActivity extends AppCompatActivity {
         if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
                 android.Manifest.permission.CAMERA)) {
             ActivityCompat.requestPermissions(this, permissions, RC_HANDLE_CAMERA_PERM);
+
             return;
         }
 
