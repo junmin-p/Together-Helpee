@@ -11,6 +11,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,10 +40,23 @@ public class MatchActivity extends AppCompatActivity {
 
     Button btn_accept;
     Button btn_cancel;
+    Button btn_refresh;
 
-    String volunteerId;
+    String type;
+    String helperId;
+    String content;
+    String time;
+    int duration;
+    String date;
+    int volunteerId;
+
+    int matchingStatus;
+
+    String mJsonString;
 
     deleteRequest deleteRequest;
+    putRequest putRequest;
+    getState getState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +64,7 @@ public class MatchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_match);
 
         Intent fromCall = getIntent();
-        String type = fromCall.getStringExtra("type");
+        type = fromCall.getStringExtra("type");
         if(type.equals("outside")){
             type = "외출";
         }
@@ -60,13 +77,13 @@ public class MatchActivity extends AppCompatActivity {
         else if(type.equals("education")){
             type = "교육";
         }
-        String helperId = fromCall.getStringExtra("helperId");
-        int matchingStatus = fromCall.getIntExtra("matchingStatus", 0);
-        String content = fromCall.getStringExtra("content");
-        String time = fromCall.getStringExtra("time");
-        int duration = fromCall.getIntExtra("duration", 0);
-        String date = fromCall.getStringExtra("date");
-        volunteerId = fromCall.getStringExtra("volunteerId");
+        helperId = fromCall.getStringExtra("helperId");
+        matchingStatus = fromCall.getIntExtra("matchingStatus", 0);
+        content = fromCall.getStringExtra("content");
+        time = fromCall.getStringExtra("time");
+        duration = fromCall.getIntExtra("duration", 0);
+        date = fromCall.getStringExtra("date");
+        volunteerId = fromCall.getIntExtra("volunteerId" , 0);
 
         phone_num = fromCall.getStringExtra("phonenum");
 
@@ -79,6 +96,10 @@ public class MatchActivity extends AppCompatActivity {
         txt_match_info = findViewById(R.id.txt_match_info);
         btn_accept = findViewById(R.id.btn_accept);
         btn_cancel = findViewById(R.id.btn_cancel);
+        btn_refresh = findViewById(R.id.btn_refresh);
+
+        getState  = new getState();
+        getState.execute("http://210.89.191.125/helpee/volunteers/wait/");
 
         txt_type.setText("요청 종류: "+type);
         txt_date.setText("요청 날짜: "+date);
@@ -86,16 +107,13 @@ public class MatchActivity extends AppCompatActivity {
         txt_duration.setText("요청 봉사시간: "+duration);
         txt_content.setText("요청 기타사항: "+content);
 
-        if(matchingStatus == 1){
-            txt_match_state.setText("매칭 수락 대기중입니다!");
-            txt_match_info.setText("지원한 봉사자의 아이디: "+helperId);
-            btn_accept.setVisibility(View.VISIBLE);
-        }
+
 
         btn_accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                putRequest = new putRequest();
+                putRequest.execute("http://210.89.191.125/helpee/volunteer/complete");
             }
         });
 
@@ -103,15 +121,23 @@ public class MatchActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 deleteRequest = new deleteRequest();
-                deleteRequest.execute("http://210.89.191.125/helpee/volunteer/"+volunteerId);
+                deleteRequest.execute("http://210.89.191.125/helpee/volunteer/delete");
+            }
+        });
 
-
-
+        btn_refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(getIntent());
+                overridePendingTransition(0, 0);
             }
         });
     }
+    private class getState extends AsyncTask<String, Void, String> {
+        String errorString = null;
 
-    /*private class deleteRequest extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -121,43 +147,137 @@ public class MatchActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Toast.makeText(getApplicationContext(),"요청이 취소됩니다.", Toast.LENGTH_SHORT).show();
-            Intent toCall = new Intent(MatchActivity.this, CallActivity.class);
-            toCall.putExtra("phonenum", phone_num);
-            finish();
+
+            if (result.equals("[]")){
+                Intent toError = new Intent(MatchActivity.this, ErrorActivity.class);
+                startActivity(toError);
+                finish();
+            }
+            else {
+                mJsonString = result;
+                try {
+                    showResult();
+                } catch (JSONException e) {
+                    Log.d("fda","asd");
+                    e.printStackTrace();
+                }
+
+                if(matchingStatus == 1){
+                    txt_match_state.setText("매칭 수락 대기중입니다!");
+                    txt_match_info.setText("지원한 봉사자의 아이디: "+helperId);
+                    btn_accept.setVisibility(View.VISIBLE);
+                }
+            }
         }
 
 
         @Override
         protected String doInBackground(String... params) {
-            URL url = null;
+            String serverURL = params[0]+phone_num;
+
             try {
-                url = new URL(params[0]);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            HttpURLConnection connection = null;
-            try {
-                connection = (HttpURLConnection) url.openConnection();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            connection.setDoInput(true);
-            connection.setInstanceFollowRedirects(false);
-            try {
-                connection.setRequestMethod("DELETE");
-            } catch (ProtocolException e) {
-                e.printStackTrace();
-            }
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            connection.setRequestProperty("charset", "utf-8");
-            connection.setUseCaches(false);
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.connect();
 
 
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d("fadsfsads", "response code - " + responseStatusCode);
 
-            return "FINISH";
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+
+                return sb.toString().trim();
+
+
+            } catch (Exception e) {
+
+                Log.d("fadsfsads", "InsertData: Error ", e);
+                errorString = e.toString();
+
+                return null;
+            }
+
         }
-    }*/
+    }
+
+
+    private void showResult() throws JSONException {
+        try {
+            JSONArray jsonArray = new JSONArray(mJsonString);
+
+            int i=jsonArray.length()-1;
+            JSONObject item = jsonArray.getJSONObject(i);
+
+            helperId = item.getString("helperId");
+            matchingStatus = item.getInt("matchingStatus");
+
+            Log.d("dafdssafs",helperId);
+            Log.d("dafdssafs",matchingStatus+"");
+
+
+        } catch (JSONException e) {
+            Log.d("fadsfsads", "showResult : ", e);
+        }
+    }
+
+    class putRequest extends AsyncTask<String, Void, String> {
+        RequestHandler rh = new RequestHandler();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Toast.makeText(getApplicationContext(),"요청을 수락합니다.", Toast.LENGTH_SHORT).show();
+            Intent toStart = new Intent(MatchActivity.this, StartActivity.class);
+            toStart.putExtra("type", type);
+            toStart.putExtra("helperId", helperId);
+            toStart.putExtra("content", content);
+            toStart.putExtra("time", time);
+            toStart.putExtra("duration", duration);
+            toStart.putExtra("date", date);
+            toStart.putExtra("volunteerId", volunteerId);
+            toStart.putExtra("phonenum", phone_num);
+            startActivity(toStart);
+            finish();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String, String> data = new HashMap<>();
+            data.put("volunteerId", String.valueOf(volunteerId));
+            String result = rh.sendPutRequest(params[0], data);
+
+            return result;
+        }
+    }
 
     class deleteRequest extends AsyncTask<String, Void, String> {
         RequestHandler rh = new RequestHandler();
@@ -179,7 +299,9 @@ public class MatchActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String result = rh.sendDeleteRequest(params[0]);
+            HashMap<String, String> data = new HashMap<>();
+            data.put("volunteerId", String.valueOf(volunteerId));
+            String result = rh.sendDeleteRequest(params[0], data);
 
             return result;
         }

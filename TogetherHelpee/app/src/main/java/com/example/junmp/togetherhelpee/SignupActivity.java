@@ -39,6 +39,7 @@ public class SignupActivity extends AppCompatActivity {
     Bitmap bmp_preview;
 
     String phone_num;
+    String deviceKey;
 
     String profile_url;
     Bitmap bitmap;
@@ -72,6 +73,9 @@ public class SignupActivity extends AppCompatActivity {
         if(intent1.getStringExtra("phonenum") != null){
             phone_num = intent1.getStringExtra("phonenum");
         }
+        if(intent1.getStringExtra("deviceKey") != null){
+            deviceKey = intent1.getStringExtra("deviceKey");
+        }
 
         btn_recapture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +83,7 @@ public class SignupActivity extends AppCompatActivity {
                 Intent recapture = new Intent(SignupActivity.this, FaceActivity.class);
                 recapture.putExtra("from","re");
                 recapture.putExtra("phonenum", phone_num);
+                recapture.putExtra("deviceKey", deviceKey);
                 startActivity(recapture);
                 finish();
             }
@@ -87,9 +92,9 @@ public class SignupActivity extends AppCompatActivity {
         btn_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Intent toMain = new Intent(SignupActivity.this, MainActivity.class);
-                startActivity(toMain);
+                Intent toCall = new Intent(SignupActivity.this, CallActivity.class);
+                toCall.putExtra("phonenum",phone_num);
+                startActivity(toCall);
                 finish();
             }
         });

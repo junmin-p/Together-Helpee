@@ -66,6 +66,7 @@ import retrofit2.Retrofit;
 public class FaceActivity extends AppCompatActivity {
     String phone_num;
     String from;
+    String device_Key;
 
     private static final String TAG = "FaceTracker";
 
@@ -129,6 +130,7 @@ public class FaceActivity extends AppCompatActivity {
 
 
             Intent intent = new Intent(FaceActivity.this, SignupActivity.class);
+            intent.putExtra("deviceKey",device_Key);
             intent.putExtra("url", String.valueOf(savedImageURI));
             intent.putExtra("phonenum", phone_num);
 
@@ -163,6 +165,9 @@ public class FaceActivity extends AppCompatActivity {
         }
         else if(intent.getStringExtra("from").equals("re")){
             from = "re";
+        }
+        if(intent.getStringExtra("deviceKey")!=null){
+            device_Key = intent.getStringExtra("deviceKey");
         }
         Toast.makeText(getApplicationContext(),"얼굴 인식 시 자동으로 사진 촬영됩니다.",Toast.LENGTH_SHORT).show();
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
@@ -446,8 +451,9 @@ public class FaceActivity extends AppCompatActivity {
         RequestBody reqFile = RequestBody.create(MediaType.parse("file"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("userfile", file.getName(), reqFile);
         RequestBody user_phone = RequestBody.create(MediaType.parse("text"), phone_num);
+        RequestBody deviceKey = RequestBody.create(MediaType.parse("text"), device_Key);
 
-        Call<ResponseBody> req = service.upload(user_phone, body);
+        Call<ResponseBody> req = service.upload(deviceKey, user_phone, body);
         req.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

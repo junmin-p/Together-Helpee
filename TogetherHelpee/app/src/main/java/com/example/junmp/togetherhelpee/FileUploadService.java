@@ -12,6 +12,7 @@ public interface FileUploadService {
     @Multipart
     @POST("/helpee/signup")
     Call<ResponseBody> upload(
+            @Part("deviceKey") RequestBody deviceKey,
             @Part("userPhone") RequestBody user_phone,
             @Part MultipartBody.Part userfile
     );

@@ -139,7 +139,8 @@ public class RequestHandler {
 
         return response;
     }
-    public String sendDeleteRequest(String requestURL) {
+    public String sendDeleteRequest(String requestURL,
+                                    HashMap<String, String> postDataParams) {
 
         URL url;
         String response = "";
@@ -149,11 +150,19 @@ public class RequestHandler {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(15000);
             conn.setConnectTimeout(15000);
-            conn.setRequestMethod("DELETE");
+            conn.setRequestMethod("POST");
             conn.setDoInput(true);
+            conn.setDoOutput(true);
 
 
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, "UTF-8"));
+            writer.write(getPostDataString(postDataParams));
 
+            writer.flush();
+            writer.close();
+            os.close();
             int responseCode = conn.getResponseCode();
 
             if (responseCode == HttpsURLConnection.HTTP_OK) {
@@ -169,34 +178,4 @@ public class RequestHandler {
         return response;
     }
 
-    String callHttpDelete(String url){
-
-        try {
-            HttpParams httpParams = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(httpParams, 15000);
-            HttpConnectionParams.setSoTimeout(httpParams, 15000);
-
-            //HttpClient httpClient = getNewHttpClient();
-            HttpClient httpClient = new DefaultHttpClient();// httpParams);
-
-
-            HttpResponse response = null;
-            HttpDelete httpDelete = new HttpDelete(url);
-            response = httpClient.execute(httpDelete);
-
-            String sResponse;
-
-            StringBuilder s = new StringBuilder();
-
-            /*while ((sResponse = readLine()) != null) {
-                s = s.append(sResponse);
-            }*/
-
-            Log.v("Asd", "Yo! Response recvd ["+s.toString()+"]");
-            return s.toString();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return "finish";
-    }
 }

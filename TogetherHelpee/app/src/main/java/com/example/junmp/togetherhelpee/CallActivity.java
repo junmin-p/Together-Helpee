@@ -596,6 +596,7 @@ public class CallActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
+            Log.d("Asd",result);
             if (result.equals("[]")){
                 haveRegisted = 0;
             }
@@ -615,6 +616,7 @@ public class CallActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             String serverURL = params[0]+phone_num;
 
+            Log.d("Asd",serverURL);
             try {
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -673,6 +675,7 @@ public class CallActivity extends AppCompatActivity {
                 JSONObject item = jsonArray.getJSONObject(i);
 
                 int startStatus = item.getInt("startStatus");
+                Log.d("Asd",startStatus+"");
                 if(startStatus == 0){
                     String type = item.getString("type");
                     String helperId = item.getString("helperId");
@@ -681,21 +684,45 @@ public class CallActivity extends AppCompatActivity {
                     String time = item.getString("time");
                     int duration = item.getInt("duration");
                     String date = item.getString("date");
-                    String volunteerId = item.getString("volunteerId");
+                    int volunteerId = item.getInt("volunteerId");
 
-                    Intent toMatch = new Intent(CallActivity.this, MatchActivity.class);
-                    toMatch.putExtra("type", type);
-                    toMatch.putExtra("helperId", helperId);
-                    toMatch.putExtra("matchingStatus", matchingStatus);
-                    toMatch.putExtra("content", content);
-                    toMatch.putExtra("time", time);
-                    toMatch.putExtra("duration", duration);
-                    toMatch.putExtra("date", date);
-                    toMatch.putExtra("volunteerId", volunteerId);
-                    toMatch.putExtra("phonenum", phone_num);
+                    if(matchingStatus == 2){
+                        Intent toStart = new Intent(CallActivity.this, StartActivity.class);
+                        toStart.putExtra("type", type);
+                        toStart.putExtra("helperId", helperId);
+                        toStart.putExtra("content", content);
+                        toStart.putExtra("time", time);
+                        toStart.putExtra("duration", duration);
+                        toStart.putExtra("date", date);
+                        toStart.putExtra("volunteerId", volunteerId);
+                        toStart.putExtra("phonenum", phone_num);
+                        startActivity(toStart);
+                        finish();
+                    }
+                    else{
+                        Intent toMatch = new Intent(CallActivity.this, MatchActivity.class);
+                        toMatch.putExtra("type", type);
+                        toMatch.putExtra("helperId", helperId);
+                        toMatch.putExtra("matchingStatus", matchingStatus);
+                        toMatch.putExtra("content", content);
+                        toMatch.putExtra("time", time);
+                        toMatch.putExtra("duration", duration);
+                        toMatch.putExtra("date", date);
+                        toMatch.putExtra("volunteerId", volunteerId);
+                        toMatch.putExtra("phonenum", phone_num);
 
-                    startActivity(toMatch);
+                        startActivity(toMatch);
 
+                        finish();
+                    }
+
+                }
+                else if(startStatus == 1){
+                    int volunteerId = item.getInt("volunteerId");
+                    Intent toIng = new Intent(CallActivity.this, IngActivity.class);
+                    toIng.putExtra("volunteerId", volunteerId);
+                    toIng.putExtra("phonenum", phone_num);
+                    startActivity(toIng);
                     finish();
                 }
             }
