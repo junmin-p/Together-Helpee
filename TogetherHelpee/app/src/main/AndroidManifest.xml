@@ -60,7 +60,15 @@
             android:name=".ErrorActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".StartActivity" />
-        <activity android:name=".IngActivity"></activity>
+        <activity android:name=".IngActivity" />
+
+        <receiver android:name=".processTimerReceiver">
+            <intent-filter>
+                <action android:name="processTimerReceiver"></action>
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".FeedbackActivity"></activity>
     </application>
 
 </manifest>

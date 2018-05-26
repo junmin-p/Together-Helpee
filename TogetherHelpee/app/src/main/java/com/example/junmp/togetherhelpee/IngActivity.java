@@ -1,5 +1,7 @@
 package com.example.junmp.togetherhelpee;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +54,15 @@ public class IngActivity extends AppCompatActivity {
             phone_num = getId.getStringExtra("phonenum");
         }
 
+
+        int repeatTime = 10;  //Repeat alarm time in seconds
+        AlarmManager processTimer = (AlarmManager)getSystemService(ALARM_SERVICE);
+        Intent intent = new Intent(this, processTimerReceiver.class);
+        intent.putExtra("volunteerId",volunteerId);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,  intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//Repeat alarm every second
+        processTimer.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),repeatTime*1000, pendingIntent);
+
         getVolunteer = new getVolunteer();
         getVolunteer.execute("http://210.89.191.125/helpee/volunteers/wait/");
         Log.d("asdfads", String.valueOf(volunteerId));
@@ -74,8 +85,9 @@ public class IngActivity extends AppCompatActivity {
 
             Log.d("Asd",result);
             if (result.equals("[]")){
-                Intent toError = new Intent(IngActivity.this, ErrorActivity.class);
-                startActivity(toError);
+                Intent toFeed = new Intent(IngActivity.this, FeedbackActivity.class);
+                toFeed.putExtra("volunteerId",volunteerId);
+                startActivity(toFeed);
                 finish();
             }
             else {

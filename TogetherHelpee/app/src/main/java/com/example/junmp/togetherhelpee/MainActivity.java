@@ -2,6 +2,8 @@ package com.example.junmp.togetherhelpee;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -248,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             } else {
                 Log.d("ASD",result);
+                btn_sign.setVisibility(View.VISIBLE);
                 Toast.makeText(MainActivity.this,"회원가입을 먼저 해주세요.",Toast.LENGTH_SHORT).show();
             }
 

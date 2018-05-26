@@ -98,8 +98,10 @@ public class CallActivity extends AppCompatActivity {
 
     String mJsonString;
     getVolunteer getVolunteer;
+    getWait getWait;
     int haveRegisted = 0;
 
+    ProgressDialog pd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,8 +128,8 @@ public class CallActivity extends AppCompatActivity {
 
         textView2.setText("오늘 날짜: "+current_month+"월 "+current_day+"일");
 
-        getVolunteer = new getVolunteer();
-        getVolunteer.execute("http://210.89.191.125/helpee/volunteers/wait/");
+        getWait = new getWait();
+        getWait.execute("http://210.89.191.125/helpee/volunteer/");
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO)
@@ -263,6 +265,10 @@ public class CallActivity extends AppCompatActivity {
     private RecognitionListener recognitionListener = new RecognitionListener() {
         @Override
         public void onReadyForSpeech(Bundle bundle) {
+            pd = new ProgressDialog(CallActivity.this);
+            pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            pd.setMessage("요청사항을 마이크에 대고 예시와 같이 말씀해주세요.\n예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요");
+            pd.show();
         }
 
         @Override
@@ -292,6 +298,7 @@ public class CallActivity extends AppCompatActivity {
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public void onResults(Bundle bundle) {
+            pd.dismiss();
             String key = "";
             key = SpeechRecognizer.RESULTS_RECOGNITION;
             ArrayList<String> mResult = bundle.getStringArrayList(key);
@@ -671,64 +678,145 @@ public class CallActivity extends AppCompatActivity {
         try {
             JSONArray jsonArray = new JSONArray(mJsonString);
 
-            for(int i=jsonArray.length()-1;i>=0;i--){
-                JSONObject item = jsonArray.getJSONObject(i);
+            int i=jsonArray.length()-1;
+            JSONObject item = jsonArray.getJSONObject(i);
 
-                int startStatus = item.getInt("startStatus");
-                Log.d("Asd",startStatus+"");
-                if(startStatus == 0){
-                    String type = item.getString("type");
-                    String helperId = item.getString("helperId");
-                    int matchingStatus = item.getInt("matchingStatus");
-                    String content = item.getString("content");
-                    String time = item.getString("time");
-                    int duration = item.getInt("duration");
-                    String date = item.getString("date");
-                    int volunteerId = item.getInt("volunteerId");
+            int startStatus = item.getInt("startStatus");
+            Log.d("Asd",startStatus+"");
+            if(startStatus == 0){
+                String type = item.getString("type");
+                String helperId = item.getString("helperId");
+                int matchingStatus = item.getInt("matchingStatus");
+                String content = item.getString("content");
+                String time = item.getString("time");
+                int duration = item.getInt("duration");
+                String date = item.getString("date");
+                int volunteerId = item.getInt("volunteerId");
 
-                    if(matchingStatus == 2){
-                        Intent toStart = new Intent(CallActivity.this, StartActivity.class);
-                        toStart.putExtra("type", type);
-                        toStart.putExtra("helperId", helperId);
-                        toStart.putExtra("content", content);
-                        toStart.putExtra("time", time);
-                        toStart.putExtra("duration", duration);
-                        toStart.putExtra("date", date);
-                        toStart.putExtra("volunteerId", volunteerId);
-                        toStart.putExtra("phonenum", phone_num);
-                        startActivity(toStart);
-                        finish();
-                    }
-                    else{
-                        Intent toMatch = new Intent(CallActivity.this, MatchActivity.class);
-                        toMatch.putExtra("type", type);
-                        toMatch.putExtra("helperId", helperId);
-                        toMatch.putExtra("matchingStatus", matchingStatus);
-                        toMatch.putExtra("content", content);
-                        toMatch.putExtra("time", time);
-                        toMatch.putExtra("duration", duration);
-                        toMatch.putExtra("date", date);
-                        toMatch.putExtra("volunteerId", volunteerId);
-                        toMatch.putExtra("phonenum", phone_num);
-
-                        startActivity(toMatch);
-
-                        finish();
-                    }
-
-                }
-                else if(startStatus == 1){
-                    int volunteerId = item.getInt("volunteerId");
-                    Intent toIng = new Intent(CallActivity.this, IngActivity.class);
-                    toIng.putExtra("volunteerId", volunteerId);
-                    toIng.putExtra("phonenum", phone_num);
-                    startActivity(toIng);
+                if(matchingStatus == 2){
+                    Intent toStart = new Intent(CallActivity.this, StartActivity.class);
+                    toStart.putExtra("type", type);
+                    toStart.putExtra("helperId", helperId);
+                    toStart.putExtra("content", content);
+                    toStart.putExtra("time", time);
+                    toStart.putExtra("duration", duration);
+                    toStart.putExtra("date", date);
+                    toStart.putExtra("volunteerId", volunteerId);
+                    toStart.putExtra("phonenum", phone_num);
+                    startActivity(toStart);
                     finish();
                 }
+                else{
+                    Intent toMatch = new Intent(CallActivity.this, MatchActivity.class);
+                    toMatch.putExtra("type", type);
+                    toMatch.putExtra("helperId", helperId);
+                    toMatch.putExtra("matchingStatus", matchingStatus);
+                    toMatch.putExtra("content", content);
+                    toMatch.putExtra("time", time);
+                    toMatch.putExtra("duration", duration);
+                    toMatch.putExtra("date", date);
+                    toMatch.putExtra("volunteerId", volunteerId);
+                    toMatch.putExtra("phonenum", phone_num);
+
+                    startActivity(toMatch);
+
+                    finish();
+                }
+
+            }
+            else if(startStatus == 1){
+                int volunteerId = item.getInt("volunteerId");
+                Intent toIng = new Intent(CallActivity.this, IngActivity.class);
+                toIng.putExtra("volunteerId", volunteerId);
+                toIng.putExtra("phonenum", phone_num);
+                startActivity(toIng);
+                finish();
             }
 
         } catch (JSONException e) {
             Log.d("fadsfsads", "showResult : ", e);
+        }
+    }
+
+    private class getWait extends AsyncTask<String, Void, String> {
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            Log.d("Asd",result);
+            if (result.equals("")){
+                getVolunteer = new getVolunteer();
+                getVolunteer.execute("http://210.89.191.125/helpee/volunteers/wait/");
+            }
+            else {
+                Toast.makeText(getApplicationContext(),"최근 받으신 봉사활동에 대한 평가를 먼저 진행해주세요!", Toast.LENGTH_SHORT).show();
+                Intent toFeedback = new Intent(CallActivity.this, FeedbackActivity.class);
+                toFeedback.putExtra("volunteerId", result);
+                startActivity(toFeedback);
+                finish();
+            }
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            String serverURL = params[0]+phone_num;
+
+            Log.d("dfasfsafsa",serverURL);
+            try {
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.connect();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d("fadsfsads", "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+
+                return sb.toString().trim();
+
+
+            } catch (Exception e) {
+
+                Log.d("fadsfsads", "InsertData: Error ", e);
+                errorString = e.toString();
+
+                return null;
+            }
+
         }
     }
 
