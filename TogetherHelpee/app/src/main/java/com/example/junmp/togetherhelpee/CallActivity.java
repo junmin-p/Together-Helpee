@@ -759,7 +759,7 @@ public class CallActivity extends AppCompatActivity {
             else {
                 Toast.makeText(getApplicationContext(),"최근 받으신 봉사활동에 대한 평가를 먼저 진행해주세요!", Toast.LENGTH_SHORT).show();
                 Intent toFeedback = new Intent(CallActivity.this, FeedbackActivity.class);
-                toFeedback.putExtra("volunteerId", result);
+                toFeedback.putExtra("volunteerId", Integer.valueOf(result));
                 startActivity(toFeedback);
                 finish();
             }

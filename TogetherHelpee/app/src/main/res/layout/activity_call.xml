@@ -8,6 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/text_guide"
         android:textSize="10pt"
@@ -45,6 +46,7 @@
         android:id="@+id/textView2"
         android:textStyle="bold"
         android:textSize="10pt"
+        android:textColor="#00ff22"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         app:layout_constraintBottom_toTopOf="@+id/layout_radio"
         android:layout_width="wrap_content"
