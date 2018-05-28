@@ -1,2 +1,2 @@
 # Together-Helpee
-<p align="center"> <img src="demo.gif"/> </p>
+<p align="center"> <img src="logo.gif"/> </p>
