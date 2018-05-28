@@ -457,7 +457,6 @@ public class FaceActivity extends AppCompatActivity {
         req.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                 Log.d("fadsfsads", "Success");
             }
 
@@ -487,7 +486,6 @@ public class FaceActivity extends AppCompatActivity {
         req.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                 Log.d("fadsfsads", "Success");
             }
 

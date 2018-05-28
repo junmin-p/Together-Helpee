@@ -15,8 +15,11 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.BufferedReader;
@@ -44,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ImageView Togethericon = (ImageView) findViewById(R.id.img_logo);
+
+        GlideDrawableImageViewTarget gifImage = new GlideDrawableImageViewTarget(Togethericon);
+        Glide.with(this).load(R.drawable.logo).into(gifImage);
+
         btn_sign = findViewById(R.id.btn_sign);
 
 
@@ -67,12 +75,10 @@ public class MainActivity extends AppCompatActivity {
         try{
             PhoneNum = mgr.getLine1Number();//mgr.getLine1Number();
             PhoneNum = PhoneNum.replace("+82", "0");
-            Toast.makeText(getApplicationContext(), PhoneNum, Toast.LENGTH_LONG).show();
         }catch(Exception e){
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
-        PhoneNum = "010-5123-6135";
+        PhoneNum = "01051236135";
 
 
         checkDevice = new checkDevice();
@@ -251,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Log.d("ASD",result);
                 btn_sign.setVisibility(View.VISIBLE);
-                Toast.makeText(MainActivity.this,"회원가입을 먼저 해주세요.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "화면 중앙의 회원가입버튼을 클릭하면 자동으로 카메라가 켜지며 얼굴인식 시 자동 촬영됩니다. 회원가입은 사진촬영만으로 완료됩니다.", Toast.LENGTH_SHORT).show();
             }
 
         }

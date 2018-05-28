@@ -20,10 +20,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class IngActivity extends AppCompatActivity {
-    Button btn_refresh;
-
     String phone_num;
     int volunteerId;
 
@@ -31,22 +31,29 @@ public class IngActivity extends AppCompatActivity {
 
     getVolunteer getVolunteer;
 
+    private TimerTask mTask2;
+    private Timer mTimer2;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ing);
 
-        btn_refresh = findViewById(R.id.btn_refresh);
+        Toast.makeText(getApplicationContext(),"현재 도움을 받으시고 있으시군요? 봉사자가 종료하면 자동으로 다음화면으로 넘어갑니다.",Toast.LENGTH_LONG).show();
 
-        btn_refresh.setOnClickListener(new View.OnClickListener() {
+        mTask2 = new TimerTask() {
             @Override
-            public void onClick(View view) {
-                finish();
-                overridePendingTransition(0, 0);
-                startActivity(getIntent());
-                overridePendingTransition(0, 0);
+            public void run() {
+                getVolunteer = new getVolunteer();
+                getVolunteer.execute("http://210.89.191.125/helpee/volunteers/wait/");
             }
-        });
+        };
+
+        mTimer2 = new Timer();
+
+        mTimer2.schedule(mTask2, 3000, 2000);
+
 
         Intent getId = getIntent();
         volunteerId = getId.getIntExtra("volunteerId" , 0);
@@ -87,6 +94,7 @@ public class IngActivity extends AppCompatActivity {
             if (result.equals("[]")){
                 Intent toFeed = new Intent(IngActivity.this, FeedbackActivity.class);
                 toFeed.putExtra("volunteerId",volunteerId);
+                mTimer2.cancel();
                 startActivity(toFeed);
                 finish();
             }

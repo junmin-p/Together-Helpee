@@ -33,9 +33,12 @@
         android:id="@+id/text_phonenumber"/>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="시작"
+        android:text="가입"
+        android:textSize="15pt"
+        android:textStyle="bold"
+        android:paddingVertical="10pt"
         android:layout_marginTop="100px"
         android:layout_gravity="center_horizontal"
         android:id="@+id/btn_signup"/>

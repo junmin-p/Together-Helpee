@@ -57,6 +57,8 @@ public class SignupActivity extends AppCompatActivity {
 
         text_phonenumber.setText(phone_num);
 
+        Toast.makeText(getApplicationContext(), "사진을 다시찍으려면 우측상단의 버튼을, 그대로 가입하시려면 하단의 가입버튼을 눌러주세요.", Toast.LENGTH_LONG).show();
+
         Intent intent1 = getIntent();
         if(intent1.getStringExtra("url") != null){
             profile_url = intent1.getStringExtra("url");

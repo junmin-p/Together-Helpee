@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     tools:context=".EndActivity">
     <TextView
         android:layout_marginTop="200px"
@@ -12,7 +13,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="12pt"
-        android:textColor="#000000"
+        android:textColor="#ffffff"
         android:text="봉사를 성공적으로 받으셨군요?"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -24,7 +25,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="12pt"
-        android:textColor="#000000"
+        android:textColor="#ffffff"
         android:text="이용해주셔서 감사합니다."
         app:layout_constraintTop_toBottomOf="@+id/text1"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -39,8 +40,12 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="15pt"
+        android:textStyle="bold"
+        android:paddingVertical="10pt"
+        android:background="@drawable/button_border3"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

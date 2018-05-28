@@ -41,6 +41,8 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
+        Toast.makeText(getApplicationContext(),"하단의 봉사시작 버튼을 클릭하시면 봉사활동이 시작됩니다!",Toast.LENGTH_LONG).show();
+
         Intent fromCall = getIntent();
         String type = fromCall.getStringExtra("type");
         if(type.equals("outside")){

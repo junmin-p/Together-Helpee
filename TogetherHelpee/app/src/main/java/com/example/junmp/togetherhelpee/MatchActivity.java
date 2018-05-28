@@ -26,6 +26,8 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MatchActivity extends AppCompatActivity {
     String phone_num;
@@ -40,7 +42,6 @@ public class MatchActivity extends AppCompatActivity {
 
     Button btn_accept;
     Button btn_cancel;
-    Button btn_refresh;
 
     String type;
     String helperId;
@@ -58,11 +59,14 @@ public class MatchActivity extends AppCompatActivity {
     putRequest putRequest;
     getState getState;
 
+    private TimerTask mTask1;
+    private Timer mTimer1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match);
 
+        Toast.makeText(getApplicationContext(),"우측하단의 버튼을 클릭하면 도움요청이 취소되고, 도움을 주겠다는 봉사자가 자원하면 좌측하단의 수락버튼이 나타납니다.",Toast.LENGTH_LONG).show();
         Intent fromCall = getIntent();
         type = fromCall.getStringExtra("type");
         if(type.equals("outside")){
@@ -96,7 +100,6 @@ public class MatchActivity extends AppCompatActivity {
         txt_match_info = findViewById(R.id.txt_match_info);
         btn_accept = findViewById(R.id.btn_accept);
         btn_cancel = findViewById(R.id.btn_cancel);
-        btn_refresh = findViewById(R.id.btn_refresh);
 
         getState  = new getState();
         getState.execute("http://210.89.191.125/helpee/volunteers/wait/");
@@ -107,7 +110,17 @@ public class MatchActivity extends AppCompatActivity {
         txt_duration.setText("요청 봉사시간: "+duration);
         txt_content.setText("요청 기타사항: "+content);
 
+        mTask1 = new TimerTask() {
+            @Override
+            public void run() {
+                getState  = new getState();
+                getState.execute("http://210.89.191.125/helpee/volunteers/wait/");
+            }
+        };
 
+        mTimer1 = new Timer();
+
+        mTimer1.schedule(mTask1, 3000, 2000);
 
         btn_accept.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,15 +138,6 @@ public class MatchActivity extends AppCompatActivity {
             }
         });
 
-        btn_refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-                overridePendingTransition(0, 0);
-                startActivity(getIntent());
-                overridePendingTransition(0, 0);
-            }
-        });
     }
     private class getState extends AsyncTask<String, Void, String> {
         String errorString = null;
@@ -163,6 +167,7 @@ public class MatchActivity extends AppCompatActivity {
                 }
 
                 if(matchingStatus == 1){
+                    mTimer1.cancel();
                     txt_match_state.setText("매칭 수락 대기중입니다!");
                     txt_match_info.setText("지원한 봉사자의 아이디: "+helperId);
                     btn_accept.setVisibility(View.VISIBLE);

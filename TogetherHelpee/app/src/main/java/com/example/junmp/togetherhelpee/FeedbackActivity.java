@@ -9,6 +9,7 @@ import android.media.AudioTrack;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,7 +47,8 @@ public class FeedbackActivity extends AppCompatActivity {
     int volunteerId = 0;
     int helpeeScore = 5;
 
-    static final String RECORDED_FILE = "/sdcard/recorded.mp4";
+    static final String RECORDED_FILE = Environment.getExternalStorageDirectory()
+            .getAbsolutePath() + "/myrecording.mp3";
     MediaPlayer player;
     MediaRecorder recorder;
     int playbackPosition = 0;
@@ -67,7 +69,7 @@ public class FeedbackActivity extends AppCompatActivity {
         volunteerId = vi.getIntExtra("volunteerId",0);
         Log.d("fdsa",String.valueOf(volunteerId));
 
-        Toast.makeText(getApplicationContext(), "하트를 클릭하여 봉사자의 점수를 메겨주세요.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "하트를 클릭하여 봉사자의 점수를 메겨주세요. 이후 바로 중앙의 마이크 버튼을 클릭하여 녹음을 진행해주시고 녹음을 마치시려면 다시한번 마이크버튼을, 재생하시려면 하단의 플레이버튼을, 그대로 제출하시려면 최하단의 제출버튼을 클릭해주세요.", Toast.LENGTH_LONG).show();
 
         txt_score = findViewById(R.id.txt_score);
         icon1 = findViewById(R.id.icon1);
@@ -89,6 +91,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 icon4.setImageResource(R.drawable.empty);
                 icon5.setImageResource(R.drawable.empty);
                 txt_score.setText("점수: 1점 (1점~5점)");
+                Toast.makeText(getApplicationContext(), "1점을 선택하셨습니다.", Toast.LENGTH_SHORT).show();
                 helpeeScore = 1;
                 Toast.makeText(getApplicationContext(), "아래 마이크 버튼을 클릭하여 의견을 남겨주세요!", Toast.LENGTH_SHORT).show();
             }
@@ -102,6 +105,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 icon4.setImageResource(R.drawable.empty);
                 icon5.setImageResource(R.drawable.empty);
                 txt_score.setText("점수: 2점 (1점~5점)");
+                Toast.makeText(getApplicationContext(), "2점을 선택하셨습니다.", Toast.LENGTH_SHORT).show();
                 helpeeScore = 2;
                 Toast.makeText(getApplicationContext(), "아래 마이크 버튼을 클릭하여 의견을 남겨주세요!", Toast.LENGTH_SHORT).show();
             }
@@ -115,6 +119,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 icon4.setImageResource(R.drawable.empty);
                 icon5.setImageResource(R.drawable.empty);
                 txt_score.setText("점수: 3점 (1점~5점)");
+                Toast.makeText(getApplicationContext(), "3점을 선택하셨습니다.", Toast.LENGTH_SHORT).show();
                 helpeeScore = 3;
                 Toast.makeText(getApplicationContext(), "아래 마이크 버튼을 클릭하여 의견을 남겨주세요!", Toast.LENGTH_SHORT).show();
             }
@@ -128,6 +133,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 icon4.setImageResource(R.drawable.heart);
                 icon5.setImageResource(R.drawable.empty);
                 txt_score.setText("점수: 4점 (1점~5점)");
+                Toast.makeText(getApplicationContext(), "4점을 선택하셨습니다.", Toast.LENGTH_SHORT).show();
                 helpeeScore = 4;
                 Toast.makeText(getApplicationContext(), "아래 마이크 버튼을 클릭하여 의견을 남겨주세요!", Toast.LENGTH_SHORT).show();
             }
@@ -141,6 +147,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 icon4.setImageResource(R.drawable.heart);
                 icon5.setImageResource(R.drawable.heart);
                 txt_score.setText("점수: 5점 (1점~5점)");
+                Toast.makeText(getApplicationContext(), "5점을 선택하셨습니다.", Toast.LENGTH_SHORT).show();
                 helpeeScore = 5;
                 Toast.makeText(getApplicationContext(), "아래 마이크 버튼을 클릭하여 의견을 남겨주세요!", Toast.LENGTH_SHORT).show();
             }
@@ -160,8 +167,8 @@ public class FeedbackActivity extends AppCompatActivity {
                     recorder = new MediaRecorder();
                     recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
                     recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-                    recorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
                     recorder.setOutputFile(RECORDED_FILE);
+                    recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
                     try{
                         Toast.makeText(getApplicationContext(),
                                 "녹음을 시작합니다. 한번더 누르시면 녹음을 마칩니다.", Toast.LENGTH_LONG).show();
@@ -225,6 +232,11 @@ public class FeedbackActivity extends AppCompatActivity {
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(is_record == 1){
+                    recorder.stop();
+                    recorder.release();
+                    recorder = null;
+                }
                 putRecord(Uri.parse(RECORDED_FILE));
                 Intent toEnd = new Intent(FeedbackActivity.this, EndActivity.class);
                 startActivity(toEnd);
@@ -283,7 +295,7 @@ public class FeedbackActivity extends AppCompatActivity {
 
         File file = new File(String.valueOf(fileUri));
         RequestBody reqFile = RequestBody.create(MediaType.parse("file"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("recordfile", volunteerId+".mp4", reqFile);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("recordfile", volunteerId+".mp3", reqFile);
         RequestBody volunteer_Id = RequestBody.create(MediaType.parse("text"), String.valueOf(volunteerId));
         RequestBody helpee_Score = RequestBody.create(MediaType.parse("text"), String.valueOf(helpeeScore));
 
@@ -291,7 +303,6 @@ public class FeedbackActivity extends AppCompatActivity {
         req.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                 Log.d("fadsfsads", "Success");
             }
 

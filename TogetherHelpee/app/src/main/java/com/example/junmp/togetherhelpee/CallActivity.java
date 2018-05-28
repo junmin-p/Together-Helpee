@@ -61,20 +61,6 @@ import java.util.HashMap;
 import static java.lang.Integer.valueOf;
 
 public class CallActivity extends AppCompatActivity {
-    private final int PERMISSIONS_ACCESS_FINE_LOCATION = 1000;
-    private final int PERMISSIONS_ACCESS_COARSE_LOCATION = 1001;
-    private boolean isAccessFineLocation = false;
-    private boolean isAccessCoarseLocation = false;
-    private boolean isPermission = false;
-    private GpsInfo gps;
-
-    private RadioGroup radioGroup;
-    private RadioButton one, two, three, four, five;
-    private int checked = 1;
-
-    private RadioGroup radioGroup2;
-    private RadioButton outside, talk, housework, education;
-    private String type = "outside";
 
     private int flag_speech = 0;
 
@@ -82,8 +68,6 @@ public class CallActivity extends AppCompatActivity {
     private String time;
     private String etc;
 
-    double latitude;
-    double longitude;
 
     String dest_date;
     String dest_time;
@@ -164,102 +148,31 @@ public class CallActivity extends AppCompatActivity {
             }
         });
 
-        radioGroup = (RadioGroup) findViewById(R.id.myRadioGroup);
-
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // find which radio button is selected
-                if(checkedId == R.id.one) {
-                    checked = 1;
-                } else if(checkedId == R.id.two) {
-                    checked = 2;
-                } else if(checkedId == R.id.three) {
-                    checked = 3;
-                } else if(checkedId == R.id.four) {
-                    checked = 4;
-                } else {
-                    checked = 5;
-                }
-            }
-
-        });
-
-        one = (RadioButton) findViewById(R.id.one);
-        two = (RadioButton) findViewById(R.id.two);
-        three = (RadioButton) findViewById(R.id.three);
-        four = (RadioButton) findViewById(R.id.four);
-        five = (RadioButton) findViewById(R.id.five);
-
-        radioGroup2 = (RadioGroup) findViewById(R.id.myRadioGroup2);
-
-        radioGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // find which radio button is selected
-                if(checkedId == R.id.outside) {
-                    type = "outside";
-                } else if(checkedId == R.id.talk) {
-                    type = "talk";
-                } else if(checkedId == R.id.housework) {
-                    type = "housework";
-                } else {
-                    type = "education";
-                }
-            }
-
-        });
-
-        one = (RadioButton) findViewById(R.id.one);
-        two = (RadioButton) findViewById(R.id.two);
-        three = (RadioButton) findViewById(R.id.three);
-        four = (RadioButton) findViewById(R.id.four);
-        five = (RadioButton) findViewById(R.id.five);
-
-        Button btn_send = findViewById(R.id.btn_send);
-        btn_send.setOnClickListener(new View.OnClickListener() {
+        Button btn_next = findViewById(R.id.btn_next);
+        btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if(flag_speech == 0){
                     Toast.makeText(CallActivity.this,"먼저 도움요청 버튼을 누르시고 도움받으실 내용을 말씀해주세요.",Toast.LENGTH_LONG).show();
                 }
                 else{
-                    Toast.makeText(CallActivity.this, type, Toast.LENGTH_SHORT).show();
-                    Toast.makeText(CallActivity.this, String.valueOf(checked), Toast.LENGTH_SHORT).show();
-                    if (!isPermission) {
-                        callPermission();
-                        return;
-                    }
+                    Toast.makeText(getApplicationContext(),"봉사종류와 예상소요시간 선택화면으로 넘어갑니다.",Toast.LENGTH_SHORT).show();
+                    Intent toCall2 = new Intent(CallActivity.this, Call2Activity.class);
 
-                    gps = new GpsInfo(CallActivity.this);
-                    // GPS 사용유무 가져오기
-                    if (gps.isGetLocation()) {
+                    toCall2.putExtra("phonenum", phone_num);
+                    toCall2.putExtra("etc", etc);
+                    toCall2.putExtra("date", dest_date);
+                    toCall2.putExtra("time", dest_time);
 
-                        latitude = gps.getLatitude();
-                        longitude = gps.getLongitude();
-
-                        Log.d("fdasds",String.valueOf(latitude));
-                        Log.d("fdasds",String.valueOf(longitude));
-
-                        postRequest pR = new postRequest();
-                        pR.execute("http://210.89.191.125/helpee/volunteer");
-/*
-                        Toast.makeText(
-                                getApplicationContext(),
-                                "당신의 위치 - \n위도: " + latitude + "\n경도: " + longitude,
-                                Toast.LENGTH_LONG).show();*/
-                    } else {
-                        // GPS 를 사용할수 없으므로
-                        gps.showSettingsAlert();
-                    }
+                    startActivity(toCall2);
+                    finish();
                 }
-
-
             }
         });
-        callPermission();
+
+
+
     }
 
     private RecognitionListener recognitionListener = new RecognitionListener() {
@@ -289,6 +202,7 @@ public class CallActivity extends AppCompatActivity {
 
         @Override
         public void onError(int i) {
+            pd.dismiss();
             textView.setText("예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요");
             Toast.makeText(CallActivity.this,"너무 늦게 말하면 오류뜹니다",Toast.LENGTH_SHORT).show();
             flag_speech = 0;
@@ -312,6 +226,7 @@ public class CallActivity extends AppCompatActivity {
 
             if(flag_speech==1) {
                 messageCheck();
+
             }
         }
 
@@ -528,67 +443,9 @@ public class CallActivity extends AppCompatActivity {
 
     }
 
-    private void callPermission() {
-        // Check the SDK version and whether the permission is already granted or not.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            requestPermissions(
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_ACCESS_FINE_LOCATION);
-
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
-
-            requestPermissions(
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    PERMISSIONS_ACCESS_COARSE_LOCATION);
-        } else {
-            isPermission = true;
-        }
-    }
-
-    class postRequest extends AsyncTask<String, Void, String> {
-        RequestHandler rh = new RequestHandler();
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-
-            Intent toCall = new Intent(CallActivity.this, CallActivity.class);
-            toCall.putExtra("phonenum", phone_num);
-            startActivity(toCall);
-            finish();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            String UPLOAD_URL = params[0];
-            HashMap<String, String> data = new HashMap<>();
-            data.put("type", type);
-            data.put("userPhone", phone_num);
-            data.put("longitude", String.valueOf(longitude));
-            data.put("latitude", String.valueOf(latitude));
-            data.put("content", etc);
-            data.put("date", dest_date);
-            data.put("time", dest_time);
-            data.put("duration", String.valueOf(checked));
 
 
 
-            String result = rh.sendPostRequest(UPLOAD_URL, data);
-
-            return result;
-        }
-    }
 
     private class getVolunteer extends AsyncTask<String, Void, String> {
         String errorString = null;
