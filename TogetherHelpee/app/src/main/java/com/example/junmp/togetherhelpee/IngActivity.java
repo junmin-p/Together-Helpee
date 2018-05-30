@@ -42,18 +42,6 @@ public class IngActivity extends AppCompatActivity {
 
         Toast.makeText(getApplicationContext(),"현재 도움을 받으시고 있으시군요? 봉사자가 종료하면 자동으로 다음화면으로 넘어갑니다.",Toast.LENGTH_LONG).show();
 
-        mTask2 = new TimerTask() {
-            @Override
-            public void run() {
-                getVolunteer = new getVolunteer();
-                getVolunteer.execute("http://210.89.191.125/helpee/volunteers/wait/");
-            }
-        };
-
-        mTimer2 = new Timer();
-
-        mTimer2.schedule(mTask2, 3000, 2000);
-
 
         Intent getId = getIntent();
         volunteerId = getId.getIntExtra("volunteerId" , 0);
@@ -94,7 +82,6 @@ public class IngActivity extends AppCompatActivity {
             if (result.equals("[]")){
                 Intent toFeed = new Intent(IngActivity.this, FeedbackActivity.class);
                 toFeed.putExtra("volunteerId",volunteerId);
-                mTimer2.cancel();
                 startActivity(toFeed);
                 finish();
             }

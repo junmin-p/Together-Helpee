@@ -8,13 +8,14 @@
     tools:context=".IngActivity">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:textSize="20pt"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:textStyle="bold"
-        android:textColor="#1c7fff"
+        android:textColor="#000000"
         android:text="도움 받는 중이시군요?"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -226,8 +226,8 @@ public class CallActivity extends AppCompatActivity {
 
             if(flag_speech==1) {
                 messageCheck();
-
             }
+            Toast.makeText(getApplicationContext(), textView.getText().toString(),Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -462,6 +462,8 @@ public class CallActivity extends AppCompatActivity {
 
             Log.d("Asd",result);
             if (result.equals("[]")){
+                Toast.makeText(getApplicationContext(), R.string.guide, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요", Toast.LENGTH_SHORT).show();
                 haveRegisted = 0;
             }
             else {

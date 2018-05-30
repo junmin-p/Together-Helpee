@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         }catch(Exception e){
         }
 
-        PhoneNum = "01051236135";
+        PhoneNum = "01023431234";
 
 
         checkDevice = new checkDevice();
