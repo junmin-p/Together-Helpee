@@ -56,6 +56,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import static java.lang.Integer.valueOf;
@@ -266,11 +267,44 @@ public class CallActivity extends AppCompatActivity {
 
                 continue;
             }
-            if (temp_n ==0 && words[i].contains("일")){
+            if (temp_n ==0 && words[i].contains("일") && !(words[i].contains("내일")) && !(words[i].contains("네일"))){
                 result_date.append(" " + words[i]);
                 temp_n = 1;
 
                 continue;
+            }
+            if(words[i].contains("모레") || words[i].contains("모래")){
+                Calendar today = Calendar.getInstance ( );
+                today.add ( Calendar.DATE, 2 );
+
+                Date tomorrow = today.getTime ( );
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                String a = sdf.format(tomorrow);
+                result_day = a.substring(4,6)+"월 "+a.substring(6,8)+"일";
+                date_flag = 1;
+                break;
+            }
+            if(words[i].contains("내일") || words[i].contains("네일")){
+                Calendar today = Calendar.getInstance ( );
+                today.add ( Calendar.DATE, 1 );
+
+                Date tomorrow = today.getTime ( );
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                String a = sdf.format(tomorrow);
+                result_day = a.substring(4,6)+"월 "+a.substring(6,8)+"일";
+                date_flag = 1;
+                break;
+            }
+            if(words[i].contains("글피")){
+                Calendar today = Calendar.getInstance ( );
+                today.add ( Calendar.DATE, 3);
+
+                Date tomorrow = today.getTime ( );
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                String a = sdf.format(tomorrow);
+                result_day = a.substring(4,6)+"월 "+a.substring(6,8)+"일";
+                date_flag = 1;
+                break;
             }
         }
         if(temp_m == 1 && temp_n == 1){

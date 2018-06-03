@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     putKey putKey;
     checkDevice checkDevice;
 
+    private static final int REQUEST_READ_PHONE_STATE_PERMISSION = 225;
+
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +60,22 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        TelephonyManager mgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        idByTelephonyManager = mgr.getDeviceId();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            TelephonyManager mgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            idByTelephonyManager = mgr.getDeviceId();
+
+            try{
+                PhoneNum = mgr.getLine1Number();//mgr.getLine1Number();
+                PhoneNum = PhoneNum.replace("+82", "0");
+            }catch(Exception e){
+            }
+        }
+        else {
+                Log.d("phony", "Current app does not have READ_PHONE_STATE permission");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_READ_PHONE_STATE_PERMISSION);
+        }
+
+
 
         btn_sign.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,22 +90,35 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        try{
-            PhoneNum = mgr.getLine1Number();//mgr.getLine1Number();
-            PhoneNum = PhoneNum.replace("+82", "0");
-        }catch(Exception e){
-        }
-
-        PhoneNum = "01023431234";
-
 
         checkDevice = new checkDevice();
         checkDevice.execute("http://210.89.191.125/helpee/device");
 
 
+
+
     }
 
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_READ_PHONE_STATE_PERMISSION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.e("phony", "Permission Granted");
+                    //Proceed to next steps
+
+                } else {
+                    Log.e("phony", "Permission Denied");
+                }
+                return;
+            }
+
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
 
 
 

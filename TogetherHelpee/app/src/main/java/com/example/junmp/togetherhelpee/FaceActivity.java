@@ -448,6 +448,9 @@ public class FaceActivity extends AppCompatActivity {
 
 
         File file = new File(String.valueOf(fileUri));
+        if(phone_num == null){
+            Log.d("phony","sad");
+        }
         RequestBody reqFile = RequestBody.create(MediaType.parse("file"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("userfile", file.getName(), reqFile);
         RequestBody user_phone = RequestBody.create(MediaType.parse("text"), phone_num);

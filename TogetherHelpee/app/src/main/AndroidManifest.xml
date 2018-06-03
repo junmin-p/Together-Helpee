@@ -35,30 +35,38 @@
 
         <activity
             android:name=".CallActivity"
+            android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".FaceActivity"
+            android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".SignupActivity"
+            android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
+            android:label=""
             android:screenOrientation="portrait"></activity>
 
         <service android:name=".GpsInfo" />
 
         <activity
             android:name=".MatchActivity"
+            android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".ErrorActivity"
+            android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".StartActivity"
+            android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".IngActivity"
+            android:label=""
             android:screenOrientation="portrait" />
 
         <receiver android:name=".processTimerReceiver">
@@ -69,24 +77,29 @@
 
         <activity
             android:name=".FeedbackActivity"
+            android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".EndActivity"
+            android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".Call2Activity"
+            android:label=""
             android:screenOrientation="portrait" />
         <activity
             android:name=".SplashActivity"
+            android:label=""
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".fcm_popup"
-            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"></activity>
+            android:label=""
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
+        </activity>
     </application>
 
 </manifest>
