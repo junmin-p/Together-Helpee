@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "234858417440",
+    "firebase_url": "https://together-d5ce1.firebaseio.com",
+    "project_id": "together-d5ce1",
+    "storage_bucket": "together-d5ce1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234858417440:android:c17ac810a73bbc97",
+        "android_client_info": {
+          "package_name": "com.example.junmp.togetherhelpee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "234858417440-36rcqg8vfuu8jt3sid6h984kv1f982tg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3oc_c5eeD-quwA52uIFxtdfRBqlMgHu8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
