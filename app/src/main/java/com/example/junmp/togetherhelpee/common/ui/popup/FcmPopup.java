@@ -10,7 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.example.junmp.togetherhelpee.activity.home.MainActivity;
+import com.example.junmp.togetherhelpee.MainActivity;
 import com.example.junmp.togetherhelpee.R;
 
 public class FcmPopup extends Activity {

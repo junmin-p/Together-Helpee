@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.junmp.togetherhelpee.R;
-import com.example.junmp.togetherhelpee.activity.register.form.FaceWithActivity;
+import com.example.junmp.togetherhelpee.activity.user.register.form.FaceWithCameraActivity;
 import com.example.junmp.togetherhelpee.activity.volunteer.request.form.WhenFormActivity;
 import com.example.junmp.togetherhelpee.domain.user.UserService;
 
@@ -28,7 +28,7 @@ public class RequestActivity extends AppCompatActivity {
                  * 회원 가입 완료 이후 도움 요청 Activity 로 진입한다.
                  */
                 if (userService.isNotRegistered()) {
-                    Intent registerIntent = new Intent(RequestActivity.this, FaceWithActivity.class);
+                    Intent registerIntent = new Intent(RequestActivity.this, FaceWithCameraActivity.class);
                     registerIntent.putExtra("nextActivity" , WhenFormActivity.class.getSimpleName());
                     startActivity(registerIntent);
 

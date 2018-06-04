@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.junmp.togetherhelpee.R;
-import com.example.junmp.togetherhelpee.activity.home.MainActivity;
 import com.example.junmp.togetherhelpee.activity.volunteer.request.RequestActivity;
 import com.example.junmp.togetherhelpee.domain.user.User;
 import com.example.junmp.togetherhelpee.domain.user.UserService;

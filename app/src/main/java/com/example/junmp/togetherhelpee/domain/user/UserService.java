@@ -8,7 +8,7 @@ public class UserService {
      */
     public boolean isRegistered() {
         // TODO 박준민 구현할것.
-        return true;
+        return false;
     }
 
     public boolean isNotRegistered() {

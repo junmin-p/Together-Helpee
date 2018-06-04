@@ -46,7 +46,7 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.home.MainActivity"
+            android:name=".MainActivity"
             android:label=""
             android:screenOrientation="portrait"></activity>
 
@@ -63,9 +63,25 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.register.form.FaceWithActivity"
+            android:name=".activity.user.register.form.FaceWithCameraActivity"
             android:label=""
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.user.register.form.NameWithVoiceActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.user.register.form.AgeWithVoiceActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.user.register.form.ConfirmActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
 
         <activity
             android:name=".ErrorActivity"

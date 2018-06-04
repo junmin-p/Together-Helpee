@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#de5532"
-    tools:context=".activity.home.MainActivity">
+    tools:context=".MainActivity">
 
     <ImageView
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.home.MainActivity" >
+        tools:context=".MainActivity" >
 
         <Button
             android:id="@+id/request_volunteer"

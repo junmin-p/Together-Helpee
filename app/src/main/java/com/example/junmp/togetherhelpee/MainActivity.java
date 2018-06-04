@@ -1,4 +1,4 @@
-package com.example.junmp.togetherhelpee.activity.home;
+package com.example.junmp.togetherhelpee;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -20,11 +20,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.example.junmp.togetherhelpee.CallActivity;
-import com.example.junmp.togetherhelpee.ErrorActivity;
-import com.example.junmp.togetherhelpee.FaceActivity;
-import com.example.junmp.togetherhelpee.R;
-import com.example.junmp.togetherhelpee.RequestHandler;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.BufferedReader;
