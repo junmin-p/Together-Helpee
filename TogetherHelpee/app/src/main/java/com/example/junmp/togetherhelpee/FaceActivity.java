@@ -92,7 +92,7 @@ public class FaceActivity extends AppCompatActivity {
             mBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             Matrix matrix = new Matrix();
             matrix.postRotate(270);
-            Bitmap rotated = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(),
+            Bitmap rotated = Bitmap.createBitmap(mBitmap, 0, 0, 960, 1280,
                     matrix, true);
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
@@ -430,7 +430,7 @@ public class FaceActivity extends AppCompatActivity {
 
             mCameraSource.release();
             Toast.makeText(getApplicationContext(),"abc",Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(FaceActivity.this, CallActivity.class);
+            Intent intent = new Intent(FaceActivity.this, Call1Activity.class);
             intent.putExtra("bm", tempBmp);
             startActivity(intent);
             finish();

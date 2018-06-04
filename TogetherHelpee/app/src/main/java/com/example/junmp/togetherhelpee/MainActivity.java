@@ -2,8 +2,6 @@ package com.example.junmp.togetherhelpee;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -281,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             else if (result.equals("true")) {
-                Intent toCall = new Intent(MainActivity.this, CallActivity.class);
+                Intent toCall = new Intent(MainActivity.this, Call1Activity.class);
                 toCall.putExtra("phonenum", PhoneNum);
                 startActivity(toCall);
                 finish();

@@ -2,14 +2,8 @@ package com.example.junmp.togetherhelpee;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.speech.RecognitionListener;
@@ -20,55 +14,37 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telecom.Call;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.entity.BufferedHttpEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
 import static java.lang.Integer.valueOf;
 
-public class CallActivity extends AppCompatActivity {
+public class Call1Activity extends AppCompatActivity {
 
     private int flag_speech = 0;
 
     private String date;
     private String time;
     private String etc;
-
 
     String dest_date;
     String dest_time;
@@ -91,7 +67,7 @@ public class CallActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_call);
+        setContentView(R.layout.activity_call1);
 
         Intent fromMain = getIntent();
 
@@ -101,17 +77,6 @@ public class CallActivity extends AppCompatActivity {
         Log.d("fads",phone_num);
 
         textView = (TextView) findViewById(R.id.textView);
-        textView2 = findViewById(R.id.textView2);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        Calendar c1 = Calendar.getInstance();
-        String strToday = sdf.format(c1.getTime());
-
-        String current_year = strToday.substring(0, 4);
-        String current_month = strToday.substring(4, 6);
-        String current_day = strToday.substring(6, 8);
-
-        textView2.setText("오늘 날짜: "+current_month+"월 "+current_day+"일");
 
         getWait = new getWait();
         getWait.execute("http://210.89.191.125/helpee/volunteer/");
@@ -140,7 +105,7 @@ public class CallActivity extends AppCompatActivity {
 
 
 
-        Button btn_call = (Button) findViewById(R.id.btn_call);
+        ImageView btn_call = (ImageView) findViewById(R.id.btn_call);
         btn_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,17 +114,17 @@ public class CallActivity extends AppCompatActivity {
             }
         });
 
-        Button btn_next = findViewById(R.id.btn_next);
+        Button btn_next = findViewById(R.id.btn_yes);
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if(flag_speech == 0){
-                    Toast.makeText(CallActivity.this,"먼저 도움요청 버튼을 누르시고 도움받으실 내용을 말씀해주세요.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(Call1Activity.this,"먼저 마이크 버튼을 누르시고 도움받으실 내용을 말씀해주세요.",Toast.LENGTH_LONG).show();
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"봉사종류와 예상소요시간 선택화면으로 넘어갑니다.",Toast.LENGTH_SHORT).show();
-                    Intent toCall2 = new Intent(CallActivity.this, Call2Activity.class);
+                    Intent toCall2 = new Intent(Call1Activity.this, Call4Activity.class);
 
                     toCall2.putExtra("phonenum", phone_num);
                     toCall2.putExtra("etc", etc);
@@ -179,7 +144,7 @@ public class CallActivity extends AppCompatActivity {
     private RecognitionListener recognitionListener = new RecognitionListener() {
         @Override
         public void onReadyForSpeech(Bundle bundle) {
-            pd = new ProgressDialog(CallActivity.this);
+            pd = new ProgressDialog(Call1Activity.this);
             pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pd.setMessage("요청사항을 마이크에 대고 예시와 같이 말씀해주세요.\n예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요");
             pd.show();
@@ -205,7 +170,7 @@ public class CallActivity extends AppCompatActivity {
         public void onError(int i) {
             pd.dismiss();
             textView.setText("예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요");
-            Toast.makeText(CallActivity.this,"너무 늦게 말하면 오류뜹니다",Toast.LENGTH_SHORT).show();
+            Toast.makeText(Call1Activity.this,"너무 늦게 말하면 오류뜹니다",Toast.LENGTH_SHORT).show();
             flag_speech = 0;
 
         }
@@ -273,6 +238,17 @@ public class CallActivity extends AppCompatActivity {
 
                 continue;
             }
+            if(words[i].contains("오늘") || words[i].contains("오널")){
+                Calendar today = Calendar.getInstance ( );
+                today.add ( Calendar.DATE, 0 );
+
+                Date tomorrow = today.getTime ( );
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                String a = sdf.format(tomorrow);
+                result_day = a.substring(4,6)+"월 "+a.substring(6,8)+"일";
+                date_flag = 1;
+                break;
+            }
             if(words[i].contains("모레") || words[i].contains("모래")){
                 Calendar today = Calendar.getInstance ( );
                 today.add ( Calendar.DATE, 2 );
@@ -313,7 +289,7 @@ public class CallActivity extends AppCompatActivity {
         }
         if (date_flag == 0){
             textView.setText("예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요");
-            Toast.makeText(CallActivity.this,"다시 한번 말씀해주세요. 날짜정보가 정확하지 않습니다.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(Call1Activity.this,"다시 한번 말씀해주세요. 날짜정보가 정확하지 않습니다.",Toast.LENGTH_SHORT).show();
         }
 
         for (int i=0; i<words.length; i++) {
@@ -346,14 +322,14 @@ public class CallActivity extends AppCompatActivity {
         }
         else {
             textView.setText("예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요");
-            Toast.makeText(CallActivity.this,"다시 한번 말씀해주세요. 시간정보가 정확하지 않습니다.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(Call1Activity.this,"다시 한번 말씀해주세요. 시간정보가 정확하지 않습니다.",Toast.LENGTH_SHORT).show();
         }
         if (time_flag==1) {
             int keyword_flag = -1;
 
             if (end_flag == words.length - 1) {
                 textView.setText("예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요");
-                Toast.makeText(CallActivity.this,"다시 한번 말씀해주세요. 봉사정보가 정확하지 않습니다.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(Call1Activity.this,"다시 한번 말씀해주세요. 봉사정보가 정확하지 않습니다.",Toast.LENGTH_SHORT).show();
             }
             else {
                 for (int j=0; j<words.length; j++){
@@ -429,7 +405,7 @@ public class CallActivity extends AppCompatActivity {
         }
         else if(Integer.valueOf(dest_month) == Integer.valueOf(current_month) && Integer.valueOf(dest_day) < Integer.valueOf(current_day)){
             textView.setText("예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요");
-            Toast.makeText(CallActivity.this, "오늘 이후의 날짜로 신청해주세요!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Call1Activity.this, "오늘 이후의 날짜로 신청해주세요!", Toast.LENGTH_SHORT).show();
             flag_speech = 0;
         }
 
@@ -449,7 +425,7 @@ public class CallActivity extends AppCompatActivity {
         }
         if(dest_hour_str.equals("")) {
             textView.setText("예시) 8월 17일 오전 2시에 삼성역까지 데려다 주세요");
-            Toast.makeText(CallActivity.this,"시간을 정확히 말해주세요.",Toast.LENGTH_SHORT).show();
+            Toast.makeText(Call1Activity.this,"시간을 정확히 말해주세요.",Toast.LENGTH_SHORT).show();
             flag_speech = 0;
         }
         int dest_hour = valueOf(dest_hour_str) + am_pm;
@@ -587,7 +563,7 @@ public class CallActivity extends AppCompatActivity {
                 int volunteerId = item.getInt("volunteerId");
 
                 if(matchingStatus == 2){
-                    Intent toStart = new Intent(CallActivity.this, StartActivity.class);
+                    Intent toStart = new Intent(Call1Activity.this, StartActivity.class);
                     toStart.putExtra("type", type);
                     toStart.putExtra("helperId", helperId);
                     toStart.putExtra("content", content);
@@ -600,7 +576,7 @@ public class CallActivity extends AppCompatActivity {
                     finish();
                 }
                 else{
-                    Intent toMatch = new Intent(CallActivity.this, MatchActivity.class);
+                    Intent toMatch = new Intent(Call1Activity.this, MatchActivity.class);
                     toMatch.putExtra("type", type);
                     toMatch.putExtra("helperId", helperId);
                     toMatch.putExtra("matchingStatus", matchingStatus);
@@ -619,7 +595,7 @@ public class CallActivity extends AppCompatActivity {
             }
             else if(startStatus == 1){
                 int volunteerId = item.getInt("volunteerId");
-                Intent toIng = new Intent(CallActivity.this, IngActivity.class);
+                Intent toIng = new Intent(Call1Activity.this, IngActivity.class);
                 toIng.putExtra("volunteerId", volunteerId);
                 toIng.putExtra("phonenum", phone_num);
                 startActivity(toIng);
@@ -651,7 +627,7 @@ public class CallActivity extends AppCompatActivity {
             }
             else {
                 Toast.makeText(getApplicationContext(),"최근 받으신 봉사활동에 대한 평가를 먼저 진행해주세요!", Toast.LENGTH_SHORT).show();
-                Intent toFeedback = new Intent(CallActivity.this, FeedbackActivity.class);
+                Intent toFeedback = new Intent(Call1Activity.this, FeedbackActivity.class);
                 toFeedback.putExtra("volunteerId", Integer.valueOf(result));
                 startActivity(toFeedback);
                 finish();

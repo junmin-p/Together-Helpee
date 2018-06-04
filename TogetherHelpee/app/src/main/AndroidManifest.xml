@@ -34,7 +34,7 @@
         </service>
 
         <activity
-            android:name=".CallActivity"
+            android:name=".Call1Activity"
             android:label=""
             android:screenOrientation="portrait" />
         <activity
@@ -48,7 +48,7 @@
         <activity
             android:name=".MainActivity"
             android:label=""
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <service android:name=".GpsInfo" />
 
@@ -84,7 +84,7 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Call2Activity"
+            android:name=".Call4Activity"
             android:label=""
             android:screenOrientation="portrait" />
         <activity
@@ -93,13 +93,16 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".fcm_popup"
+        <activity
+            android:name=".fcm_popup"
             android:label=""
-            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
-        </activity>
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
+        <activity android:name=".Call2Activity" />
+        <activity android:name=".Call3Activity"></activity>
     </application>
 
 </manifest>

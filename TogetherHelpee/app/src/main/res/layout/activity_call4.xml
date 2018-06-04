@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".Call4Activity">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200px"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/layout_radio2"
+        android:id="@+id/layout_radio"
+        tools:context=".MainActivity" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:id="@+id/text"
+            android:text="봉사예정시간"
+            android:textSize="14pt"/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text"
+            android:gravity="center_horizontal"
+            android:id="@+id/myRadioGroup"
+            android:checkedButton="@+id/one" >
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/one"
+                android:textStyle="bold"
+                android:textSize="12pt"
+                android:textColor="#ffffff"
+                android:buttonTint="#ffcbcb"
+                android:text="1시간" />
+
+            <RadioButton
+                android:id="@+id/two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#ffcbcb"
+                android:text="2시간"
+                android:textColor="#ffffff"
+                android:textSize="12pt"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#ffcbcb"
+                android:id="@+id/three"
+                android:textStyle="bold"
+                android:textSize="12pt"
+                android:textColor="#ffffff"
+                android:text="3시간" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#ffcbcb"
+                android:id="@+id/four"
+                android:textStyle="bold"
+                android:textSize="12pt"
+                android:textColor="#ffffff"
+                android:text="4시간" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#ffcbcb"
+                android:id="@+id/five"
+                android:textStyle="bold"
+                android:textSize="12pt"
+                android:textColor="#ffffff"
+                android:text="5시간" />
+        </RadioGroup>
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/layout_radio"
+        android:layout_marginTop="200px"
+        android:id="@+id/layout_radio2"
+        tools:context=".MainActivity" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:id="@+id/text2"
+            android:text="봉사종류"
+            android:gravity="center_horizontal"
+            android:textSize="14pt"/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text2"
+            android:id="@+id/myRadioGroup2"
+            android:gravity="center_horizontal"
+            android:checkedButton="@+id/outside" >
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/outside"
+                android:buttonTint="#b5e8ff"
+                android:textStyle="bold"
+                android:textSize="12pt"
+                android:textColor="#ffffff"
+                android:text="외출" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/talk"
+                android:buttonTint="#b5e8ff"
+                android:textStyle="bold"
+                android:textSize="12pt"
+                android:textColor="#ffffff"
+                android:text="말동무" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/housework"
+                android:buttonTint="#b5e8ff"
+                android:textStyle="bold"
+                android:textSize="12pt"
+                android:textColor="#ffffff"
+                android:text="가사" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/education"
+                android:buttonTint="#b5e8ff"
+                android:textStyle="bold"
+                android:textSize="12pt"
+                android:textColor="#ffffff"
+                android:text="교육" />
+        </RadioGroup>
+    </RelativeLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_border3"
+        android:paddingVertical="10pt"
+        android:text="전송"
+        android:textSize="15pt"
+        android:textStyle="bold"
+        android:id="@+id/btn_send"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>
