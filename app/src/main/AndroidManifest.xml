@@ -46,7 +46,7 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.home.MainActivity"
             android:label=""
             android:screenOrientation="portrait"></activity>
 
@@ -88,7 +88,7 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".activity.splash.SplashActivity"
             android:label=""
             android:screenOrientation="portrait">
             <intent-filter>
@@ -96,7 +96,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".fcm_popup"
+        <activity android:name=".common.ui.popup.FcmPopup"
             android:label=""
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
         </activity>

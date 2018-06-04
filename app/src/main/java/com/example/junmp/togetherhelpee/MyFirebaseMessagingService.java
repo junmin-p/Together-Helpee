@@ -10,18 +10,12 @@ import android.net.Uri;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.junmp.togetherhelpee.MatchActivity;
-import com.example.junmp.togetherhelpee.R;
+import com.example.junmp.togetherhelpee.common.ui.popup.FcmPopup;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.net.URL;
-import java.net.URLConnection;
 
 
 public class MyFirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
@@ -74,7 +68,7 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
                 .setSound(defaultSoundUri).setLights(000000255,500,2000)
                 .setContentIntent(pendingIntent);
 
-        Intent popupIntent = new Intent(getApplicationContext(), fcm_popup.class);
+        Intent popupIntent = new Intent(getApplicationContext(), FcmPopup.class);
         popupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         popupIntent.putExtra("msg", message);
         popupIntent.putExtra("id", id);

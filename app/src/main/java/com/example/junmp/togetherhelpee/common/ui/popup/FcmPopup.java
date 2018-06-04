@@ -1,8 +1,7 @@
-package com.example.junmp.togetherhelpee;
+package com.example.junmp.togetherhelpee.common.ui.popup;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -11,7 +10,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-public class fcm_popup extends Activity {
+import com.example.junmp.togetherhelpee.activity.home.MainActivity;
+import com.example.junmp.togetherhelpee.R;
+
+public class FcmPopup extends Activity {
     private TextView message_txt;
     private String message;
     private String id;

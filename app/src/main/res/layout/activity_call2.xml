@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/layout_radio2"
         android:id="@+id/layout_radio"
-        tools:context=".MainActivity" >
+        tools:context=".activity.home.MainActivity" >
 
         <TextView
             android:layout_width="match_parent"
@@ -98,7 +98,7 @@
         app:layout_constraintLeft_toRightOf="@+id/layout_radio"
         android:layout_marginTop="200px"
         android:id="@+id/layout_radio2"
-        tools:context=".MainActivity" >
+        tools:context=".activity.home.MainActivity" >
 
         <TextView
             android:layout_width="match_parent"

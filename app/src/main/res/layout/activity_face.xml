@@ -10,16 +10,16 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true">
 
-    <com.example.junmp.togetherhelpee.camera.CameraSourcePreview
+    <com.example.junmp.togetherhelpee.common.camera.util.CameraSourcePreview
         android:id="@+id/preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.example.junmp.togetherhelpee.camera.GraphicOverlay
+        <com.example.junmp.togetherhelpee.common.camera.util.GraphicOverlay
             android:id="@+id/faceOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.example.junmp.togetherhelpee.camera.CameraSourcePreview>
+    </com.example.junmp.togetherhelpee.common.camera.util.CameraSourcePreview>
 
 </LinearLayout>

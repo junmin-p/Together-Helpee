@@ -1,4 +1,4 @@
-package com.example.junmp.togetherhelpee.camera;
+package com.example.junmp.togetherhelpee.common.util.camera;
 
 import android.content.Context;
 import android.graphics.Canvas;

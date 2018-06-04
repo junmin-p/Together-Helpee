@@ -1,8 +1,11 @@
-package com.example.junmp.togetherhelpee;
+package com.example.junmp.togetherhelpee.activity.splash;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.junmp.togetherhelpee.R;
+import com.example.junmp.togetherhelpee.activity.home.MainActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
