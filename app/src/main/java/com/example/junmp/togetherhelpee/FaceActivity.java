@@ -415,7 +415,7 @@ public class FaceActivity extends AppCompatActivity {
 
             mCameraSource.release();
             Toast.makeText(getApplicationContext(),"abc",Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(FaceActivity.this, CallActivity.class);
+            Intent intent = new Intent(FaceWithActivity.this, CallActivity.class);
             intent.putExtra("bm", tempBmp);
             startActivity(intent);
             finish();

@@ -56,6 +56,17 @@
             android:name=".MatchActivity"
             android:label=""
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.volunteer.request.RequestActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.register.form.FaceWithActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".ErrorActivity"
             android:label=""
