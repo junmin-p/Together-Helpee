@@ -1,4 +1,4 @@
-package com.example.junmp.togetherhelpee;
+package com.example.junmp.togetherhelpee.activity.user.register.form;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,16 +12,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
+import com.example.junmp.togetherhelpee.R;
+import com.example.junmp.togetherhelpee.activity.home.DisplayHome;
+import com.example.junmp.togetherhelpee.common.util.DeviceUUIDFactory;
 import com.example.junmp.togetherhelpee.common.util.camera.CameraSourcePreview;
 import com.example.junmp.togetherhelpee.common.util.camera.GraphicOverlay;
+import com.example.junmp.togetherhelpee.domain.file.FileService;
+import com.example.junmp.togetherhelpee.domain.user.User;
+import com.example.junmp.togetherhelpee.domain.volunteer.Volunteer;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.vision.CameraSource;
@@ -36,23 +42,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
-
-public class FaceActivity extends AppCompatActivity {
-    String phone_num;
-    String from;
-    String device_Key;
-
+public class FaceFormActivity extends AppCompatActivity {
+    private FileService fileService = new FileService();
     private static final String TAG = "FaceTracker";
 
     private CameraSource mCameraSource = null;
@@ -63,9 +55,8 @@ public class FaceActivity extends AppCompatActivity {
     private CameraSourcePreview mPreview;
     private GraphicOverlay mGraphicOverlay;
 
-    private static final int RC_HANDLE_GMS = 9001;
     // permission request codes need to be < 256
-    private static final int RC_HANDLE_CAMERA_PERM = 2;
+    private static final int HANDLE_CAMERA_PERMITTION = 2;
 
 
     private CameraSource.PictureCallback mPicture = new CameraSource.PictureCallback() {
@@ -93,36 +84,36 @@ public class FaceActivity extends AppCompatActivity {
                 rotated.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 stream.flush();
                 stream.close();
+                mBitmap.recycle();
             } catch (IOException e) // Catch the exception
             {
                 e.printStackTrace();
             }
 
-            Log.d("fadsfsads", from);
-            Uri savedImageURI = Uri.parse(file.getAbsolutePath());
-
-            Log.d("fadsfsads", "123");
-            if(from.equals("first")){
-                uploadFile(savedImageURI);
-            }
-            else if(from.equals("re")){
-                putFile(savedImageURI);
-            }
-
-
+            new AsyncInit().execute(file);
             mCameraSource.release();
 
 
 
-            Intent intent = new Intent(FaceActivity.this, SignupActivity.class);
-            intent.putExtra("deviceKey",device_Key);
-            intent.putExtra("url", String.valueOf(savedImageURI));
-            intent.putExtra("phonenum", phone_num);
+        }
+    };
 
+
+    private class AsyncInit extends AsyncTask<File, Void, String> {
+        @Override
+        protected String doInBackground(File... params) {
+            return fileService.uplaod(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String home) {
+            Log.d("==========" , home);
+            Intent intent = new Intent(FaceFormActivity.this, NameFormActivity.class);
             startActivity(intent);
             finish();
         }
-    };
+    }
+
     private CameraSource.ShutterCallback mShutter = new CameraSource.ShutterCallback() {
         @Override
         public void onShutter() {
@@ -139,22 +130,8 @@ public class FaceActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        setContentView(R.layout.activity_face);
+        setContentView(R.layout.activity_user_form_face);
 
-        Intent intent = getIntent();
-        if(intent.getStringExtra("phonenum")!=null){
-            phone_num = intent.getStringExtra("phonenum");
-        }
-        if(intent.getStringExtra("from").equals("first")){
-            from = "first";
-        }
-        else if(intent.getStringExtra("from").equals("re")){
-            from = "re";
-        }
-        if(intent.getStringExtra("deviceKey")!=null){
-            device_Key = intent.getStringExtra("deviceKey");
-        }
-        Toast.makeText(getApplicationContext(),"얼굴 인식 시 자동으로 사진 촬영됩니다.",Toast.LENGTH_SHORT).show();
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
 
@@ -180,7 +157,7 @@ public class FaceActivity extends AppCompatActivity {
 
         if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
                 android.Manifest.permission.CAMERA)) {
-            ActivityCompat.requestPermissions(this, permissions, RC_HANDLE_CAMERA_PERM);
+            ActivityCompat.requestPermissions(this, permissions, HANDLE_CAMERA_PERMITTION);
 
             return;
         }
@@ -190,8 +167,8 @@ public class FaceActivity extends AppCompatActivity {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityCompat.requestPermissions(FaceActivity.this, permissions,
-                        RC_HANDLE_CAMERA_PERM);
+                ActivityCompat.requestPermissions(FaceFormActivity.this, permissions,
+                        HANDLE_CAMERA_PERMITTION);
             }
         };
 
@@ -226,7 +203,7 @@ public class FaceActivity extends AppCompatActivity {
         }
 
         mCameraSource = new CameraSource.Builder(context, detector)
-                .setRequestedPreviewSize(640, 480)
+
                 .setFacing(CameraSource.CAMERA_FACING_FRONT)
                 .setRequestedFps(30.0f)
                 .build();
@@ -280,7 +257,7 @@ public class FaceActivity extends AppCompatActivity {
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode != RC_HANDLE_CAMERA_PERM) {
+        if (requestCode != HANDLE_CAMERA_PERMITTION) {
             Log.d(TAG, "Got unexpected permission result: " + requestCode);
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             return;
@@ -288,7 +265,7 @@ public class FaceActivity extends AppCompatActivity {
 
         if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Camera permission granted - initialize the camera source");
-            // we have permission, so create the camerasource
+            // we have permission, so builder the camerasource
             createCameraSource();
             return;
         }
@@ -324,8 +301,7 @@ public class FaceActivity extends AppCompatActivity {
         int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(
                 getApplicationContext());
         if (code != ConnectionResult.SUCCESS) {
-            Dialog dlg =
-                    GoogleApiAvailability.getInstance().getErrorDialog(this, code, RC_HANDLE_GMS);
+            Dialog dlg = GoogleApiAvailability.getInstance().getErrorDialog(this, code, 9001);
             dlg.show();
         }
 
@@ -346,7 +322,7 @@ public class FaceActivity extends AppCompatActivity {
 
     /**
      * Factory for creating a face tracker to be associated with a new face.  The multiprocessor
-     * uses this factory to create face trackers as needed -- one for each individual.
+     * uses this factory to builder face trackers as needed -- one for each individual.
      */
     private class GraphicFaceTrackerFactory implements MultiProcessor.Factory<Face> {
         @Override
@@ -376,6 +352,7 @@ public class FaceActivity extends AppCompatActivity {
             mFaceGraphic.setId(faceId);
 
         }
+
         /**
          * Update the position/characteristics of the face within the overlay.
          */
@@ -415,13 +392,14 @@ public class FaceActivity extends AppCompatActivity {
 
             mCameraSource.release();
             Toast.makeText(getApplicationContext(),"abc",Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(FaceWithCameraActivity.this, CallActivity.class);
+            Intent intent = new Intent(FaceActive.this, CallActivity.class);
             intent.putExtra("bm", tempBmp);
             startActivity(intent);
             finish();
             */
         }
     }
+/*
 
     private void uploadFile(Uri fileUri) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -429,17 +407,17 @@ public class FaceActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
 // Change base URL to your upload server URL.
-        FileUploadService service = new Retrofit.Builder().baseUrl("http://210.89.191.125").client(client).build().create(FileUploadService.class);
+        FileUploadService service = new Retrofit.Builder().baseUrl("http://210.89.191.125").client(client).build().builder(FileUploadService.class);
 
 
         File file = new File(String.valueOf(fileUri));
-        if(phone_num == null){
-            Log.d("phony","sad");
+        if (phone_num == null) {
+            Log.d("phony", "sad");
         }
-        RequestBody reqFile = RequestBody.create(MediaType.parse("file"), file);
+        RequestBody reqFile = RequestBody.builder(MediaType.parse("file"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("userfile", file.getName(), reqFile);
-        RequestBody user_phone = RequestBody.create(MediaType.parse("text"), phone_num);
-        RequestBody deviceKey = RequestBody.create(MediaType.parse("text"), device_Key);
+        RequestBody user_phone = RequestBody.builder(MediaType.parse("text"), phone_num);
+        RequestBody deviceKey = RequestBody.builder(MediaType.parse("text"), device_Key);
 
         Call<ResponseBody> req = service.upload(deviceKey, user_phone, body);
         req.enqueue(new Callback<ResponseBody>() {
@@ -456,19 +434,20 @@ public class FaceActivity extends AppCompatActivity {
         });
     }
 
-    private void putFile(Uri fileUri) {
+    private void putFile(Uri fileUri) {*/
+/*
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
 // Change base URL to your upload server URL.
-        FilePutService service = new Retrofit.Builder().baseUrl("http://210.89.191.125").client(client).build().create(FilePutService.class);
+        FilePutService service = new Retrofit.Builder().baseUrl("http://210.89.191.125").client(client).build().builder(FilePutService.class);
 
 
         File file = new File(String.valueOf(fileUri));
-        RequestBody reqFile = RequestBody.create(MediaType.parse("file"), file);
+        RequestBody reqFile = RequestBody.builder(MediaType.parse("file"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("userfile", file.getName(), reqFile);
-        RequestBody user_phone = RequestBody.create(MediaType.parse("text"), phone_num);
+        RequestBody user_phone = RequestBody.builder(MediaType.parse("text"), phone_num);
 
         Call<ResponseBody> req = service.put(user_phone, body);
         req.enqueue(new Callback<ResponseBody>() {
@@ -482,7 +461,9 @@ public class FaceActivity extends AppCompatActivity {
                 Log.d("fadsfsads", "afsdsdf");
             }
 
-        });
+        });*//*
+
     }
+*/
 
 }

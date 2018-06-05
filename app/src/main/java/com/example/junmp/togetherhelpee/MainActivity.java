@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.example.junmp.togetherhelpee.activity.user.register.form.FaceFormActivity;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.BufferedReader;
@@ -57,31 +58,28 @@ public class MainActivity extends AppCompatActivity {
         btn_sign = findViewById(R.id.btn_sign);
 
 
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             TelephonyManager mgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             idByTelephonyManager = mgr.getDeviceId();
 
-            try{
+            try {
                 PhoneNum = mgr.getLine1Number();//mgr.getLine1Number();
                 PhoneNum = PhoneNum.replace("+82", "0");
-            }catch(Exception e){
+            } catch (Exception e) {
             }
+        } else {
+            Log.d("phony", "Current app does not have READ_PHONE_STATE permission");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_READ_PHONE_STATE_PERMISSION);
         }
-        else {
-                Log.d("phony", "Current app does not have READ_PHONE_STATE permission");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_READ_PHONE_STATE_PERMISSION);
-        }
-
 
 
         btn_sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toFace = new Intent(MainActivity.this, FaceActivity.class);
+                Intent toFace = new Intent(MainActivity.this, FaceFormActivity.class);
                 toFace.putExtra("from", "first");
                 toFace.putExtra("phonenum", PhoneNum);
-                toFace.putExtra("deviceKey",idByTelephonyManager);
+                toFace.putExtra("deviceKey", idByTelephonyManager);
 
                 startActivity(toFace);
                 finish();
@@ -91,8 +89,6 @@ public class MainActivity extends AppCompatActivity {
 
         checkDevice = new checkDevice();
         checkDevice.execute("http://210.89.191.125/helpee/device");
-
-
 
 
     }
@@ -119,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private class checkDevice extends AsyncTask<String, Void, String> {
         String errorString = null;
 
@@ -133,13 +128,11 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            if(result == null){
+            if (result == null) {
                 Intent toError = new Intent(MainActivity.this, ErrorActivity.class);
                 startActivity(toError);
                 finish();
-            }
-
-            else if (result.equals("true")) {
+            } else if (result.equals("true")) {
                 putKey = new putKey();
                 putKey.execute("http://210.89.191.125/helpee/token/update");
             } else {
@@ -153,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             String serverURL = params[0] + "/" + idByTelephonyManager;
-            Log.d("ASD",serverURL);
+            Log.d("ASD", serverURL);
             try {
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -198,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
     class postKey extends AsyncTask<String, Void, String> {
         RequestHandler rh = new RequestHandler();
 
@@ -271,19 +265,17 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            if(result == null){
+            if (result == null) {
                 Intent toError = new Intent(MainActivity.this, ErrorActivity.class);
                 startActivity(toError);
                 finish();
-            }
-
-            else if (result.equals("true")) {
+            } else if (result.equals("true")) {
                 Intent toCall = new Intent(MainActivity.this, CallActivity.class);
                 toCall.putExtra("phonenum", PhoneNum);
                 startActivity(toCall);
                 finish();
             } else {
-                Log.d("ASD",result);
+                Log.d("ASD", result);
                 btn_sign.setVisibility(View.VISIBLE);
                 Toast.makeText(getApplicationContext(), "화면 중앙의 회원가입버튼을 클릭하면 자동으로 카메라가 켜지며 얼굴인식 시 자동 촬영됩니다. 회원가입은 사진촬영만으로 완료됩니다.", Toast.LENGTH_SHORT).show();
             }
@@ -294,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             String serverURL = params[0] + "/" + PhoneNum;
-            Log.d("ASD",serverURL);
+            Log.d("ASD", serverURL);
             try {
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();

@@ -10,7 +10,7 @@ import com.google.android.gms.vision.CameraSource;
 import java.util.HashSet;
 import java.util.Set;
 
-public class GraphicOverlay extends View{
+public class GraphicOverlay extends View {
     private final Object mLock = new Object();
     private int mPreviewWidth;
     private float mWidthScaleFactor = 1.0f;

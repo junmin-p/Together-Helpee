@@ -5,26 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#ffffff"
+    android:background="#de5532"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/textName"
         android:layout_width="match_parent"
-        android:layout_height="108dp"
-        android:text="나이를 말해주세요"
+        android:layout_height="wrap_content"
+        android:text="언제 도움이 필요하세요?"
         android:textSize="35dp" />
 
+
     <ImageView
-        android:id="@+id/img_mic"
+        android:id="@+id/imageView4"
         android:layout_width="match_parent"
-        android:layout_height="403dp"
+        android:layout_height="443dp"
         app:srcCompat="@drawable/btnplus2" />
 
     <Button
         android:id="@+id/btn_next"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="69dp"
         android:text="다음 (dummy)" />
 
 </LinearLayout>

@@ -9,34 +9,37 @@ import android.widget.Button;
 import com.example.junmp.togetherhelpee.R;
 import com.example.junmp.togetherhelpee.activity.volunteer.request.form.WhenFormActivity;
 
+
+
 /**
  * TODO
- * 얼굴 인식후 사진을 자동으로 촬영한다.
- * 촬영된 사진 리소스는 다음 activity 에 전달한다.
- * 혹은 즉시 서버에 업로드 한 이후 url 을 다음 activity 에 전달한다.
- * 사진을 서버에 업로드 할때 progress bar 를 구현해야 한다. ( 옵션 )
+ * 음성이 인식되면 mic 이미지에 바운스 애니메이션 줄것 ( 옵션 )
+ * 이름이 인식되면 확인 절차 없이 다음 activity 로 진입한다.
+ * 이전 액티비티에서 전달된 사진 정보 ( path or url ) 도 같이 다음 activity 로 전달한다.
+ *
  */
-public class FaceWithCameraActivity extends AppCompatActivity {
-    private String imageUrl = "http://210.89.191.125/photo/1527532115221.jpeg";
+public class NameFormActivity extends AppCompatActivity {
+    private String name = "홍길동";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_register_face);
+        setContentView(R.layout.activity_user_form_name);
         final String referer = getIntent().getStringExtra("nextActivity");
+        final String imageUrl = getIntent().getStringExtra("imageUrl");
+
         Button btnDummyNext = findViewById(R.id.btn_next);
 
         btnDummyNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent registerIntent = new Intent(FaceWithCameraActivity.this, NameWithVoiceActivity.class);
+                Intent registerIntent = new Intent(NameFormActivity.this, AgeFormActivity.class);
 
                 if (hasNextAndWhenForm(referer))
                     registerIntent.putExtra("nextActivity", referer);
 
-                // 추출한 사진 정보 같이 전달할것 ( path or url )
-                registerIntent.putExtra("imageUrl", imageUrl);
-
+                registerIntent.putExtra("imageUrl" , imageUrl);
+                registerIntent.putExtra("name" , name);
 
                 startActivity(registerIntent);
                 finish();

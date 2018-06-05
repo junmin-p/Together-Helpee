@@ -11,10 +11,12 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    ;
+
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    ;
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -38,7 +40,7 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity
-            android:name=".FaceActivity"
+            android:name=".activity.user.register.form.FaceFormActivity"
             android:label=""
             android:screenOrientation="portrait" />
         <activity
@@ -58,22 +60,22 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.volunteer.request.RequestActivity"
+            android:name=".activity.home.HomeActivity"
             android:label=""
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.user.register.form.FaceWithCameraActivity"
+            android:name=".activity.user.register.form.NameFormActivity"
             android:label=""
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.user.register.form.NameWithVoiceActivity"
+            android:name=".activity.user.register.form.AgeFormActivity"
             android:label=""
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.user.register.form.AgeWithVoiceActivity"
+            android:name=".activity.user.register.form.GenderFormActivity"
             android:label=""
             android:screenOrientation="portrait" />
 
@@ -81,6 +83,32 @@
             android:name=".activity.user.register.form.ConfirmActivity"
             android:label=""
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.volunteer.request.form.WhenFormActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.volunteer.request.form.WhatFormActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.volunteer.recommend.RecommendActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.volunteer.matched.MatchedActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.volunteer.match.MatchRetryActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+
 
 
         <activity

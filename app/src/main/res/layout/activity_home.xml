@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/mainbackground"
+    tools:context=".MainActivity">
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="40dp"
+        android:visibility="gone"
+        android:text="안녕하세요 {:name} {:gender}" />
+
+    <TextView
+        android:id="@+id/volunteer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:visibility="gone"
+        android:text="{:createdAt} 에 요청하신 {:content} 을 도와줄 봉사자를 찾고 있어요" />
+
+    
+
+    <Button
+        android:id="@+id/request"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="도와주세요"
+        android:textSize="70dp"
+        android:visibility="invisible"
+        android:layout_gravity="bottom"
+        />
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="취소"
+        android:textSize="70dp"
+        android:layout_gravity="bottom"
+        />
+</LinearLayout>

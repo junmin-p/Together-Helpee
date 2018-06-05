@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#de5532"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="차정현 할아버지"
+        android:textSize="35dp" />
+
+    <TextView
+        android:id="@+id/textName1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="{:when}에 {:what}  을(를) 도와줄 봉사자를 찾아 드릴께요."
+        android:textSize="35dp" />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="left"
+            android:text="네 고마워요" />
+
+
+    </LinearLayout>
+</LinearLayout>

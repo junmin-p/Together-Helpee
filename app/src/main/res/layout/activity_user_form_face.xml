@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     tools:context=".activity.user.register.form.FaceFormActivity"
     android:id="@+id/topLayout"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#de5532"
     android:keepScreenOn="true">
 
     <com.example.junmp.togetherhelpee.common.util.camera.CameraSourcePreview
@@ -22,4 +21,10 @@
 
     </com.example.junmp.togetherhelpee.common.util.camera.CameraSourcePreview>
 
+<TextView
+    android:id="@+id/cameraText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="얼굴을 인식시켜 주세요"
+    android:textSize="35dp"/>
 </LinearLayout>

@@ -5,26 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#ffffff"
+    android:background="#de5532"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="416dp"
-        app:srcCompat="@drawable/face" />
-
     <TextView
-        android:id="@+id/cameraText"
+        android:id="@+id/textName"
         android:layout_width="match_parent"
         android:layout_height="108dp"
-        android:text="얼굴을 인식시켜 주세요"
-        android:textSize="35dp"/>
+        android:text="이름을 말해주세요"
+        android:textSize="35dp" />
+
+    <ImageView
+        android:id="@+id/img_mic"
+        android:layout_width="match_parent"
+        android:layout_height="403dp"
+        app:srcCompat="@drawable/btnplus2" />
 
     <Button
         android:id="@+id/btn_next"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="69dp"
         android:text="다음 (dummy)" />
 
 </LinearLayout>
