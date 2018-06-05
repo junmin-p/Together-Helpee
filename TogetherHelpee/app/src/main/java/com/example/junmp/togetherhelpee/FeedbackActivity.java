@@ -2,6 +2,7 @@ package com.example.junmp.togetherhelpee;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -9,7 +10,12 @@ import android.media.AudioTrack;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -54,6 +61,16 @@ public class FeedbackActivity extends AppCompatActivity {
     int playbackPosition = 0;
     private int is_record = 0;
     private int is_play = 0;
+
+    Intent intent_rec;
+    SpeechRecognizer mRecognizer;
+
+    private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
+    String phone_num;
+
+    ProgressDialog pd;
+
+    String message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +170,13 @@ public class FeedbackActivity extends AppCompatActivity {
             }
         });
 
+        intent_rec = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent_rec.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
+        intent_rec.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
+
+        mRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+        mRecognizer.setRecognitionListener(recognitionListener);
+
         btn_mic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,6 +194,7 @@ public class FeedbackActivity extends AppCompatActivity {
                     recorder.setOutputFile(RECORDED_FILE);
                     recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
                     try{
+                        mRecognizer.startListening(intent_rec);
                         Toast.makeText(getApplicationContext(),
                                 "녹음을 시작합니다. 한번더 누르시면 녹음을 마칩니다.", Toast.LENGTH_LONG).show();
                         recorder.prepare();
@@ -237,10 +262,15 @@ public class FeedbackActivity extends AppCompatActivity {
                     recorder.release();
                     recorder = null;
                 }
-                putRecord(Uri.parse(RECORDED_FILE));
-                Intent toEnd = new Intent(FeedbackActivity.this, EndActivity.class);
-                startActivity(toEnd);
-                finish();
+                if(message.equals(null)){
+                    Toast.makeText(getApplicationContext(),"마이크를 누르시고 한 문장으로 평가해주세요.",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    putRecord(Uri.parse(RECORDED_FILE));
+                    Intent toEnd = new Intent(FeedbackActivity.this, EndActivity.class);
+                    startActivity(toEnd);
+                    finish();
+                }
             }
         });
     }
@@ -284,6 +314,74 @@ public class FeedbackActivity extends AppCompatActivity {
 
     }
 
+    private RecognitionListener recognitionListener = new RecognitionListener() {
+        @Override
+        public void onReadyForSpeech(Bundle bundle) {
+            pd = new ProgressDialog(FeedbackActivity.this);
+            pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            pd.setMessage("요청사항을 마이크에 대고 예시와 같이 말씀해주세요.\n예시) 삼성역까지 데려다 주세요");
+            pd.show();
+        }
+
+        @Override
+        public void onBeginningOfSpeech() {
+        }
+
+        @Override
+        public void onRmsChanged(float v) {
+        }
+
+        @Override
+        public void onBufferReceived(byte[] bytes) {
+        }
+
+        @Override
+        public void onEndOfSpeech() {
+        }
+
+        @Override
+        public void onError(int i) {
+            pd.dismiss();
+
+            is_record = 0;
+            btn_mic.setImageResource(R.drawable.mic);
+
+            recorder.stop();
+            recorder.release();
+            recorder = null;
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        public void onResults(Bundle bundle) {
+            pd.dismiss();
+            String key = "";
+            key = SpeechRecognizer.RESULTS_RECOGNITION;
+            ArrayList<String> mResult = bundle.getStringArrayList(key);
+
+            String[] rs = new String[mResult.size()];
+            mResult.toArray(rs);
+
+            message = rs[0];
+
+            is_record = 0;
+            btn_mic.setImageResource(R.drawable.mic);
+
+            recorder.stop();
+            recorder.release();
+            recorder = null;
+
+        }
+
+        @Override
+        public void onPartialResults(Bundle bundle) {
+        }
+
+        @Override
+        public void onEvent(int i, Bundle bundle) {
+        }
+    };
+
     private void putRecord(Uri fileUri) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -296,10 +394,11 @@ public class FeedbackActivity extends AppCompatActivity {
         File file = new File(String.valueOf(fileUri));
         RequestBody reqFile = RequestBody.create(MediaType.parse("file"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("recordfile", volunteerId+".mp3", reqFile);
+        RequestBody helpee_Feedback = RequestBody.create(MediaType.parse("text"), message);
         RequestBody volunteer_Id = RequestBody.create(MediaType.parse("text"), String.valueOf(volunteerId));
         RequestBody helpee_Score = RequestBody.create(MediaType.parse("text"), String.valueOf(helpeeScore));
 
-        Call<ResponseBody> req = service.put(volunteer_Id, helpee_Score, body);
+        Call<ResponseBody> req = service.put(helpee_Feedback, volunteer_Id, helpee_Score, body);
         req.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

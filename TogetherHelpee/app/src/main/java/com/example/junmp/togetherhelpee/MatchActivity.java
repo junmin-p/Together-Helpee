@@ -50,11 +50,7 @@ public class MatchActivity extends AppCompatActivity {
     String mJsonString;
 
     deleteRequest deleteRequest;
-    putRequest putRequest;
     getState getState;
-
-    private TimerTask mTask1;
-    private Timer mTimer1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,25 +100,8 @@ public class MatchActivity extends AppCompatActivity {
         txt_duration.setText("요청 봉사시간: "+duration);
         txt_content.setText("요청 기타사항: "+content);
 
-        mTask1 = new TimerTask() {
-            @Override
-            public void run() {
-                getState  = new getState();
-                getState.execute("http://210.89.191.125/helpee/volunteers/wait/");
-            }
-        };
 
-        mTimer1 = new Timer();
 
-        mTimer1.schedule(mTask1, 3000, 2000);
-
-        btn_accept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                putRequest = new putRequest();
-                putRequest.execute("http://210.89.191.125/helpee/volunteer/complete");
-            }
-        });
 
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,10 +140,17 @@ public class MatchActivity extends AppCompatActivity {
                 }
 
                 if(matchingStatus == 1){
-                    mTimer1.cancel();
-                    txt_match_state.setText("매칭 수락 대기중입니다!");
-                    txt_match_info.setText("지원한 봉사자의 아이디: "+helperId);
-                    btn_accept.setVisibility(View.VISIBLE);
+                    Intent toPartner = new Intent(MatchActivity.this, PartnerActivity.class);
+                    toPartner.putExtra("type", type);
+                    toPartner.putExtra("helperId", helperId);
+                    toPartner.putExtra("content", content);
+                    toPartner.putExtra("time", time);
+                    toPartner.putExtra("duration", duration);
+                    toPartner.putExtra("date", date);
+                    toPartner.putExtra("volunteerId", volunteerId);
+                    toPartner.putExtra("phonenum", phone_num);
+                    startActivity(toPartner);
+                    finish();
                 }
             }
         }
@@ -243,40 +229,7 @@ public class MatchActivity extends AppCompatActivity {
         }
     }
 
-    class putRequest extends AsyncTask<String, Void, String> {
-        RequestHandler rh = new RequestHandler();
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Toast.makeText(getApplicationContext(),"요청을 수락합니다.", Toast.LENGTH_SHORT).show();
-            Intent toStart = new Intent(MatchActivity.this, StartActivity.class);
-            toStart.putExtra("type", type);
-            toStart.putExtra("helperId", helperId);
-            toStart.putExtra("content", content);
-            toStart.putExtra("time", time);
-            toStart.putExtra("duration", duration);
-            toStart.putExtra("date", date);
-            toStart.putExtra("volunteerId", volunteerId);
-            toStart.putExtra("phonenum", phone_num);
-            startActivity(toStart);
-            finish();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            HashMap<String, String> data = new HashMap<>();
-            data.put("volunteerId", String.valueOf(volunteerId));
-            String result = rh.sendPutRequest(params[0], data);
-
-            return result;
-        }
-    }
 
     class deleteRequest extends AsyncTask<String, Void, String> {
         RequestHandler rh = new RequestHandler();

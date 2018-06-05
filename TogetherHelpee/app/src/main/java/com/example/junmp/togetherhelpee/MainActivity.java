@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_READ_PHONE_STATE_PERMISSION);
         }
 
-
+        PhoneNum = "01024321412";
 
         btn_sign.setOnClickListener(new View.OnClickListener() {
             @Override

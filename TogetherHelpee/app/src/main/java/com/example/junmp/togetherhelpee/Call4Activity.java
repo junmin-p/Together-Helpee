@@ -119,6 +119,19 @@ public class Call4Activity extends AppCompatActivity {
         four = (RadioButton) findViewById(R.id.four);
         five = (RadioButton) findViewById(R.id.five);
 
+        Button btn_back = findViewById(R.id.btn_no);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent back = new Intent(Call4Activity.this, Call3Activity.class);
+                back.putExtra("phonenum",phone_num);
+                back.putExtra("date",dest_date);
+                back.putExtra("time",dest_time);
+                startActivity(back);
+                finish();
+            }
+        });
+
         Button btn_send = findViewById(R.id.btn_send);
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override

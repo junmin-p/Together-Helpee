@@ -36,7 +36,13 @@
         <activity
             android:name=".Call1Activity"
             android:label=""
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".FaceActivity"
             android:label=""
@@ -88,21 +94,22 @@
             android:label=""
             android:screenOrientation="portrait" />
         <activity
+            android:name=".Call2Activity"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Call3Activity"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".SplashActivity"
             android:label=""
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".fcm_popup"
             android:label=""
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
-        <activity android:name=".Call2Activity" />
-        <activity android:name=".Call3Activity"></activity>
+        <activity android:name=".PartnerActivity"></activity>
     </application>
 
 </manifest>

@@ -1,37 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".SignupActivity">
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="600px"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/img_preview"/>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150px"
-        android:layout_gravity="center_horizontal"
-        android:orientation="horizontal">
+        app:layout_constraintTop_toBottomOf="@id/img_preview"
+        android:id="@+id/layout_name">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="150px"
+            android:textStyle="bold"
+            android:textSize="12pt"
+            android:text="이름을 말씀해주세요"
+            android:id="@+id/txt_name"
+            app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_name"
+            android:paddingVertical="10pt"
+            android:paddingHorizontal="10pt"/>
         <ImageView
-            android:layout_width="500px"
-            android:layout_height="500px"
-            android:id="@+id/img_preview"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="다시 찍기"
-            android:layout_marginTop="230px"
-            android:layout_marginLeft="50px"
-            android:id="@+id/btn_recapture"/>
-    </LinearLayout>
+            android:layout_width="0dp"
+            android:layout_height="150px"
+            app:layout_constraintHorizontal_weight="1"
+            android:src="@drawable/mic"
+            android:id="@+id/btn_name"
+            app:layout_constraintLeft_toRightOf="@id/txt_name"
+            app:layout_constraintRight_toRightOf="parent"
+            />
+    </android.support.constraint.ConstraintLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50px"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/text_phonenumber"/>
-
+        app:layout_constraintTop_toBottomOf="@id/layout_name">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="150px"
+            android:textStyle="bold"
+            android:textSize="12pt"
+            android:text="연령을 입력해주세요"
+            android:id="@+id/txt_age"
+            app:layout_constraintHorizontal_weight="3"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_age"
+            android:paddingVertical="10pt"
+            android:paddingHorizontal="10pt"/>
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="150px"
+            app:layout_constraintHorizontal_weight="1"
+            android:id="@+id/btn_age"
+            app:layout_constraintLeft_toRightOf="@id/txt_age"
+            app:layout_constraintRight_toRightOf="parent"
+            />
+    </android.support.constraint.ConstraintLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,7 +72,7 @@
         android:textStyle="bold"
         android:paddingVertical="10pt"
         android:layout_marginTop="100px"
-        android:layout_gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/btn_signup"/>
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

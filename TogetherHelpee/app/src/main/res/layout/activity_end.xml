@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#ffffff"
     tools:context=".EndActivity">
     <TextView
         android:layout_marginTop="200px"
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="12pt"
-        android:textColor="#ffffff"
+        android:textColor="#000000"
         android:text="봉사를 성공적으로 받으셨군요?"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="12pt"
-        android:textColor="#ffffff"
+        android:textColor="#000000"
         android:text="이용해주셔서 감사합니다."
         app:layout_constraintTop_toBottomOf="@+id/text1"
         app:layout_constraintLeft_toLeftOf="parent"

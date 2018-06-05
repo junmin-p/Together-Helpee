@@ -70,7 +70,7 @@ public class StartActivity extends AppCompatActivity {
         txt_helper = findViewById(R.id.txt_helper);
         btn_start = findViewById(R.id.btn_start);
 
-        txt_time.setText("날짜:"+date+"\n"+"시간:"+time);
+        txt_time.setText("약속시간은 \n날짜:"+date+"\n"+"시간:"+time+"입니다.");
 
         getName = new getName();
         getName.execute("http://210.89.191.125/helpee/helper/name/");
@@ -173,8 +173,8 @@ public class StartActivity extends AppCompatActivity {
             for(int i=jsonArray.length()-1;i>=0;i--){
                 JSONObject item = jsonArray.getJSONObject(i);
 
-                helper_name = item.getString("helperName");
-                txt_helper.setText(helper_name+"님을 만나셨나요?");
+                helper_name = item.getString("name");
+                btn_start.setText(helper_name+"님을 만났어요");
             }
 
         } catch (JSONException e) {

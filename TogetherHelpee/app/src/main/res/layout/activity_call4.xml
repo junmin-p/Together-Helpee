@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#ffffff"
     tools:context=".Call4Activity">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:textColor="#ffffff"
+            android:textColor="#000000"
             android:textStyle="bold"
             android:gravity="center_horizontal"
             android:id="@+id/text"
@@ -43,7 +43,7 @@
                 android:id="@+id/one"
                 android:textStyle="bold"
                 android:textSize="12pt"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:buttonTint="#ffcbcb"
                 android:text="1시간" />
 
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:buttonTint="#ffcbcb"
                 android:text="2시간"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:textSize="12pt"
                 android:textStyle="bold" />
 
@@ -64,7 +64,7 @@
                 android:id="@+id/three"
                 android:textStyle="bold"
                 android:textSize="12pt"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:text="3시간" />
 
             <RadioButton
@@ -74,7 +74,7 @@
                 android:id="@+id/four"
                 android:textStyle="bold"
                 android:textSize="12pt"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:text="4시간" />
 
             <RadioButton
@@ -84,7 +84,7 @@
                 android:id="@+id/five"
                 android:textStyle="bold"
                 android:textSize="12pt"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:text="5시간" />
         </RadioGroup>
     </RelativeLayout>
@@ -104,7 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:textColor="#ffffff"
+            android:textColor="#000000"
             android:textStyle="bold"
             android:id="@+id/text2"
             android:text="봉사종류"
@@ -126,7 +126,7 @@
                 android:buttonTint="#b5e8ff"
                 android:textStyle="bold"
                 android:textSize="12pt"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:text="외출" />
 
             <RadioButton
@@ -136,7 +136,7 @@
                 android:buttonTint="#b5e8ff"
                 android:textStyle="bold"
                 android:textSize="12pt"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:text="말동무" />
 
             <RadioButton
@@ -146,7 +146,7 @@
                 android:buttonTint="#b5e8ff"
                 android:textStyle="bold"
                 android:textSize="12pt"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:text="가사" />
 
             <RadioButton
@@ -156,13 +156,25 @@
                 android:buttonTint="#b5e8ff"
                 android:textStyle="bold"
                 android:textSize="12pt"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:text="교육" />
         </RadioGroup>
     </RelativeLayout>
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_border3"
+        android:paddingVertical="10pt"
+        android:text="뒤로"
+        android:textSize="15pt"
+        android:textStyle="bold"
+        android:id="@+id/btn_no"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btn_send"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+    <Button
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/button_border3"
         android:paddingVertical="10pt"
@@ -170,6 +182,7 @@
         android:textSize="15pt"
         android:textStyle="bold"
         android:id="@+id/btn_send"
+        app:layout_constraintLeft_toRightOf="@id/btn_no"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

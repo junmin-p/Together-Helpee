@@ -92,8 +92,9 @@ public class FaceActivity extends AppCompatActivity {
             mBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             Matrix matrix = new Matrix();
             matrix.postRotate(270);
-            Bitmap rotated = Bitmap.createBitmap(mBitmap, 0, 0, 960, 1280,
+            Bitmap rotated = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(),
                     matrix, true);
+            Bitmap news = Bitmap.createScaledBitmap(rotated, 960, 1280, true);
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
             imageBytes = output.toByteArray();
@@ -105,7 +106,7 @@ public class FaceActivity extends AppCompatActivity {
             try {
                 OutputStream stream = null;
                 stream = new FileOutputStream(file);
-                rotated.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                news.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 stream.flush();
                 stream.close();
             } catch (IOException e) // Catch the exception

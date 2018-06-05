@@ -28,21 +28,21 @@
         android:background="@drawable/button_border1"
         android:textColor="#000000"
         android:id="@+id/btn_yes"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/btn_no"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/btn_no"
         app:layout_constraintBottom_toBottomOf="parent"/>
     <Button
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="아니요"
+        android:text="뒤로"
         android:textSize="15pt"
         android:textStyle="bold"
         android:paddingVertical="10pt"
         android:background="@drawable/button_border2"
         android:textColor="#000000"
         android:id="@+id/btn_no"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/btn_yes"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/btn_yes"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <ImageView
