@@ -524,7 +524,6 @@ public class Call1Activity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            Log.d("Asd",result);
             if (result.equals("")){
                 getVolunteer = new getVolunteer();
                 getVolunteer.execute("http://210.89.191.125/helpee/volunteers/wait/");

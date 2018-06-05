@@ -180,9 +180,11 @@ public class FeedbackActivity extends AppCompatActivity {
         btn_mic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mRecognizer.startListening(intent_rec);
                 if(is_record == 0){
                     if(recorder != null){
                         recorder.stop();
+                        recorder.reset();
                         recorder.release();
                         recorder = null;
                     }// TODO Auto-generated method stub
@@ -194,7 +196,6 @@ public class FeedbackActivity extends AppCompatActivity {
                     recorder.setOutputFile(RECORDED_FILE);
                     recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
                     try{
-                        mRecognizer.startListening(intent_rec);
                         Toast.makeText(getApplicationContext(),
                                 "녹음을 시작합니다. 한번더 누르시면 녹음을 마칩니다.", Toast.LENGTH_LONG).show();
                         recorder.prepare();
@@ -214,6 +215,7 @@ public class FeedbackActivity extends AppCompatActivity {
                     btn_mic.setImageResource(R.drawable.mic);
 
                     recorder.stop();
+                    recorder.reset();
                     recorder.release();
                     recorder = null;
 
@@ -262,7 +264,7 @@ public class FeedbackActivity extends AppCompatActivity {
                     recorder.release();
                     recorder = null;
                 }
-                if(message.equals(null)){
+                if(message == null){
                     Toast.makeText(getApplicationContext(),"마이크를 누르시고 한 문장으로 평가해주세요.",Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -343,12 +345,6 @@ public class FeedbackActivity extends AppCompatActivity {
         public void onError(int i) {
             pd.dismiss();
 
-            is_record = 0;
-            btn_mic.setImageResource(R.drawable.mic);
-
-            recorder.stop();
-            recorder.release();
-            recorder = null;
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
@@ -364,10 +360,14 @@ public class FeedbackActivity extends AppCompatActivity {
 
             message = rs[0];
 
+            if(recorder == null)
+                return;
+
             is_record = 0;
             btn_mic.setImageResource(R.drawable.mic);
 
             recorder.stop();
+            recorder.reset();
             recorder.release();
             recorder = null;
 

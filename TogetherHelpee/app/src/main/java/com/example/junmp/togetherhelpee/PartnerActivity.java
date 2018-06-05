@@ -261,7 +261,8 @@ public class PartnerActivity extends AppCompatActivity {
 
                 txt_name.setText("이름 : "+helper_name);
                 txt_career.setText("봉사경력 : "+admit_time+"시간");
-                txt_score.setText("평점 : "+((double)((int)(helper_score*100)/100))+"점");
+                Log.d("FDAsfs",helper_score+"");
+                txt_score.setText("평점 : "+String.format("%.2f",helper_score)+"점");
                 new DownloadImageTask(img_profile).execute(img_src);
             }
 
