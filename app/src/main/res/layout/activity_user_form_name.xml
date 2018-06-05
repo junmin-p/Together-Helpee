@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#de5532"
-    tools:context=".MainActivity">
+    tools:context=".activity.user.register.form.NameFormActivity">
 
     <TextView
         android:id="@+id/textName"
@@ -19,7 +19,7 @@
         android:id="@+id/img_mic"
         android:layout_width="match_parent"
         android:layout_height="403dp"
-        app:srcCompat="@drawable/btnplus2" />
+        app:srcCompat="@drawable/record" />
 
     <Button
         android:id="@+id/btn_next"

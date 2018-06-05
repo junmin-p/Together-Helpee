@@ -36,4 +36,12 @@ public class UserService {
             throw new RuntimeException(ex);
         }
     }
+
+    public void register(int age, String name, String imageName, String deviceId , String phoneNumber) {
+        try {
+            userRepository.register(deviceId , age , name , imageName , phoneNumber).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

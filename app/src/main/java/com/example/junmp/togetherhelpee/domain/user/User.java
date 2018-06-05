@@ -2,6 +2,8 @@ package com.example.junmp.togetherhelpee.domain.user;
 
 
 public class User {
+    private String userPhone;
+    private String userNumber;
     private String userId;
     private String name;
     private String gender;

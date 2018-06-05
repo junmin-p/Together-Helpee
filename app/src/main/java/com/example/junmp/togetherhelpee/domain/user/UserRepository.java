@@ -6,16 +6,14 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
-import retrofit2.http.Multipart;
-import retrofit2.http.PUT;
-import retrofit2.http.Part;
-import retrofit2.http.Path;
+import retrofit2.http.*;
 
 public interface UserRepository {
 
-    @GET("user/{deviceId}")
+    @GET("user/helpee/{deviceId}")
     Call<User> getOne(@Path("deviceId") String deviceId);
 
-
+    @FormUrlEncoded
+    @POST("user/helpee/{deviceId}")
+    Call<Void> register(@Path("deviceId") String deviceId, @Field("age") int age,  @Field("name") String name, @Field("imageName") String imageName , @Field("phoneNumber") String phoneNumber);
 }

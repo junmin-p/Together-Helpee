@@ -14,9 +14,9 @@ import okhttp3.RequestBody;
 public class FileService {
     private FileRepository fileRepository = RetrofitBuilder.builder().create(FileRepository.class);
 
-    public String uplaod(File file) {
+    public UploadFile uplaod(File file) {
         RequestBody reqFile = RequestBody.create(MediaType.parse("file"), file);
-        MultipartBody.Part uploadFile = MultipartBody.Part.createFormData("userfile", file.getName(), reqFile);
+        MultipartBody.Part uploadFile = MultipartBody.Part.createFormData("image", file.getName(), reqFile);
         try {
             return fileRepository.uploadImage(uploadFile).execute().body();
         } catch (IOException e) {

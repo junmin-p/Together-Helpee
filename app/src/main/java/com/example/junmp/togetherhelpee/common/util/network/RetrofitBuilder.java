@@ -8,7 +8,7 @@ public class RetrofitBuilder {
 
     public static Retrofit builder() {
         return new Retrofit.Builder()
-                .baseUrl("http://lim-bo.com/api/")
+                .baseUrl("http://172.23.243.239:9001/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }

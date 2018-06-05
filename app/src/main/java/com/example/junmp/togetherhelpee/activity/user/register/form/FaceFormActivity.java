@@ -20,12 +20,15 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 
+import com.example.junmp.togetherhelpee.FileUploadService;
 import com.example.junmp.togetherhelpee.R;
 import com.example.junmp.togetherhelpee.activity.home.DisplayHome;
+import com.example.junmp.togetherhelpee.activity.volunteer.request.form.WhenFormActivity;
 import com.example.junmp.togetherhelpee.common.util.DeviceUUIDFactory;
 import com.example.junmp.togetherhelpee.common.util.camera.CameraSourcePreview;
 import com.example.junmp.togetherhelpee.common.util.camera.GraphicOverlay;
 import com.example.junmp.togetherhelpee.domain.file.FileService;
+import com.example.junmp.togetherhelpee.domain.file.UploadFile;
 import com.example.junmp.togetherhelpee.domain.user.User;
 import com.example.junmp.togetherhelpee.domain.volunteer.Volunteer;
 import com.google.android.gms.common.ConnectionResult;
@@ -42,6 +45,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 
 public class FaceFormActivity extends AppCompatActivity {
     private FileService fileService = new FileService();
@@ -51,13 +65,12 @@ public class FaceFormActivity extends AppCompatActivity {
 
     private Bitmap mBitmap;
     private byte[] imageBytes;
-
+    private String referer;
     private CameraSourcePreview mPreview;
     private GraphicOverlay mGraphicOverlay;
 
     // permission request codes need to be < 256
     private static final int HANDLE_CAMERA_PERMITTION = 2;
-
 
     private CameraSource.PictureCallback mPicture = new CameraSource.PictureCallback() {
 
@@ -79,14 +92,13 @@ public class FaceFormActivity extends AppCompatActivity {
             File file = wrapper.getDir("Images", MODE_PRIVATE);
             file = new File(file, "UniqueFileName" + ".jpg");
             try {
-                OutputStream stream = null;
-                stream = new FileOutputStream(file);
+
+                OutputStream stream = new FileOutputStream(file);
                 rotated.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                 stream.flush();
                 stream.close();
-                mBitmap.recycle();
-            } catch (IOException e) // Catch the exception
-            {
+
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -94,21 +106,25 @@ public class FaceFormActivity extends AppCompatActivity {
             mCameraSource.release();
 
 
-
         }
     };
 
 
-    private class AsyncInit extends AsyncTask<File, Void, String> {
+    private class AsyncInit extends AsyncTask<File, Void, UploadFile> {
         @Override
-        protected String doInBackground(File... params) {
+        protected UploadFile doInBackground(File... params) {
             return fileService.uplaod(params[0]);
         }
 
         @Override
-        protected void onPostExecute(String home) {
-            Log.d("==========" , home);
+        protected void onPostExecute(UploadFile home) {
+            mBitmap.recycle();
             Intent intent = new Intent(FaceFormActivity.this, NameFormActivity.class);
+            intent.putExtra("imageName", home.getFileName());
+
+            if (hasNextAndWhenForm(referer))
+                intent.putExtra("nextActivity" , referer);
+
             startActivity(intent);
             finish();
         }
@@ -134,6 +150,7 @@ public class FaceFormActivity extends AppCompatActivity {
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
+        referer = getIntent().getStringExtra("nextActivity");
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
@@ -143,6 +160,10 @@ public class FaceFormActivity extends AppCompatActivity {
         } else {
             requestCameraPermission();
         }
+    }
+
+    private boolean hasNextAndWhenForm(String referer) {
+        return referer != null && referer.equals(WhenFormActivity.class.getSimpleName());
     }
 
     /**
@@ -364,7 +385,6 @@ public class FaceFormActivity extends AppCompatActivity {
 
             mCameraSource.takePicture(mShutter, mPicture);
 
-
         }
 
         /**
@@ -384,86 +404,7 @@ public class FaceFormActivity extends AppCompatActivity {
         @Override
         public void onDone() {
             mOverlay.remove(mFaceGraphic);
-            /*
-            mCameraSource.takePicture();
-            mOverlay.setDrawingCacheEnabled(true);
-            Bitmap tempBmp = Bitmap.createBitmap(mOverlay.getDrawingCache());
-            mOverlay.setDrawingCacheEnabled(false);
 
-            mCameraSource.release();
-            Toast.makeText(getApplicationContext(),"abc",Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(FaceActive.this, CallActivity.class);
-            intent.putExtra("bm", tempBmp);
-            startActivity(intent);
-            finish();
-            */
         }
     }
-/*
-
-    private void uploadFile(Uri fileUri) {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
-
-// Change base URL to your upload server URL.
-        FileUploadService service = new Retrofit.Builder().baseUrl("http://210.89.191.125").client(client).build().builder(FileUploadService.class);
-
-
-        File file = new File(String.valueOf(fileUri));
-        if (phone_num == null) {
-            Log.d("phony", "sad");
-        }
-        RequestBody reqFile = RequestBody.builder(MediaType.parse("file"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("userfile", file.getName(), reqFile);
-        RequestBody user_phone = RequestBody.builder(MediaType.parse("text"), phone_num);
-        RequestBody deviceKey = RequestBody.builder(MediaType.parse("text"), device_Key);
-
-        Call<ResponseBody> req = service.upload(deviceKey, user_phone, body);
-        req.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.d("fadsfsads", "Success");
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("fadsfsads", "afsdsdf");
-            }
-
-        });
-    }
-
-    private void putFile(Uri fileUri) {*/
-/*
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
-
-// Change base URL to your upload server URL.
-        FilePutService service = new Retrofit.Builder().baseUrl("http://210.89.191.125").client(client).build().builder(FilePutService.class);
-
-
-        File file = new File(String.valueOf(fileUri));
-        RequestBody reqFile = RequestBody.builder(MediaType.parse("file"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("userfile", file.getName(), reqFile);
-        RequestBody user_phone = RequestBody.builder(MediaType.parse("text"), phone_num);
-
-        Call<ResponseBody> req = service.put(user_phone, body);
-        req.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.d("fadsfsads", "Success");
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("fadsfsads", "afsdsdf");
-            }
-
-        });*//*
-
-    }
-*/
-
 }

@@ -43,8 +43,7 @@ public class FeedbackActivity extends AppCompatActivity {
     int volunteerId = 0;
     int helpeeScore = 5;
 
-    static final String RECORDED_FILE = Environment.getExternalStorageDirectory()
-            .getAbsolutePath() + "/myrecording.mp3";
+    static final String RECORDED_FILE = Environment.getExternalStorageDirectory().getAbsolutePath() + "/myrecording.mp3";
     MediaPlayer player;
     MediaRecorder recorder;
     int playbackPosition = 0;
@@ -192,8 +191,6 @@ public class FeedbackActivity extends AppCompatActivity {
                             "녹음이 중지되었습니다. 재생해보시려면 아래의 버튼을, 그대로 제출하시려면 최하단의 제출버튼을 클릭해주세요.", Toast.LENGTH_LONG).show();
                     // TODO Auto-generated method stub
                 }
-
-
             }
         });
 
