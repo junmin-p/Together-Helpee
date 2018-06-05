@@ -77,7 +77,7 @@ public class Call1Activity extends AppCompatActivity {
         Log.d("fads",phone_num);
 
         textView = (TextView) findViewById(R.id.textView);
-//sdfasf
+//sdfasfdsfasd
         getWait = new getWait();
         getWait.execute("http://210.89.191.125/helpee/volunteer/");
 
