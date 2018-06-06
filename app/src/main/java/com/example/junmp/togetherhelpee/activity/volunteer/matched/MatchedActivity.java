@@ -6,10 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.junmp.togetherhelpee.MainActivity;
 import com.example.junmp.togetherhelpee.R;
-import com.example.junmp.togetherhelpee.activity.volunteer.recommend.RecommendActivity;
-import com.example.junmp.togetherhelpee.activity.volunteer.request.form.WhatFormActivity;
+import com.example.junmp.togetherhelpee.activity.home.HomeActivity;
 import com.example.junmp.togetherhelpee.domain.user.UserService;
 import com.example.junmp.togetherhelpee.domain.volunteer.VolunteerService;
 
@@ -41,7 +39,7 @@ public class MatchedActivity extends AppCompatActivity {
 
                 /*volunteerService.getRecommendHelper(new VolunteerForm());*/
 
-                Intent registerIntent = new Intent(MatchedActivity.this, MainActivity.class);
+                Intent registerIntent = new Intent(MatchedActivity.this, HomeActivity.class);
                 startActivity(registerIntent);
                 finish();
             }

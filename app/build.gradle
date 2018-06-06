@@ -18,6 +18,7 @@ android {
         }
     }
     useLibrary 'org.apache.http.legacy'
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
@@ -36,9 +37,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:15.0.2'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson
-    implementation group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.3.0'
-
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'
+    implementation 'gun0912.ted:tedpermission:2.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

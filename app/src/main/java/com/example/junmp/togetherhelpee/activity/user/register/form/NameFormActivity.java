@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.junmp.togetherhelpee.R;
-import com.example.junmp.togetherhelpee.activity.volunteer.request.form.WhenFormActivity;
 
 import java.util.ArrayList;
 
@@ -25,14 +23,12 @@ import java.util.ArrayList;
  */
 public class NameFormActivity extends AppCompatActivity {
     private String name;
-    private Intent micIntent;
     private static final int RESULT_SPEECH = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_form_name);
-        final String referer = getIntent().getStringExtra("nextActivity");
         final String imageName = getIntent().getStringExtra("imageName");
 
         Button btnDummyNext = findViewById(R.id.btn_next);
@@ -47,8 +43,6 @@ public class NameFormActivity extends AppCompatActivity {
 
                 Intent registerIntent = new Intent(NameFormActivity.this, AgeFormActivity.class);
 
-                if (hasNextAndWhenForm(referer))
-                    registerIntent.putExtra("nextActivity", referer);
 
                 registerIntent.putExtra("imageName" , imageName);
                 registerIntent.putExtra("name" , name);
@@ -64,7 +58,7 @@ public class NameFormActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                micIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                Intent micIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 micIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE , getPackageName());
                 micIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE , "ko-KR");
                 micIntent.putExtra(RecognizerIntent.EXTRA_PROMPT , "말해주세요");
@@ -87,9 +81,5 @@ public class NameFormActivity extends AppCompatActivity {
                 name = sttResults.get(0);
             }
         }
-    }
-
-    private boolean hasNextAndWhenForm(String referer) {
-        return referer != null && referer.equals(WhenFormActivity.class.getSimpleName());
     }
 }

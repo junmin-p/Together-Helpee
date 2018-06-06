@@ -1,4 +1,4 @@
-package com.example.junmp.togetherhelpee.common.util;
+package com.example.junmp.togetherhelpee.common.util.device;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

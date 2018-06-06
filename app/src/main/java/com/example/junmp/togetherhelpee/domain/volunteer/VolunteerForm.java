@@ -1,23 +1,65 @@
 package com.example.junmp.togetherhelpee.domain.volunteer;
 
-import com.example.junmp.togetherhelpee.domain.user.User;
-
 import java.util.Date;
 
 public class VolunteerForm {
-    private User user;
+    private String userId;
+
     private Date startAt;
     private Date endAt;
-    private float latitude;
-    private float longitude;
-    private String helpContents;
+    private double latitude;
+    private double longitude;
+    private String message;
 
-    public VolunteerForm(User user, Date startAt, Date endAt, float latitude, float longitude, String helpContents) {
-        this.user = user;
-        this.startAt = startAt;
-        this.endAt = endAt;
+    public Date getStartAt() {
+        return startAt;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public Date getEndAt() {
+
+        return endAt;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public VolunteerForm(String userId , double latitude, double longitude) {
+        this.userId = userId;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.helpContents = helpContents;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setStartAt(Date startAt) {
+
+        this.startAt = startAt;
+    }
+
+    public void setEndAt(Date endAt) {
+        this.endAt = endAt;
+    }
+
+    public boolean validate() {
+        return true;
+    }
+
+    public String getErrorMessage() {
+        return "";
     }
 }

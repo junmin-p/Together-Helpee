@@ -53,7 +53,7 @@ public class FeedbackActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_volunteer_feedback);
+        setContentView(R.layout.activity_volunteer_feedback_old);
 
         Intent intent = new Intent(getApplicationContext(), processTimerReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);

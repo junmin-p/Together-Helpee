@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.example.junmp.togetherhelpee.R;
 import com.example.junmp.togetherhelpee.activity.user.register.form.FaceFormActivity;
-import com.example.junmp.togetherhelpee.activity.volunteer.request.form.WhenFormActivity;
-import com.example.junmp.togetherhelpee.common.util.DeviceUUIDFactory;
+import com.example.junmp.togetherhelpee.activity.volunteer.request.form.VolunteerFormActivity;
+import com.example.junmp.togetherhelpee.common.util.device.DeviceUtil;
 import com.example.junmp.togetherhelpee.domain.user.User;
 import com.example.junmp.togetherhelpee.domain.user.UserService;
 import com.example.junmp.togetherhelpee.domain.volunteer.Volunteer;
@@ -38,24 +38,25 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (displayHome.getUser() == null) {
                     Intent registerIntent = new Intent(HomeActivity.this, FaceFormActivity.class);
-                    registerIntent.putExtra("nextActivity", WhenFormActivity.class.getSimpleName());
                     startActivity(registerIntent);
 
                 } else {
-                    startActivity(new Intent(HomeActivity.this, WhenFormActivity.class));
+                    startActivity(new Intent(HomeActivity.this, VolunteerFormActivity.class));
                 }
+
             }
         });
 
         new AsyncInit().execute();
     }
 
+
     private class AsyncInit extends AsyncTask<String, Void, DisplayHome> {
         @Override
         protected DisplayHome doInBackground(String... params) {
             DisplayHome home = new DisplayHome();
 
-            User user = userService.getLoggedUser(new DeviceUUIDFactory(getApplicationContext()).getDeviceUuid());
+            User user = userService.getLoggedUser(DeviceUtil.getPhoneNumber(HomeActivity.this));
             home.setUser(user);
 
             if (user != null) {
@@ -84,9 +85,9 @@ public class HomeActivity extends AppCompatActivity {
                 String replace = title.replace(":createdAt", volunteer.getCreatedAt().toString()).replace(":content", volunteer.getContent());
                 volunteerView.setText(replace);
                 volunteerView.setVisibility(View.VISIBLE);
+                requestHelpButton.setVisibility(View.GONE);
             }
 
-            requestHelpButton.setVisibility(View.VISIBLE);
         }
     }
 }

@@ -12,20 +12,20 @@
         android:id="@+id/textName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="무엇을 도와 드릴까요?"
+        android:text="차정현 할아버지"
         android:textSize="35dp" />
 
-
-    <ImageView
-        android:id="@+id/imageView4"
+    <TextView
+        android:id="@+id/textName1"
         android:layout_width="match_parent"
-        android:layout_height="443dp"
-        app:srcCompat="@drawable/btnplus2" />
+        android:layout_height="wrap_content"
+        android:text="{:when}에 {:what}  을(를) 도와줄 봉사자를 찾아 드릴께요."
+        android:textSize="35dp" />
 
     <Button
-        android:id="@+id/btn_next"
-        android:layout_width="match_parent"
-        android:layout_height="69dp"
-        android:text="다음 (dummy)" />
+            android:id="@+id/btn_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="네 고마워요" />
 
-</LinearLayout>
+    </LinearLayout>

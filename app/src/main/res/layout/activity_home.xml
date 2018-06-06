@@ -38,12 +38,5 @@
         android:layout_gravity="bottom"
         />
 
-    <Button
-        android:id="@+id/cancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="취소"
-        android:textSize="70dp"
-        android:layout_gravity="bottom"
-        />
+
 </LinearLayout>

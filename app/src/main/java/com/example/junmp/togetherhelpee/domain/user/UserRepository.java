@@ -10,8 +10,8 @@ import retrofit2.http.*;
 
 public interface UserRepository {
 
-    @GET("user/helpee/{deviceId}")
-    Call<User> getOne(@Path("deviceId") String deviceId);
+    @GET("user/helpee/{phoneNumber}")
+    Call<User> getOne(@Path("phoneNumber") String phoneNumber);
 
     @FormUrlEncoded
     @POST("user/helpee/{deviceId}")

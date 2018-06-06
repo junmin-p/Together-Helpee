@@ -11,26 +11,18 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 
-import com.example.junmp.togetherhelpee.FileUploadService;
 import com.example.junmp.togetherhelpee.R;
-import com.example.junmp.togetherhelpee.activity.home.DisplayHome;
-import com.example.junmp.togetherhelpee.activity.volunteer.request.form.WhenFormActivity;
-import com.example.junmp.togetherhelpee.common.util.DeviceUUIDFactory;
 import com.example.junmp.togetherhelpee.common.util.camera.CameraSourcePreview;
 import com.example.junmp.togetherhelpee.common.util.camera.GraphicOverlay;
 import com.example.junmp.togetherhelpee.domain.file.FileService;
 import com.example.junmp.togetherhelpee.domain.file.UploadFile;
-import com.example.junmp.togetherhelpee.domain.user.User;
-import com.example.junmp.togetherhelpee.domain.volunteer.Volunteer;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.vision.CameraSource;
@@ -45,17 +37,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-
 
 public class FaceFormActivity extends AppCompatActivity {
     private FileService fileService = new FileService();
@@ -64,8 +45,8 @@ public class FaceFormActivity extends AppCompatActivity {
     private CameraSource mCameraSource = null;
 
     private Bitmap mBitmap;
-    private byte[] imageBytes;
-    private String referer;
+
+
     private CameraSourcePreview mPreview;
     private GraphicOverlay mGraphicOverlay;
 
@@ -85,8 +66,7 @@ public class FaceFormActivity extends AppCompatActivity {
                     matrix, true);
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
-            imageBytes = output.toByteArray();
-            String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
 
             ContextWrapper wrapper = new ContextWrapper(getApplicationContext());
             File file = wrapper.getDir("Images", MODE_PRIVATE);
@@ -122,9 +102,6 @@ public class FaceFormActivity extends AppCompatActivity {
             Intent intent = new Intent(FaceFormActivity.this, NameFormActivity.class);
             intent.putExtra("imageName", home.getFileName());
 
-            if (hasNextAndWhenForm(referer))
-                intent.putExtra("nextActivity" , referer);
-
             startActivity(intent);
             finish();
         }
@@ -150,7 +127,6 @@ public class FaceFormActivity extends AppCompatActivity {
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
-        referer = getIntent().getStringExtra("nextActivity");
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
@@ -162,9 +138,6 @@ public class FaceFormActivity extends AppCompatActivity {
         }
     }
 
-    private boolean hasNextAndWhenForm(String referer) {
-        return referer != null && referer.equals(WhenFormActivity.class.getSimpleName());
-    }
 
     /**
      * Handles the requesting of the camera permission.  This includes

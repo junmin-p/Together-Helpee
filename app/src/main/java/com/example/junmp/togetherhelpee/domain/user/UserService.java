@@ -29,9 +29,9 @@ public class UserService {
      * 로그인 한 유저 정보를 가져올것
      * @return
      */
-    public User getLoggedUser(String deviceId)  {
+    public User getLoggedUser(String phoneNumber)  {
         try {
-            return userRepository.getOne(deviceId).execute().body();
+            return userRepository.getOne(phoneNumber).execute().body();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
