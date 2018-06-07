@@ -79,7 +79,7 @@ public class CameraActivity extends AppCompatActivity {
     private class AsyncInit extends AsyncTask<File, Void, UploadFile> {
         @Override
         protected UploadFile doInBackground(File... params) {
-            return fileService.uplaod(params[0]);
+            return fileService.upload(params[0]);
         }
 
         @Override
