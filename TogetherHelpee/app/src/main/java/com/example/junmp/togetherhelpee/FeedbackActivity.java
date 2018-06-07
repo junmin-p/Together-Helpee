@@ -62,8 +62,6 @@ public class FeedbackActivity extends AppCompatActivity {
     private int is_record = 0;
     private int is_play = 0;
 
-    Intent intent_rec;
-    SpeechRecognizer mRecognizer;
 
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
     String phone_num;
@@ -170,17 +168,9 @@ public class FeedbackActivity extends AppCompatActivity {
             }
         });
 
-        intent_rec = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent_rec.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
-        intent_rec.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
-
-        mRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
-        mRecognizer.setRecognitionListener(recognitionListener);
-
         btn_mic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRecognizer.startListening(intent_rec);
                 if(is_record == 0){
                     if(recorder != null){
                         recorder.stop();
@@ -315,72 +305,6 @@ public class FeedbackActivity extends AppCompatActivity {
         super.onPause();
 
     }
-
-    private RecognitionListener recognitionListener = new RecognitionListener() {
-        @Override
-        public void onReadyForSpeech(Bundle bundle) {
-            pd = new ProgressDialog(FeedbackActivity.this);
-            pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            pd.setMessage("요청사항을 마이크에 대고 예시와 같이 말씀해주세요.\n예시) 삼성역까지 데려다 주세요");
-            pd.show();
-        }
-
-        @Override
-        public void onBeginningOfSpeech() {
-        }
-
-        @Override
-        public void onRmsChanged(float v) {
-        }
-
-        @Override
-        public void onBufferReceived(byte[] bytes) {
-        }
-
-        @Override
-        public void onEndOfSpeech() {
-        }
-
-        @Override
-        public void onError(int i) {
-            pd.dismiss();
-
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        @Override
-        public void onResults(Bundle bundle) {
-            pd.dismiss();
-            String key = "";
-            key = SpeechRecognizer.RESULTS_RECOGNITION;
-            ArrayList<String> mResult = bundle.getStringArrayList(key);
-
-            String[] rs = new String[mResult.size()];
-            mResult.toArray(rs);
-
-            message = rs[0];
-
-            if(recorder == null)
-                return;
-
-            is_record = 0;
-            btn_mic.setImageResource(R.drawable.mic);
-
-            recorder.stop();
-            recorder.reset();
-            recorder.release();
-            recorder = null;
-
-        }
-
-        @Override
-        public void onPartialResults(Bundle bundle) {
-        }
-
-        @Override
-        public void onEvent(int i, Bundle bundle) {
-        }
-    };
 
     private void putRecord(Uri fileUri) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();

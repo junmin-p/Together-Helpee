@@ -104,12 +104,12 @@
         <activity
             android:name=".SplashActivity"
             android:label=""
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".fcm_popup"
             android:label=""
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
-        <activity android:name=".PartnerActivity"></activity>
+        <activity android:name=".PartnerActivity" />
     </application>
 
 </manifest>

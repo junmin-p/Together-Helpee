@@ -12,6 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -45,6 +50,9 @@ public class Call4Activity extends AppCompatActivity {
     private String dest_time;
 
     postPush postPush;
+    getReserve getReserve;
+
+    String mJsonString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,13 +159,12 @@ public class Call4Activity extends AppCompatActivity {
                         Log.d("fdasds",String.valueOf(latitude));
                         Log.d("fdasds",String.valueOf(longitude));
 
-                        postRequest pR = new postRequest();
-                        pR.execute("http://210.89.191.125/helpee/volunteer");
-/*
+                        getReserve = new getReserve();
+                        getReserve.execute("http://210.89.191.125/helpee/reservation");
                         Toast.makeText(
                                 getApplicationContext(),
                                 "당신의 위치 - \n위도: " + latitude + "\n경도: " + longitude,
-                                Toast.LENGTH_LONG).show();*/
+                                Toast.LENGTH_LONG).show();
                     } else {
                         // GPS 를 사용할수 없으므로
                         gps.showSettingsAlert();
@@ -301,6 +308,118 @@ public class Call4Activity extends AppCompatActivity {
                 return null;
             }
 
+        }
+    }
+
+    private class getReserve extends AsyncTask<String, Void, String> {
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            Log.d("Asd",result);
+            if (result.equals("")){
+                postRequest pR = new postRequest();
+                pR.execute("http://210.89.191.125/helpee/volunteer");
+            }
+            else {
+                mJsonString = result;
+                try {
+                    showResult();
+                } catch (JSONException e) {
+                    Log.d("fda","asd");
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            String serverURL = params[0]+"?latitude="+latitude+"&&longitude="+longitude+"&&date="+dest_date+" "+dest_time;
+
+            Log.d("Asd",serverURL);
+            try {
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.connect();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d("fadsfsads", "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+
+                return sb.toString().trim();
+
+
+            } catch (Exception e) {
+
+                Log.d("fadsfsads", "InsertData: Error ", e);
+                errorString = e.toString();
+
+                return null;
+            }
+
+        }
+    }
+
+
+    private void showResult() throws JSONException {
+        try {
+            JSONArray jsonArray = new JSONArray(mJsonString);
+
+            for(int i=jsonArray.length()-1;i>=0;i--){
+                JSONObject item = jsonArray.getJSONObject(i);
+
+                String helperId = item.getString("userId");
+                Intent toPartner = new Intent(Call4Activity.this, PartnerActivity.class);
+                toPartner.putExtra("where", "reserve");
+                toPartner.putExtra("helperId", helperId);
+                toPartner.putExtra("phonenum",phone_num);
+                toPartner.putExtra("type", type);
+                toPartner.putExtra("content", etc);
+                toPartner.putExtra("time", dest_time);
+                toPartner.putExtra("duration", checked);
+                toPartner.putExtra("date", dest_date);/*
+                TODO
+                toPartner.putExtra("volunteerId", volunteerId);*/
+                startActivity(toPartner);
+                finish();
+            }
+
+        } catch (JSONException e) {
+            Log.d("fadsfsads", "showResult : ", e);
         }
     }
 }

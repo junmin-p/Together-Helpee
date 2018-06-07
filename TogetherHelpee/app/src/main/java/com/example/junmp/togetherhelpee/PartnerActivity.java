@@ -54,6 +54,13 @@ public class PartnerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_partner);
 
         Intent fromCall = getIntent();
+
+        if(fromCall.getStringExtra("where") != null){
+            helperId = fromCall.getStringExtra("helperId");
+
+            getName = new getName();
+            getName.execute("http://210.89.191.125/helpee/helper/name/");
+        }
         type = fromCall.getStringExtra("type");
         if(type.equals("outside")){
             type = "외출";
@@ -261,7 +268,6 @@ public class PartnerActivity extends AppCompatActivity {
 
                 txt_name.setText("이름 : "+helper_name);
                 txt_career.setText("봉사경력 : "+admit_time+"시간");
-                Log.d("FDAsfs",helper_score+"");
                 txt_score.setText("평점 : "+String.format("%.2f",helper_score)+"점");
                 new DownloadImageTask(img_profile).execute(img_src);
             }

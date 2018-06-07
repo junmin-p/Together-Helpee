@@ -84,6 +84,7 @@ public class Call1Activity extends AppCompatActivity {
 
         setContentView(R.layout.activity_call1);
 
+
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             TelephonyManager mgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             idByTelephonyManager = mgr.getDeviceId();
