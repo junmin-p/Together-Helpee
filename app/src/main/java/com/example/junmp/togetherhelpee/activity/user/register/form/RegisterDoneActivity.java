@@ -32,7 +32,7 @@ public class RegisterDoneActivity extends AbstractWebViewActivity {
         webView.addJavascriptInterface(new Object() {
 
             @JavascriptInterface
-            public void next(int age) {
+            public void clickHome() {
                 Intent intent = new Intent(RegisterDoneActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
