@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.example.junmp.togetherhelpee.activity.user.register.form.FaceFormActivity;
+import com.example.junmp.togetherhelpee.activity.user.register.form.CameraActivity;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.BufferedReader;
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         btn_sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toFace = new Intent(MainActivity.this, FaceFormActivity.class);
+                Intent toFace = new Intent(MainActivity.this, CameraActivity.class);
                 toFace.putExtra("from", "first");
                 toFace.putExtra("phonenum", PhoneNum);
                 toFace.putExtra("deviceKey", idByTelephonyManager);

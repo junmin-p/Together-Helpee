@@ -37,9 +37,9 @@ public class UserService {
         }
     }
 
-    public void register(int age, String name, String imageName, String deviceId , String phoneNumber) {
+    public void register(int age, String name, String imageName, String gender ,  String deviceId , String phoneNumber) {
         try {
-            userRepository.register(deviceId , age , name , imageName , phoneNumber).execute();
+            userRepository.register(deviceId , age , name , imageName , gender ,  phoneNumber).execute();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

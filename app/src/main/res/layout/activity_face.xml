@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
-    tools:context=".activity.user.register.form.FaceFormActivity"
+    tools:context=".activity.user.register.form.CameraActivity"
     android:id="@+id/topLayout"
     android:orientation="horizontal"
     android:layout_width="match_parent"

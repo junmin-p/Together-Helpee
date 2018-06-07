@@ -40,7 +40,7 @@
                 android:label=""
                 android:screenOrientation="portrait"/>
         <activity
-                android:name=".activity.user.register.form.FaceFormActivity"
+                android:name=".activity.user.register.form.CameraActivity"
                 android:label=""
                 android:screenOrientation="portrait"/>
         <activity
@@ -64,9 +64,10 @@
                 android:label=""
                 android:screenOrientation="portrait"/>
 
+
         <activity
-                android:name=".activity.home.HomeWebViewActivity"
-                android:label="Home"
+                android:name=".activity.user.register.form.FaceFormActivity"
+                android:label=""
                 android:screenOrientation="portrait"/>
 
 
@@ -79,25 +80,25 @@
                 android:name=".activity.user.register.form.AgeFormActivity"
                 android:label=""
                 android:screenOrientation="portrait"/>
+        <activity
+                android:name=".activity.user.register.form.GenderFormActivity"
+                android:label=""
+                android:screenOrientation="portrait"/>
+
 
 
         <activity
-                android:name=".activity.user.register.form.ConfirmActivity"
+                android:name=".activity.user.register.form.RegisterDoneActivity"
                 android:label=""
                 android:screenOrientation="portrait"/>
 
         <activity
-                android:name=".activity.volunteer.request.form.RegisterWebViewFormActivity"
+                android:name=".activity.volunteer.request.form.RegisterFormActivity"
                 android:label=""
                 android:screenOrientation="portrait"/>
 
         <activity
-                android:name=".activity.volunteer.request.form.VolunteerFormActivity"
-                android:label=""
-                android:screenOrientation="portrait"/>
-
-        <activity
-                android:name=".activity.volunteer.request.form.RequestDoneActivity"
+                android:name=".activity.volunteer.request.form.RegisterDoneActivity"
                 android:label=""
                 android:screenOrientation="portrait"/>
 

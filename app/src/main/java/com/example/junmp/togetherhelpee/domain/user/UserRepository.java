@@ -15,5 +15,5 @@ public interface UserRepository {
 
     @FormUrlEncoded
     @POST("user/helpee/{deviceId}")
-    Call<Void> register(@Path("deviceId") String deviceId, @Field("age") int age,  @Field("name") String name, @Field("imageName") String imageName , @Field("phoneNumber") String phoneNumber);
+    Call<Void> register(@Path("deviceId") String deviceId, @Field("age") int age,  @Field("name") String name, @Field("imageName") String imageName , @Field("gender") String gender ,  @Field("phoneNumber") String phoneNumber);
 }

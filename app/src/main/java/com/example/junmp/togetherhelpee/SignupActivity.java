@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.junmp.togetherhelpee.activity.user.register.form.FaceFormActivity;
+import com.example.junmp.togetherhelpee.activity.user.register.form.CameraActivity;
 
 import java.io.File;
 
@@ -69,7 +69,7 @@ public class SignupActivity extends AppCompatActivity {
         btn_recapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent recapture = new Intent(SignupActivity.this, FaceFormActivity.class);
+                Intent recapture = new Intent(SignupActivity.this, CameraActivity.class);
                 recapture.putExtra("from","re");
                 recapture.putExtra("phonenum", phone_num);
                 recapture.putExtra("deviceKey", deviceKey);

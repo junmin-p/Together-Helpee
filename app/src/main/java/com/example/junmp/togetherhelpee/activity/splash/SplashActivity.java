@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 import com.example.junmp.togetherhelpee.R;
-import com.example.junmp.togetherhelpee.activity.home.HomeWebViewActivity;
+import com.example.junmp.togetherhelpee.activity.home.HomeActivity;
 import com.example.junmp.togetherhelpee.common.util.device.DeviceUUIDFactory;
 import com.example.junmp.togetherhelpee.common.util.push.PushUtil;
 import com.example.junmp.togetherhelpee.domain.device.DeviceService;
@@ -60,7 +60,7 @@ public class SplashActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Intent intent = new Intent(SplashActivity.this, HomeWebViewActivity.class);
+            Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
         }
