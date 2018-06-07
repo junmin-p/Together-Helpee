@@ -6,10 +6,17 @@
               android:orientation="vertical"
               tools:context=".activity.home.HomeActivity">
 
-    <WebView
+    <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/home_index"
-    />
+            android:id="@+id/swipe_refresh"
+    >
+        <WebView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/home_index"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </LinearLayout>

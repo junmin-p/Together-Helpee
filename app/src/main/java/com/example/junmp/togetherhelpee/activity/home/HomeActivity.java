@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.webkit.*;
 import com.example.junmp.togetherhelpee.R;
 import com.example.junmp.togetherhelpee.activity.common.AbstractWebViewActivity;
@@ -25,8 +26,29 @@ public class HomeActivity extends AbstractWebViewActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_webview);
         super.initWebview(R.id.home_index);
+        final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipe_refresh);
+        webView.setWebViewClient(new WebViewClient() {
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
+                refreshLayout.setRefreshing(false);
+
+            }
+
+        });
         new AsyncInit().execute();
 
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                webView.reload();
+            }
+        });
+
+        refreshLayout.setColorSchemeResources(
+                android.R.color.holo_orange_light
+        );
     }
 
     private void bindJavascript() {
@@ -40,7 +62,7 @@ public class HomeActivity extends AbstractWebViewActivity {
 
             @JavascriptInterface
             public void register() {
-                startActivity(new Intent(HomeActivity.this , FaceFormActivity.class));
+                startActivity(new Intent(HomeActivity.this, FaceFormActivity.class));
                 finish();
             }
         }, "Home");
