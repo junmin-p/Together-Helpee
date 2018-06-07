@@ -6,7 +6,6 @@
               android:orientation="vertical"
               tools:context=".activity.home.HomeWebViewActivity">
 
-    <ProgressBar android:layout_width="match_parent" android:layout_height="match_parent" />
     <WebView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

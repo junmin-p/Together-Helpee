@@ -87,6 +87,11 @@
                 android:screenOrientation="portrait"/>
 
         <activity
+                android:name=".activity.volunteer.request.form.RegisterWebViewFormActivity"
+                android:label=""
+                android:screenOrientation="portrait"/>
+
+        <activity
                 android:name=".activity.volunteer.request.form.VolunteerFormActivity"
                 android:label=""
                 android:screenOrientation="portrait"/>
