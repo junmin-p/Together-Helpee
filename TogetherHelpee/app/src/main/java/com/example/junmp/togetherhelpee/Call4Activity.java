@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -152,7 +153,6 @@ public class Call4Activity extends AppCompatActivity {
                     gps = new GpsInfo(Call4Activity.this);
                     // GPS 사용유무 가져오기
                     if (gps.isGetLocation()) {
-
                         latitude = gps.getLatitude();
                         longitude = gps.getLongitude();
 
@@ -252,8 +252,6 @@ public class Call4Activity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-
-            Log.d("Asd",result);
         }
 
 
@@ -297,6 +295,14 @@ public class Call4Activity extends AppCompatActivity {
                 bufferedReader.close();
 
 
+                DataOutputStream outputStream = new DataOutputStream(httpURLConnection.getOutputStream());
+                String jsonParamsString = "";
+                outputStream.writeBytes(jsonParamsString);
+                outputStream.flush();
+                outputStream.close();
+                Log.d("fdasfdsf",jsonParamsString);
+
+
                 return sb.toString().trim();
 
 
@@ -304,6 +310,7 @@ public class Call4Activity extends AppCompatActivity {
 
                 Log.d("fadsfsads", "InsertData: Error ", e);
                 errorString = e.toString();
+
 
                 return null;
             }
@@ -342,7 +349,7 @@ public class Call4Activity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String serverURL = params[0]+"?latitude="+latitude+"&&longitude="+longitude+"&&date="+dest_date+" "+dest_time;
+            String serverURL = params[0]+"?latitude="+latitude+"&&longitude="+longitude+"&&date="+dest_date+"%"+dest_time;
 
             Log.d("Asd",serverURL);
             try {

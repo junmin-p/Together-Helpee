@@ -164,8 +164,8 @@ public class IngActivity extends AppCompatActivity {
                 if(startStatus == 2){
                     Toast.makeText(getApplicationContext(),"봉사가 종료되었습니다.",Toast.LENGTH_SHORT).show();
 
-                    Intent toMain = new Intent(IngActivity.this, MainActivity.class);
-                    startActivity(toMain);
+                    Intent toFeed = new Intent(IngActivity.this, FeedbackActivity.class);
+                    startActivity(toFeed);
                     finish();
                 }
             }

@@ -36,6 +36,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -499,17 +500,58 @@ public class Call1Activity extends AppCompatActivity {
 
             }
             else if(startStatus == 1){
+                long current_time = System.currentTimeMillis();
+                SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String str = dayTime.format(new Date(current_time));
+
+                String type = item.getString("type");
+                String helperId = item.getString("helperId");
+                int matchingStatus = item.getInt("matchingStatus");
+                String content = item.getString("content");
+                String time = item.getString("time");
+                int duration = item.getInt("duration");
+                String date = item.getString("date");
                 int volunteerId = item.getInt("volunteerId");
-                Intent toIng = new Intent(Call1Activity.this, IngActivity.class);
-                toIng.putExtra("volunteerId", volunteerId);
-                toIng.putExtra("phonenum", phone_num);
-                startActivity(toIng);
-                finish();
+
+                String dest_time = date+" "+time;
+
+                Date current = null;
+                Date dest = null;
+                try {
+                    current = dayTime.parse(str);
+                    dest = dayTime.parse(dest_time);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                long diff = dest.getTime() - current.getTime();
+                long diffSeconds = diff / 1000;
+
+                Log.d("fdasfadfd",diffSeconds+"");
+
+                Log.d("fdasfadfd",str);
+                Log.d("fdasfadfd",dest_time+"");
+                if(diffSeconds <= 3600 && diffSeconds >= 0){
+                    Intent toMap = new Intent(Call1Activity.this, MapActivity.class);
+                    toMap.putExtra("phonenum", phone_num);
+                    toMap.putExtra("volunteerId", volunteerId);
+                    toMap.putExtra("helperId", helperId);
+                    startActivity(toMap);
+                    finish();
+                }
+                else{
+                    Intent toIng = new Intent(Call1Activity.this, IngActivity.class);
+                    toIng.putExtra("volunteerId", volunteerId);
+                    toIng.putExtra("phonenum", phone_num);
+                    startActivity(toIng);
+                    finish();
+                }
             }
 
         } catch (JSONException e) {
             Log.d("fadsfsads", "showResult : ", e);
         }
+
+
     }
 
     private class getWait extends AsyncTask<String, Void, String> {

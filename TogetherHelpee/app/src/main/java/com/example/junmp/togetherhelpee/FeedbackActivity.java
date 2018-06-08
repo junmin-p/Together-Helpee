@@ -68,8 +68,6 @@ public class FeedbackActivity extends AppCompatActivity {
 
     ProgressDialog pd;
 
-    String message;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -253,9 +251,11 @@ public class FeedbackActivity extends AppCompatActivity {
                     recorder.stop();
                     recorder.release();
                     recorder = null;
-                }
-                if(message == null){
-                    Toast.makeText(getApplicationContext(),"마이크를 누르시고 한 문장으로 평가해주세요.",Toast.LENGTH_SHORT).show();
+                    is_record = 0;
+                    putRecord(Uri.parse(RECORDED_FILE));
+                    Intent toEnd = new Intent(FeedbackActivity.this, EndActivity.class);
+                    startActivity(toEnd);
+                    finish();
                 }
                 else{
                     putRecord(Uri.parse(RECORDED_FILE));
@@ -318,11 +318,10 @@ public class FeedbackActivity extends AppCompatActivity {
         File file = new File(String.valueOf(fileUri));
         RequestBody reqFile = RequestBody.create(MediaType.parse("file"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("recordfile", volunteerId+".mp3", reqFile);
-        RequestBody helpee_Feedback = RequestBody.create(MediaType.parse("text"), message);
         RequestBody volunteer_Id = RequestBody.create(MediaType.parse("text"), String.valueOf(volunteerId));
         RequestBody helpee_Score = RequestBody.create(MediaType.parse("text"), String.valueOf(helpeeScore));
 
-        Call<ResponseBody> req = service.put(helpee_Feedback, volunteer_Id, helpee_Score, body);
+        Call<ResponseBody> req = service.put(volunteer_Id, helpee_Score, body);
         req.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

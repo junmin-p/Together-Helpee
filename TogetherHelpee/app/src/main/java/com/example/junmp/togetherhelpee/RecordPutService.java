@@ -12,7 +12,6 @@ public interface RecordPutService {
     @Multipart
     @PUT("/helpee/record")
     Call<ResponseBody> put(
-            @Part("helpeeFeedbackContent") RequestBody helpee_Feedback,
             @Part("volunteerId") RequestBody volunteer_Id,
             @Part("helpeeScore") RequestBody helpee_Score,
             @Part MultipartBody.Part recordfile

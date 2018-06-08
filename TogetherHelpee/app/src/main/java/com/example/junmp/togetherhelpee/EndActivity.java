@@ -23,7 +23,7 @@ public class EndActivity extends AppCompatActivity {
         btn_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toMain = new Intent(EndActivity.this, MainActivity.class);
+                Intent toMain = new Intent(EndActivity.this, Call1Activity.class);
                 startActivity(toMain);
                 finish();
             }

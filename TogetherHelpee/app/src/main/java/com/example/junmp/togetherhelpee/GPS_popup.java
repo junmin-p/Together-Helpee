@@ -4,58 +4,26 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 
-public class fcm_popup extends Activity {
-    private TextView message_txt;
-    private String message;
-    private String id;
-
+public class GPS_popup extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        finish();
-        overridePendingTransition(0, 0);
-        startActivity(getIntent());
-        overridePendingTransition(0, 0);
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_fcm_popup);
+        setContentView(R.layout.activity_gps_popup);
 
-        // 키잠금 해제 및 화면 켜기
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        //UI 객체생성
+        TextView txtText = (TextView)findViewById(R.id.txtText);
 
-
+        //데이터 가져오기
         Intent intent = getIntent();
-        message = intent.getStringExtra("msg");
-        id = intent.getStringExtra("id");
-
-        Log.d("fcmpop",message);
-        Log.d("fcmid",id);
-
-        message_txt = (TextView)findViewById(R.id.fcm_txt);
-        message_txt.setText(message);
-
+        txtText.setText("GPS 위성 사용을 키셔야 정확한 위치 서비스가 가능합니다.");
 
     }
-
-
-    //신청 버튼 클릭
-    public void mOnRegister(View v){
-        //데이터 전달하기
-        Intent intent = new Intent(getApplicationContext(),Call1Activity.class);
-        startActivity(intent);
-
-    }
-
 
     //확인 버튼 클릭
     public void mOnClose(View v){
@@ -83,5 +51,4 @@ public class fcm_popup extends Activity {
         //안드로이드 백버튼 막기
         return;
     }
-
 }

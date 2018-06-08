@@ -47,7 +47,7 @@ public class Call3Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_call2);
+        setContentView(R.layout.activity_call3);
 
         Intent from = getIntent();
         phone_num = from.getStringExtra("phonenum");

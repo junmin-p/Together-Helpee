@@ -2,4 +2,5 @@
     <string name="app_name">TogetherHelpee</string>
     <string name="guide">-이용방법-\n1. 좌측하단의 도움 요청 버튼을 누르고 예시와 같은 형식으로 말한다.\n2. 말한 내용이 적절히 나왔을 때 우측하단의 다음버튼을 클릭하여 다음화면으로 넘어갑니다.\n3. 봉사종류와 예상소요시간을 적절히 선택후 전송버튼을 누르고 도움요청을 완료한다.</string>
     <string name="guide2">1. 좌측하단의 도움 요청 버튼을 누르고 예시와 같은 형식으로 말한다.\n2. 말한 내용이 적절히 나왔을 때 우측하단의 다음버튼을 클릭하여 다음화면으로 넘어갑니다.\n3. 봉사종류와 예상소요시간을 적절히 선택후 전송버튼을 누르고 도움요청을 완료한다.</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
