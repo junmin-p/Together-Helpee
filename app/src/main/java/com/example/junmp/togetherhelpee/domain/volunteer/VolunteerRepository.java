@@ -2,10 +2,7 @@ package com.example.junmp.togetherhelpee.domain.volunteer;
 
 import com.example.junmp.togetherhelpee.domain.volunteer.helper.Helper;
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.Path;
+import retrofit2.http.*;
 
 import java.util.Date;
 
@@ -19,4 +16,7 @@ public interface VolunteerRepository {
 
     @POST("volunteer")
     Call<Volunteer> save(@Body VolunteerForm form);
+
+    @PUT("volunteer/{volunteerId}/accept")
+    Call<Void> accept(@Path("volunteerId") int volunteerId);
 }

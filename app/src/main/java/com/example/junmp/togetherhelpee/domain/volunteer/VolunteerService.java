@@ -33,4 +33,12 @@ public class VolunteerService {
             throw new RuntimeException(e);
         }
     }
+
+    public void accept(int volunteerId) {
+        try {
+            volunteerRepository.accept(volunteerId).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

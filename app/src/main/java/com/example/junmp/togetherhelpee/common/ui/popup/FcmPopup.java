@@ -2,6 +2,7 @@ package com.example.junmp.togetherhelpee.common.ui.popup;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -12,8 +13,17 @@ import android.widget.TextView;
 
 import com.example.junmp.togetherhelpee.MainActivity;
 import com.example.junmp.togetherhelpee.R;
+import com.example.junmp.togetherhelpee.activity.home.HomeActivity;
+import com.example.junmp.togetherhelpee.common.constante.Server;
+import com.example.junmp.togetherhelpee.common.util.device.DeviceUtil;
+import com.example.junmp.togetherhelpee.domain.user.User;
+import com.example.junmp.togetherhelpee.domain.user.UserService;
+import com.example.junmp.togetherhelpee.domain.volunteer.Volunteer;
+import com.example.junmp.togetherhelpee.domain.volunteer.VolunteerService;
 
 public class FcmPopup extends Activity {
+    private VolunteerService volunteerService = new VolunteerService();
+    private UserService userService = new UserService();
     private TextView message_txt;
     private String message;
     private String id;
@@ -47,9 +57,25 @@ public class FcmPopup extends Activity {
     //신청 버튼 클릭
     public void mOnRegister(View v){
         //데이터 전달하기
-        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-        startActivity(intent);
+        new AsyncInit().execute();
+    }
 
+    private class AsyncInit extends AsyncTask<String, Void, Volunteer> {
+        @Override
+        protected Volunteer doInBackground(String... params) {
+            User user = userService.getLoggedUser(DeviceUtil.getPhoneNumber(FcmPopup.this));
+            Volunteer activeOne = volunteerService.getActiveOne(user.getId());
+            volunteerService.accept(activeOne.getVolunteerId());
+            return activeOne;
+        }
+
+        @Override
+        protected void onPostExecute(Volunteer volunteer) {
+
+            Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
 

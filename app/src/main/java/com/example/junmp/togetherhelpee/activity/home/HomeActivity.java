@@ -34,10 +34,7 @@ public class HomeActivity extends AbstractWebViewActivity {
                 refreshLayout.setRefreshing(false);
 
             }
-
         });
-        new AsyncInit().execute();
-
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -45,10 +42,15 @@ public class HomeActivity extends AbstractWebViewActivity {
                 webView.reload();
             }
         });
-
         refreshLayout.setColorSchemeResources(
                 android.R.color.holo_orange_light
         );
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new AsyncInit().execute();
     }
 
     private void bindJavascript() {
