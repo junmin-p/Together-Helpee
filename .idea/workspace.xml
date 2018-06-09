@@ -11,31 +11,10 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64da8324-9940-4e58-820a-2c1728be55d0" name="Default" comment="로고 변경">
-      <change beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/user/UserActivity.java" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+    <list default="true" id="64da8324-9940-4e58-820a-2c1728be55d0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/MyFirebaseMessagingService.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/MyFirebaseMessagingService.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/home/HomeActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/home/HomeActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/splash/SplashActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/splash/SplashActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/volunteer/matched/MatchedActivity.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/volunteer/matched/done/MatchedDoneActivity.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/volunteer/matched/end/MatchedEndActivity.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/volunteer/matched/feedback/MatchedFeedbackActivity.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/volunteer/matched/standby/MatchedStandbyActivity.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/volunteer/matched/start/MatchedStartActivity.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/volunteer/recommend/RecommendActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/volunteer/recommend/RecommendActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/common/ui/popup/FcmPopup.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/popup/FcmPopupActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/domain/device/DeviceService.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/domain/device/DeviceService.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_fcm_popup.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_fcm_popup.xml" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_splash.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_splash.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_volunteer_done.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_volunteer_matched.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_user.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_volunteer_matched_end.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_volunteer_matched_helper_start.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_volunteer_matched_standby.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_volunteer_matched_start.xml" afterPath="" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -108,34 +87,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/user/UserActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="33" column="13" lean-forward="false" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1071#1325#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="RegisterFormActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/volunteer/request/form/RegisterFormActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1380">
-              <caret line="120" column="13" lean-forward="true" selection-start-line="120" selection-start-column="13" selection-end-line="120" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RegisterDoneActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/volunteer/request/form/RegisterDoneActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="84">
-              <caret line="11" column="33" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="33" />
+              <caret line="120" column="13" lean-forward="false" selection-start-line="120" selection-start-column="13" selection-end-line="120" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -145,7 +101,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/volunteer/recommend/RecommendActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="462">
-              <caret line="31" column="49" lean-forward="true" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
+              <caret line="31" column="49" lean-forward="false" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -181,11 +137,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="activity_user_form_gender.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="activity_user_form_gender.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_user_form_gender.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="189">
-              <caret line="9" column="12" lean-forward="true" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
+              <caret line="9" column="12" lean-forward="false" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -194,14 +150,41 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SplashActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/splash/SplashActivity.java">
+      <file leaf-file-name="activity_splash.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_splash.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="966">
-              <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
-              <folding>
-                <marker date="1528527706792" expanded="true" signature="2634:2717" ph="{...}" />
-              </folding>
+            <state relative-caret-position="126">
+              <caret line="6" column="8" lean-forward="false" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="android-designer2">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="activity_start.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_start.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="147">
+              <caret line="7" column="34" lean-forward="false" selection-start-line="7" selection-start-column="34" selection-end-line="7" selection-end-column="34" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="android-designer2">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+          <provider editor-type-id="android-manifest">
+            <state />
+          </provider>
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-154">
+              <caret line="109" column="0" lean-forward="false" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -2365,15 +2348,15 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/common/ui/popup/FcmPopupActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/user/register/form/UserActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_user.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_home_webview.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/user/UserActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/domain/device/DeviceService.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/popup/FcmPopupActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/home/HomeActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_splash.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/splash/SplashActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/volunteer/recommend/RecommendActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_splash.xml" />
       </list>
     </option>
   </component>
@@ -2664,7 +2647,7 @@
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="device.picker.selection" value="ce031713b1eb34f70d" />
+    <property name="device.picker.selection" value="Nexus_6_API_26" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/common/util" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="android.project.structure.last.selected" value="app" />
@@ -2985,7 +2968,14 @@
       <option name="project" value="LOCAL" />
       <updated>1528385257271</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="로고 변경">
+      <created>1528529153452</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1528529153452</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -3006,9 +2996,9 @@
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2311828" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33070865" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32834646" sideWeight="0.4978701" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2311828" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Build" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33070865" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32834646" sideWeight="0.4978701" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14097969" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Device File Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -3108,7 +3098,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/volunteer/VolunteerActivity.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_volunteer_matched_standby.xml">
       <provider editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -3356,19 +3345,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider editor-type-id="android-manifest">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="101">
-          <caret line="35" column="18" lean-forward="false" selection-start-line="35" selection-start-column="18" selection-end-line="35" selection-end-column="18" />
-          <folding>
-            <element signature="e#1012#1030#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_home_webview.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
@@ -3385,8 +3361,8 @@
         <state relative-caret-position="105">
           <caret line="5" column="25" lean-forward="false" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
           <folding>
-            <element signature="e#172#173#0" expanded="true" />
-            <element signature="e#238#239#0" expanded="true" />
+            <element signature="e#172#173#0" expanded="false" />
+            <element signature="e#238#239#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -3423,17 +3399,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_splash.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="6" column="30" lean-forward="true" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/splash/SplashActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="966">
@@ -3449,8 +3414,8 @@
         <state relative-caret-position="380">
           <caret line="33" column="13" lean-forward="false" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1071#1325#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#1071#1325#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -3474,7 +3439,7 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/volunteer/request/form/RegisterFormActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1380">
-          <caret line="120" column="13" lean-forward="true" selection-start-line="120" selection-start-column="13" selection-end-line="120" selection-end-column="13" />
+          <caret line="120" column="13" lean-forward="false" selection-start-line="120" selection-start-column="13" selection-end-line="120" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -3506,7 +3471,7 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/junmp/togetherhelpee/activity/volunteer/recommend/RecommendActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="462">
-          <caret line="31" column="49" lean-forward="true" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
+          <caret line="31" column="49" lean-forward="false" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
           <folding />
         </state>
       </provider>
@@ -3549,7 +3514,40 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_user_form_gender.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="189">
-          <caret line="9" column="12" lean-forward="true" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
+          <caret line="9" column="12" lean-forward="false" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_start.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="7" column="34" lean-forward="false" selection-start-line="7" selection-start-column="34" selection-end-line="7" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider editor-type-id="android-manifest">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-154">
+          <caret line="109" column="0" lean-forward="false" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_splash.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="6" column="8" lean-forward="false" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
           <folding />
         </state>
       </provider>

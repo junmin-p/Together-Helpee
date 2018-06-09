@@ -109,11 +109,6 @@
                 android:screenOrientation="portrait"/>
 
         <activity
-                android:name=".activity.volunteer.matched.MatchedActivity"
-                android:label=""
-                android:screenOrientation="portrait"/>
-
-        <activity
                 android:name=".activity.volunteer.match.MatchRetryActivity"
                 android:label=""
                 android:screenOrientation="portrait"/>
