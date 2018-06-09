@@ -10,13 +10,16 @@ import android.speech.RecognizerIntent;
 import android.support.v4.app.ActivityCompat;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
+
 import com.example.junmp.togetherhelpee.GpsInfo;
 import com.example.junmp.togetherhelpee.R;
 import com.example.junmp.togetherhelpee.activity.common.AbstractWebViewActivity;
 import com.example.junmp.togetherhelpee.activity.volunteer.recommend.RecommendActivity;
 import com.example.junmp.togetherhelpee.common.constante.Server;
 import com.example.junmp.togetherhelpee.common.util.device.DeviceUtil;
-import com.example.junmp.togetherhelpee.common.util.text.TextUtil;
+import com.example.junmp.togetherhelpee.common.util.text.ParseDateException;
+import com.example.junmp.togetherhelpee.common.util.text.ParseTimeException;
+import com.example.junmp.togetherhelpee.common.util.text.TextParser;
 import com.example.junmp.togetherhelpee.domain.user.User;
 import com.example.junmp.togetherhelpee.domain.user.UserService;
 import com.example.junmp.togetherhelpee.domain.volunteer.Volunteer;
@@ -28,16 +31,24 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class RegisterFormActivity extends AbstractWebViewActivity {
+
     private UserService userService = new UserService();
     private VolunteerService volunteerService = new VolunteerService();
     private static final int REQUEST_START_AT = 1;
+
     private static final int REQUEST_END_AT = 2;
     private static final int REQUEST_MESSAGE = 3;
-    private static final int REQUEST_SEND = 4;
-    private int currentStep = 1;
+
+    private int currentStep = REQUEST_START_AT;
+    private static boolean IS_RETRY_TIME = false;
+    private static boolean IS_RETRY_DATE = false;
+    private static  final int REQUEST_DONE = 4;
+
     private VolunteerForm form;
     private final int PERMISSIONS_ACCESS_FINE_LOCATION = 1000;
     private Intent micIntent;
+    private TextParser textParser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,31 +60,40 @@ public class RegisterFormActivity extends AbstractWebViewActivity {
         new AsyncGetUser().execute(DeviceUtil.getPhoneNumber(RegisterFormActivity.this));
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (currentStep == REQUEST_START_AT && IS_RETRY_DATE) {
+            showMic("다시 한번 이야기 해 주세요.  오늘 , 내일 처럼 자세히 부탁드려요", REQUEST_START_AT);
+        } else if (currentStep == REQUEST_START_AT && IS_RETRY_TIME) {
+            showMic("다시 한번 이야기 해 주세요.  한시 , 두시 처럼 자세히 부탁드려요", REQUEST_START_AT);
+        } else if (currentStep == REQUEST_END_AT && IS_RETRY_TIME == false && IS_RETRY_DATE == false) {
+            showMic("언제까지 도와 드릴까요? ( 예 : 내일 오전 여섯시 , 모레 오후 일곱시 )", REQUEST_END_AT);
+        } else if (currentStep == REQUEST_END_AT && IS_RETRY_DATE) {
+            showMic("다시 한번 이야기 해 주세요.  오늘 , 내일 처럼 자세히 부탁드려요", REQUEST_END_AT);
+        } else if (currentStep == REQUEST_END_AT && IS_RETRY_TIME) {
+            showMic("다시 한번 이야기 해 주세요.  한시 , 두시 처럼 자세히 부탁드려요", REQUEST_END_AT);
+        } else if (currentStep == REQUEST_MESSAGE) {
+            showMic("무엇을 도와드릴까요?", REQUEST_MESSAGE);
+        }
+    }
+
     private void bindJavascript() {
         webView.addJavascriptInterface(new Object() {
 
             @JavascriptInterface
             public void clickMic() {
-                switch (currentStep) {
-                    case REQUEST_START_AT: {
-                        micIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "언제부터 도와 드릴까요? ( 예 : 내일 오전 여섯시 , 모레 오후 일곱시 ) ");
-                        startActivityForResult(micIntent, REQUEST_START_AT);
-                        break;
-                    }
-                    case REQUEST_END_AT: {
-                        micIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "언제까지 도와 드릴까요? ( 예 : 내일 오전 여섯시 , 모레 오후 일곱시 ) ");
-                        startActivityForResult(micIntent, REQUEST_END_AT);
-                        break;
-                    }
-                    case REQUEST_MESSAGE: {
-                        micIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "무엇을 도와 드릴까요?");
-                        startActivityForResult(micIntent, REQUEST_MESSAGE);
-                        break;
-                    }
-                }
+                showMic("언제부터 도와 드릴까요?  ( 예 : 내일 오전 여섯시 , 모레 오후 일곱시 ) ", REQUEST_START_AT);
             }
-        } , "Volunteer");
+        }, "Volunteer");
     }
+
+    private void showMic(String message, int requestCode) {
+        micIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, message);
+        startActivityForResult(micIntent, requestCode);
+    }
+
+
 
     private class AsyncGetUser extends AsyncTask<String, Void, User> {
         @Override
@@ -115,7 +135,7 @@ public class RegisterFormActivity extends AbstractWebViewActivity {
                 finish();
             } else {
                 Intent intent = new Intent(RegisterFormActivity.this, RegisterDoneActivity.class);
-                intent.putExtra("volunteerId" , displayVolunteer.getVolunteer().getVolunteerId());
+                intent.putExtra("volunteerId", displayVolunteer.getVolunteer().getVolunteerId());
                 startActivity(intent);
                 finish();
             }
@@ -144,33 +164,71 @@ public class RegisterFormActivity extends AbstractWebViewActivity {
 
         ArrayList<String> sttResults = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-        if (sttResults.isEmpty()) {
-            Toast.makeText(RegisterFormActivity.this, "다시 말해 주세요", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (requestCode == REQUEST_START_AT) {
-            Date startAt = TextUtil.textToDate(sttResults.get(0));
-
-            if (startAt != null) {
-                form.setStartAt(startAt);
-                currentStep = REQUEST_END_AT;
-            } else {
-                //retry
-            }
-
-        } else if (requestCode == REQUEST_END_AT) {
-            Date endAt = TextUtil.textToDate(sttResults.get(0));
-
-            if (endAt != null) {
-                form.setEndAt(endAt);
-                currentStep = REQUEST_MESSAGE;
-            } else {
-                //retry
-            }
-        } else if (requestCode == REQUEST_MESSAGE) {
+        if (currentStep == REQUEST_START_AT && requestCode == REQUEST_START_AT)
+            parseStartAt(sttResults);
+        else if (currentStep == REQUEST_END_AT && requestCode == REQUEST_END_AT)
+            parseEndAt(sttResults);
+        else if (currentStep == REQUEST_MESSAGE && requestCode == REQUEST_MESSAGE) {
             form.setMessage(sttResults.get(0));
+            currentStep = REQUEST_DONE;
             new AsyncRegister().execute(form);
+        }
+    }
+
+
+    private void parseStartAt( ArrayList<String> sttResults) {
+        if (IS_RETRY_TIME == false && IS_RETRY_DATE == false) {
+            textParser = new TextParser(sttResults.get(0));
+            parseStartAt();
+        } else if (IS_RETRY_DATE) {
+            textParser.setDateText(sttResults);
+            parseStartAt();
+        } else if (IS_RETRY_TIME) {
+            textParser.setTimeText(sttResults);
+            parseStartAt();
+        }
+    }
+
+
+    private void parseStartAt() {
+        try {
+            form.setStartAt(textParser.parseDate());
+            currentStep = REQUEST_END_AT;
+            IS_RETRY_TIME = false;
+            IS_RETRY_DATE = false;
+        } catch (ParseDateException e) {
+            IS_RETRY_DATE = true;
+        } catch (ParseTimeException e) {
+            IS_RETRY_TIME = true;
+        }
+    }
+
+
+
+    private void parseEndAt( ArrayList<String> sttResults) {
+        if (IS_RETRY_TIME == false && IS_RETRY_DATE == false) {
+            textParser = new TextParser(sttResults.get(0));
+            parseEndAt();
+        } else if (IS_RETRY_DATE) {
+            textParser.setDateText(sttResults);
+            parseEndAt();
+        } else if (IS_RETRY_TIME) {
+            textParser.setTimeText(sttResults);
+            parseEndAt();
+        }
+    }
+
+
+    private void parseEndAt() {
+        try {
+            form.setEndAt(textParser.parseDate());
+            currentStep = REQUEST_MESSAGE;
+            IS_RETRY_TIME = false;
+            IS_RETRY_DATE = false;
+        } catch (ParseDateException e) {
+            IS_RETRY_DATE = true;
+        } catch (ParseTimeException e) {
+            IS_RETRY_TIME = true;
         }
     }
 }
