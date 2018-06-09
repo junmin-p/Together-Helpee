@@ -79,12 +79,17 @@ public class Call1Activity extends AppCompatActivity {
     int haveRegisted = 0;
 
     ProgressDialog pd;
+
+    int wheretogo = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_call1);
 
+        Intent from = getIntent();
+
+        wheretogo = from.getIntExtra("from", 0);
 
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
             TelephonyManager mgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -469,17 +474,48 @@ public class Call1Activity extends AppCompatActivity {
                 int volunteerId = item.getInt("volunteerId");
 
                 if(matchingStatus == 2){
-                    Intent toStart = new Intent(Call1Activity.this, StartActivity.class);
-                    toStart.putExtra("type", type);
-                    toStart.putExtra("helperId", helperId);
-                    toStart.putExtra("content", content);
-                    toStart.putExtra("time", time);
-                    toStart.putExtra("duration", duration);
-                    toStart.putExtra("date", date);
-                    toStart.putExtra("volunteerId", volunteerId);
-                    toStart.putExtra("phonenum", phone_num);
-                    startActivity(toStart);
-                    finish();
+                    long current_time = System.currentTimeMillis();
+                    SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String str = dayTime.format(new Date(current_time));
+
+                    String dest_time = date+" "+time;
+
+                    Date current = null;
+                    Date dest = null;
+                    try {
+                        current = dayTime.parse(str);
+                        dest = dayTime.parse(dest_time);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    long diff = dest.getTime() - current.getTime();
+                    long diffSeconds = diff / 1000;
+
+                    Log.d("fdasfadfd",diffSeconds+"");
+
+                    Log.d("fdasfadfd",str);
+                    Log.d("fdasfadfd",dest_time+"");
+                    if(diffSeconds <= 3600 && wheretogo == 0){
+                        Intent toMap = new Intent(Call1Activity.this, MapActivity.class);
+                        toMap.putExtra("phonenum", phone_num);
+                        toMap.putExtra("volunteerId", volunteerId);
+                        toMap.putExtra("helperId", helperId);
+                        startActivity(toMap);
+                        finish();
+                    }
+                    else {
+                        Intent toStart = new Intent(Call1Activity.this, StartActivity.class);
+                        toStart.putExtra("type", type);
+                        toStart.putExtra("helperId", helperId);
+                        toStart.putExtra("content", content);
+                        toStart.putExtra("time", time);
+                        toStart.putExtra("duration", duration);
+                        toStart.putExtra("date", date);
+                        toStart.putExtra("volunteerId", volunteerId);
+                        toStart.putExtra("phonenum", phone_num);
+                        startActivity(toStart);
+                        finish();
+                    }
                 }
                 else{
                     Intent toMatch = new Intent(Call1Activity.this, MatchActivity.class);
@@ -500,51 +536,15 @@ public class Call1Activity extends AppCompatActivity {
 
             }
             else if(startStatus == 1){
-                long current_time = System.currentTimeMillis();
-                SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String str = dayTime.format(new Date(current_time));
-
-                String type = item.getString("type");
-                String helperId = item.getString("helperId");
-                int matchingStatus = item.getInt("matchingStatus");
-                String content = item.getString("content");
-                String time = item.getString("time");
-                int duration = item.getInt("duration");
-                String date = item.getString("date");
                 int volunteerId = item.getInt("volunteerId");
 
-                String dest_time = date+" "+time;
+                Intent toIng = new Intent(Call1Activity.this, IngActivity.class);
+                toIng.putExtra("volunteerId", volunteerId);
+                toIng.putExtra("phonenum", phone_num);
+                startActivity(toIng);
+                finish();
 
-                Date current = null;
-                Date dest = null;
-                try {
-                    current = dayTime.parse(str);
-                    dest = dayTime.parse(dest_time);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                long diff = dest.getTime() - current.getTime();
-                long diffSeconds = diff / 1000;
 
-                Log.d("fdasfadfd",diffSeconds+"");
-
-                Log.d("fdasfadfd",str);
-                Log.d("fdasfadfd",dest_time+"");
-                if(diffSeconds <= 3600 && diffSeconds >= 0){
-                    Intent toMap = new Intent(Call1Activity.this, MapActivity.class);
-                    toMap.putExtra("phonenum", phone_num);
-                    toMap.putExtra("volunteerId", volunteerId);
-                    toMap.putExtra("helperId", helperId);
-                    startActivity(toMap);
-                    finish();
-                }
-                else{
-                    Intent toIng = new Intent(Call1Activity.this, IngActivity.class);
-                    toIng.putExtra("volunteerId", volunteerId);
-                    toIng.putExtra("phonenum", phone_num);
-                    startActivity(toIng);
-                    finish();
-                }
             }
 
         } catch (JSONException e) {

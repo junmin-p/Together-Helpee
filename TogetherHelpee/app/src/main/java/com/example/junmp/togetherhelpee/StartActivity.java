@@ -19,6 +19,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 public class StartActivity extends AppCompatActivity {
@@ -72,14 +75,41 @@ public class StartActivity extends AppCompatActivity {
 
         txt_time.setText("약속시간은 \n날짜:"+date+"\n"+"시간:"+time+"입니다.");
 
+        long current_time = System.currentTimeMillis();
+        SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String str = dayTime.format(new Date(current_time));
+
+        String dest_time = date+" "+time;
+
+        Date current = null;
+        Date dest = null;
+        try {
+            current = dayTime.parse(str);
+            dest = dayTime.parse(dest_time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long diff = dest.getTime() - current.getTime();
+        long diffSeconds = diff / 1000;
+
+        if(diffSeconds >= 0){
+            btn_start.setText("아직 시작시간이 되지 않았습니다.");
+            btn_start.setEnabled(false);
+        }
+
         getName = new getName();
         getName.execute("http://210.89.191.125/helpee/helper/name/");
 
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                putStart = new putStart();
-                putStart.execute("http://210.89.191.125/helpee/volunteer/start");
+                if(btn_start.isEnabled()){
+                    putStart = new putStart();
+                    putStart.execute("http://210.89.191.125/helpee/volunteer/start");
+                }
+                else{
+                    btn_start.setText("아직 시작시간이 되지 않았습니다.");
+                }
             }
         });
     }
@@ -174,7 +204,6 @@ public class StartActivity extends AppCompatActivity {
                 JSONObject item = jsonArray.getJSONObject(i);
 
                 helper_name = item.getString("name");
-                btn_start.setText(helper_name+"님을 만났어요");
             }
 
         } catch (JSONException e) {

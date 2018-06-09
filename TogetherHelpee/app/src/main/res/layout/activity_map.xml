@@ -19,6 +19,25 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="match_parent">
+    </fragment>
+
+    <ImageView
+        android:layout_width="120px"
+        android:layout_height="120px"
+        android:layout_alignParentRight="true"
+        android:id="@+id/refresh"
+        android:clickable="true"
+        android:src="@drawable/refresh"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:textSize="12pt"
+        android:textColor="#000000"
+        android:background="#ffffff"
+        android:paddingVertical="8pt"
+        android:id="@+id/btn_stop"
+        android:text="OOO님을 만났어요"
         />
 </RelativeLayout>

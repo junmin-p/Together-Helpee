@@ -149,6 +149,7 @@ public class MatchActivity extends AppCompatActivity {
                     toPartner.putExtra("date", date);
                     toPartner.putExtra("volunteerId", volunteerId);
                     toPartner.putExtra("phonenum", phone_num);
+
                     startActivity(toPartner);
                     finish();
                 }

@@ -1,5 +1,6 @@
 package com.example.junmp.togetherhelpee;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +62,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback,GoogleMap.OnMarkerClickListener  {
@@ -80,9 +84,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     String address;
     List<Address> address_list;
 
-    private ImageView refresh;
-    private ImageView home;
-
     private LocationRequest mLocationRequest;
     private LocationCallback mLocationCallback;
     private Location mCurrentLocation;
@@ -92,12 +93,26 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     Marker myMarker;
     ArrayList<Marker> markerArrayList = new ArrayList<>();
 
+    private final int PERMISSIONS_ACCESS_FINE_LOCATION = 1000;
+    private final int PERMISSIONS_ACCESS_COARSE_LOCATION = 1001;
+    private boolean isAccessFineLocation = false;
+    private boolean isAccessCoarseLocation = false;
+    private boolean isPermission = true;
+    private GpsInfo gps;
+
+    private ImageView refresh;
+    private Button btn_stop;
+
     private int searchFlag=1;
+
+    Timer timer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        refresh = (ImageView)findViewById(R.id.refresh);
+        btn_stop = findViewById(R.id.btn_stop);
 
         provider = LocationManager.GPS_PROVIDER;
 
@@ -113,6 +128,42 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         getHelper = new getHelper();
         getHelper.execute("http://210.89.191.125/helpee/helper/name/");
+
+        TimerTask refresh_location = new TimerTask() {
+            public void run() {
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(getIntent());
+                overridePendingTransition(0, 0);
+            }
+        };
+        timer = new Timer();
+
+        timer.schedule(refresh_location, 30000, 30000);
+
+        refresh.setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(getIntent());
+                overridePendingTransition(0, 0);
+            }
+        });
+
+        btn_stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timer.cancel();
+                timer = null;
+                Intent toStart = new Intent(MapActivity.this, Call1Activity.class);
+                toStart.putExtra("from",1);
+                startActivity(toStart);
+                finish();
+            }
+        });
     }
 
     private class getHelper extends AsyncTask<String, Void, String> {
@@ -207,6 +258,10 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 latitude = item.getDouble("latitude");
                 longitude = item.getDouble("longitude");
 
+                String name = item.getString("name");
+
+                btn_stop.setText(name+"님을 만났어요");
+
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     checkMyPermissionLocation();
@@ -231,11 +286,53 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
+        if (!isPermission) {
+            callPermission();
+            Log.d("Fdasfsaf","dfafdsafsas");
+            return;
+        }
 
-        LatLng startplace = new LatLng(37.2635730, 127.0286010);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startplace, 14));
-        mMap.setOnMarkerClickListener(this);
+        gps = new GpsInfo(MapActivity.this);
+        // GPS 사용유무 가져오기
+        if (gps.isGetLocation()) {
+            double latitude_my = gps.getLatitude();
+            double longitude_my = gps.getLongitude();
 
+            Log.d("Fdasfsaf",latitude_my+"");
+            Log.d("Fdasfsaf",longitude_my+"");
+
+            LatLng startplace = new LatLng(latitude_my, longitude_my);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startplace, 14));
+            mMap.setOnMarkerClickListener(this);
+        } else {
+            // GPS 를 사용할수 없으므로
+            gps.showSettingsAlert();
+            Log.d("Fdasfsaf","dfas");
+        }
+
+
+    }
+
+    private void callPermission() {
+        // Check the SDK version and whether the permission is already granted or not.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_ACCESS_FINE_LOCATION);
+
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
+
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PERMISSIONS_ACCESS_COARSE_LOCATION);
+        } else {
+            isPermission = true;
+        }
     }
 
     @Override

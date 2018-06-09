@@ -23,6 +23,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 public class PartnerActivity extends AppCompatActivity {
@@ -83,13 +86,13 @@ public class PartnerActivity extends AppCompatActivity {
 
         phone_num = fromCall.getStringExtra("phonenum");
 
-        getName = new getName();
-        getName.execute("http://210.89.191.125/helpee/helper/name/");
-
         txt_name = findViewById(R.id.txt_name);
         txt_career = findViewById(R.id.txt_career);
         txt_score = findViewById(R.id.txt_score);
         img_profile = findViewById(R.id.img_profile);
+
+        getName = new getName();
+        getName.execute("http://210.89.191.125/helpee/helper/name/");
 
         btn_yes = findViewById(R.id.btn_yes);
         btn_yes.setOnClickListener(new View.OnClickListener() {
@@ -122,17 +125,45 @@ public class PartnerActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Toast.makeText(getApplicationContext(),"요청을 수락합니다.", Toast.LENGTH_SHORT).show();
-            Intent toStart = new Intent(PartnerActivity.this, StartActivity.class);
-            toStart.putExtra("type", type);
-            toStart.putExtra("helperId", helperId);
-            toStart.putExtra("content", content);
-            toStart.putExtra("time", time);
-            toStart.putExtra("duration", duration);
-            toStart.putExtra("date", date);
-            toStart.putExtra("volunteerId", volunteerId);
-            toStart.putExtra("phonenum", phone_num);
-            startActivity(toStart);
-            finish();
+
+            long current_time = System.currentTimeMillis();
+            SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String str = dayTime.format(new Date(current_time));
+
+            String dest_time = date+" "+time;
+
+            Date current = null;
+            Date dest = null;
+            try {
+                current = dayTime.parse(str);
+                dest = dayTime.parse(dest_time);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            long diff = dest.getTime() - current.getTime();
+            long diffSeconds = diff / 1000;
+
+            if(diffSeconds <= 3600){
+                Intent toMap = new Intent(PartnerActivity.this, MapActivity.class);
+                toMap.putExtra("phonenum", phone_num);
+                toMap.putExtra("volunteerId", volunteerId);
+                toMap.putExtra("helperId", helperId);
+                startActivity(toMap);
+                finish();
+            }
+            else{
+                Intent toStart = new Intent(PartnerActivity.this, StartActivity.class);
+                toStart.putExtra("type", type);
+                toStart.putExtra("helperId", helperId);
+                toStart.putExtra("content", content);
+                toStart.putExtra("time", time);
+                toStart.putExtra("duration", duration);
+                toStart.putExtra("date", date);
+                toStart.putExtra("volunteerId", volunteerId);
+                toStart.putExtra("phonenum", phone_num);
+                startActivity(toStart);
+                finish();
+            }
         }
 
         @Override
@@ -257,13 +288,18 @@ public class PartnerActivity extends AppCompatActivity {
     private void showResult() throws JSONException {
         try {
             JSONArray jsonArray = new JSONArray(mJsonString);
-
             for(int i=jsonArray.length()-1;i>=0;i--){
+                Log.d("Fadsfdas","A");
                 JSONObject item = jsonArray.getJSONObject(i);
 
                 String helper_name = item.getString("name");
+
+                Log.d("Fadsfdas",item.getString("name"));
                 int admit_time = item.getInt("admitTime");
-                double helper_score = item.getDouble("userFeedbackScore");
+                double helper_score = 0;
+                if(!item.isNull("userFeedbackScore")){
+                    helper_score = item.getDouble("userFeedbackScore");
+                }
                 String img_src = "http://210.89.191.125/photo/"+item.getString("profileImage");
 
                 txt_name.setText("이름 : "+helper_name);
