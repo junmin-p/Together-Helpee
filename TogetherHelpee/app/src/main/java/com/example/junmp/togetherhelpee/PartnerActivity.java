@@ -35,6 +35,9 @@ public class PartnerActivity extends AppCompatActivity {
     putRequest putRequest;
     putReject putReject;
 
+    putReserveAccept putReserveAccept;
+    postPush postPush;
+
     String type;
     String helperId;
     String content;
@@ -51,6 +54,11 @@ public class PartnerActivity extends AppCompatActivity {
     TextView txt_career;
     TextView txt_score;
     ImageView img_profile;
+
+    int where = 0;
+
+    double latitude;
+    double longitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +67,9 @@ public class PartnerActivity extends AppCompatActivity {
         Intent fromCall = getIntent();
 
         if(fromCall.getStringExtra("where") != null){
+            latitude = fromCall.getDoubleExtra("latitude",0);
+            longitude = fromCall.getDoubleExtra("longitude",0);
+            where = 1;
             helperId = fromCall.getStringExtra("helperId");
 
             getName = new getName();
@@ -98,8 +109,14 @@ public class PartnerActivity extends AppCompatActivity {
         btn_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                putRequest = new putRequest();
-                putRequest.execute("http://210.89.191.125/helpee/volunteer/complete");
+                if(where == 1){
+                    putReserveAccept = new putReserveAccept();
+                    putReserveAccept.execute("http://210.89.191.125/helpee/reservation/accept");
+                }
+                else{
+                    putRequest = new putRequest();
+                    putRequest.execute("http://210.89.191.125/helpee/volunteer/complete");
+                }
             }
         });
 
@@ -107,8 +124,14 @@ public class PartnerActivity extends AppCompatActivity {
         btn_no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                putReject = new putReject();
-                putRequest.execute("http://210.89.191.125/helpee/volunteer/reject");
+                if(where == 1){
+                    postPush = new postPush();
+                    postPush.execute("http://210.89.191.125/helpee/helpers/push");
+                }
+                else{
+                    putReject = new putReject();
+                    putRequest.execute("http://210.89.191.125/helpee/volunteer/reject");
+                }
             }
         });
     }
@@ -337,4 +360,105 @@ public class PartnerActivity extends AppCompatActivity {
             bmImage.setImageBitmap(result);
         }
     }
+
+    class putReserveAccept extends AsyncTask<String, Void, String> {
+        RequestHandler rh = new RequestHandler();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Intent toCall = new Intent(PartnerActivity.this, Call1Activity.class);
+            startActivity(toCall);
+            finish();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String, String> data = new HashMap<>();
+            data.put("volunteerId", String.valueOf(volunteerId));
+            data.put("helperId", helperId);
+            String result = rh.sendPutRequest(params[0], data);
+
+            return result;
+        }
+    }
+
+    private class postPush extends AsyncTask<String, Void, String> {
+        String errorString = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            Intent toCall = new Intent(PartnerActivity.this, Call1Activity.class);
+            startActivity(toCall);
+            finish();
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            String serverURL = params[0] + "?latitude=" + latitude + "&&longitude=" + longitude;
+
+            Log.d("Asd", serverURL);
+            try {
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.connect();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d("fadsfsads", "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                } else {
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+                return sb.toString().trim();
+
+
+            } catch (Exception e) {
+
+                Log.d("fadsfsads", "InsertData: Error ", e);
+                errorString = e.toString();
+
+
+                return null;
+            }
+
+        }
+    }
+
 }

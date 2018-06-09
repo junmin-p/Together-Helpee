@@ -13,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -196,6 +197,8 @@ public class Call2Activity extends AppCompatActivity {
         int temp_b = 0;
         int temp_c = 0;
 
+        int temp_min = 0;
+
         int temp_m = 0;
         int temp_n = 0;
 
@@ -226,8 +229,8 @@ public class Call2Activity extends AppCompatActivity {
                 continue;
             }
             if (temp_b == 0 && words[i].contains("시")) {
-                words[i] = words[i].split("에")[0];
-                result.append(" "+words[i]);
+                String word = words[i].split("시")[0];
+                result.append(" "+word+"시");
                 end_flag = i;
                 temp_b = 1;
                 continue;
@@ -239,10 +242,17 @@ public class Call2Activity extends AppCompatActivity {
                 continue;
             }
             if (temp_c == 0 && (words[i].contains("시에") || words[i].contains("반에"))) {
-                words[i] = words[i].split("에")[0];
-                result.append(" "+words[i]);
+                String word = words[i].split("에")[0];
+                result.append(" "+word);
                 end_flag = i;
                 temp_c = 1;
+                continue;
+            }
+            if (temp_min == 0 && (words[i].contains("분에") || words[i].contains("분"))) {
+                String word = words[i].split("분")[0];
+                result.append(" "+word+"분");
+                end_flag = i;
+                temp_min = 1;
                 continue;
             }
         }
@@ -266,6 +276,7 @@ public class Call2Activity extends AppCompatActivity {
         flag_speech = time_flag;
     }
     private void messageCheck(){
+        Log.d("afsd",time);
         String[] time_arr = time.split(" ");
         int am_pm = 0;
         if(time_arr[0].equals("오후")){

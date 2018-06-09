@@ -48,6 +48,7 @@ public class fcm_popup extends Activity {
         Intent intent = new Intent(getApplicationContext(),Call1Activity.class);
         startActivity(intent);
 
+        finish();
     }
 
 

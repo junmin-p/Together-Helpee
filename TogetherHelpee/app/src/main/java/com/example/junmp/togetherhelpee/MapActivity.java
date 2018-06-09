@@ -105,7 +105,16 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
     private int searchFlag=1;
 
-    Timer timer;
+    Timer timer = new Timer();
+    TimerTask refresh_location = new TimerTask() {
+        public void run() {
+            finish();
+            overridePendingTransition(0, 0);
+            startActivity(getIntent());
+            overridePendingTransition(0, 0);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,17 +138,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         getHelper = new getHelper();
         getHelper.execute("http://210.89.191.125/helpee/helper/name/");
 
-        TimerTask refresh_location = new TimerTask() {
-            public void run() {
-                finish();
-                overridePendingTransition(0, 0);
-                startActivity(getIntent());
-                overridePendingTransition(0, 0);
-            }
-        };
-        timer = new Timer();
-
-        timer.schedule(refresh_location, 30000, 30000);
+        timer.schedule(refresh_location, 15000, 15000);
 
         refresh.setOnClickListener(new View.OnClickListener()
         {
@@ -156,8 +155,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                timer.cancel();
-                timer = null;
                 Intent toStart = new Intent(MapActivity.this, Call1Activity.class);
                 toStart.putExtra("from",1);
                 startActivity(toStart);
@@ -560,20 +557,31 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         finish();
     }
 
+    @Override
+    public void onPause() {
+        timer.cancel();
+        timer.purge();
+        refresh_location.cancel();
+        refresh_location=null;
+        timer = null;
 
-    private Bitmap createDrawableFromView(Context context, View view) {
+        super.onPause();
+    }
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        view.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
-        view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
-        view.buildDrawingCache();
-        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+    public void onResume(){
+        if(timer == null && refresh_location == null){
+            timer = new Timer();
+            refresh_location = new TimerTask() {
+                public void run() {
+                    finish();
+                    overridePendingTransition(0, 0);
+                    startActivity(getIntent());
+                    overridePendingTransition(0, 0);
+                }
+            };
+            timer.schedule(refresh_location, 15000, 15000);
+        }
 
-        Canvas canvas = new Canvas(bitmap);
-        view.draw(canvas);
-
-        return bitmap;
+        super.onResume();
     }
 }

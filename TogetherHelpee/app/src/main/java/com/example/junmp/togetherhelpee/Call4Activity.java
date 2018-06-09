@@ -52,9 +52,11 @@ public class Call4Activity extends AppCompatActivity {
 
     postPush postPush;
     getReserve getReserve;
+    getReserve2 getReserve2;
 
     String mJsonString;
 
+    String helperId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,8 +161,9 @@ public class Call4Activity extends AppCompatActivity {
                         Log.d("fdasds",String.valueOf(latitude));
                         Log.d("fdasds",String.valueOf(longitude));
 
-                        getReserve = new getReserve();
-                        getReserve.execute("http://210.89.191.125/helpee/reservation");
+                        postRequest pR = new postRequest();
+                        pR.execute("http://210.89.191.125/helpee/volunteer");
+
                         Toast.makeText(
                                 getApplicationContext(),
                                 "당신의 위치 - \n위도: " + latitude + "\n경도: " + longitude,
@@ -210,13 +213,8 @@ public class Call4Activity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            postPush = new postPush();
-            postPush.execute("http://210.89.191.125/helpee/helpers/push");
-
-            Intent toCall = new Intent(Call4Activity.this, Call1Activity.class);
-            toCall.putExtra("phonenum", phone_num);
-            startActivity(toCall);
-            finish();
+            getReserve = new getReserve();
+            getReserve.execute("http://210.89.191.125/helpee/reservation");
         }
 
         @Override
@@ -252,6 +250,11 @@ public class Call4Activity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+
+            Intent toCall = new Intent(Call4Activity.this, Call1Activity.class);
+            toCall.putExtra("phonenum", phone_num);
+            startActivity(toCall);
+            finish();
         }
 
 
@@ -294,15 +297,6 @@ public class Call4Activity extends AppCompatActivity {
 
                 bufferedReader.close();
 
-
-                DataOutputStream outputStream = new DataOutputStream(httpURLConnection.getOutputStream());
-                String jsonParamsString = "";
-                outputStream.writeBytes(jsonParamsString);
-                outputStream.flush();
-                outputStream.close();
-                Log.d("fdasfdsf",jsonParamsString);
-
-
                 return sb.toString().trim();
 
 
@@ -332,8 +326,8 @@ public class Call4Activity extends AppCompatActivity {
 
             Log.d("Asd",result);
             if (result.equals("")){
-                postRequest pR = new postRequest();
-                pR.execute("http://210.89.191.125/helpee/volunteer");
+                postPush = new postPush();
+                postPush.execute("http://210.89.191.125/helpee/helpers/push");
             }
             else {
                 mJsonString = result;
@@ -409,24 +403,108 @@ public class Call4Activity extends AppCompatActivity {
             for(int i=jsonArray.length()-1;i>=0;i--){
                 JSONObject item = jsonArray.getJSONObject(i);
 
-                String helperId = item.getString("userId");
-                Intent toPartner = new Intent(Call4Activity.this, PartnerActivity.class);
-                toPartner.putExtra("where", "reserve");
-                toPartner.putExtra("helperId", helperId);
-                toPartner.putExtra("phonenum",phone_num);
-                toPartner.putExtra("type", type);
-                toPartner.putExtra("content", etc);
-                toPartner.putExtra("time", dest_time);
-                toPartner.putExtra("duration", checked);
-                toPartner.putExtra("date", dest_date);/*
-                TODO
-                toPartner.putExtra("volunteerId", volunteerId);*/
-                startActivity(toPartner);
-                finish();
+                helperId = item.getString("userId");
+
+                getReserve = new getReserve();
+                getReserve.execute("http://210.89.191.125/helpee/reservation");
             }
 
         } catch (JSONException e) {
             Log.d("fadsfsads", "showResult : ", e);
         }
     }
+
+    private class getReserve2 extends AsyncTask<String, Void, String> {
+        String errorString2 = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            Log.d("Asd",result);
+            if (result.equals("")){
+                Intent toError = new Intent(Call4Activity.this, ErrorActivity.class);
+                startActivity(toError);
+                finish();
+            }
+            else {
+                int volunteerId = Integer.parseInt(result);
+                Intent toPartner = new Intent(Call4Activity.this, PartnerActivity.class);
+                toPartner.putExtra("where", "reserve");
+                toPartner.putExtra("latitude", latitude);
+                toPartner.putExtra("longitude", longitude);
+                toPartner.putExtra("helperId", helperId);
+                toPartner.putExtra("phonenum",phone_num);
+                toPartner.putExtra("type", type);
+                toPartner.putExtra("content", etc);
+                toPartner.putExtra("time", dest_time);
+                toPartner.putExtra("duration", checked);
+                toPartner.putExtra("date", dest_date);
+                toPartner.putExtra("volunteerId", volunteerId);
+                startActivity(toPartner);
+                finish();
+            }
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            String serverURL = params[0]+"?latitude="+latitude+"&&longitude="+longitude+"&&date="+dest_date+"%"+dest_time;
+
+            Log.d("Asd",serverURL);
+            try {
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                httpURLConnection.setReadTimeout(5000);
+                httpURLConnection.setConnectTimeout(5000);
+                httpURLConnection.connect();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d("fadsfsads", "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if(responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                }
+                else{
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while((line = bufferedReader.readLine()) != null){
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+
+                return sb.toString().trim();
+
+
+            } catch (Exception e) {
+
+                Log.d("fadsfsads", "InsertData: Error ", e);
+                errorString2 = e.toString();
+
+                return null;
+            }
+
+        }
+    }
+
+
 }
