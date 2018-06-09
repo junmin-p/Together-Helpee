@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.webkit.*;
+import com.example.junmp.togetherhelpee.FeedbackActivity;
 import com.example.junmp.togetherhelpee.R;
 import com.example.junmp.togetherhelpee.activity.common.AbstractWebViewActivity;
 import com.example.junmp.togetherhelpee.activity.user.UserActivity;
@@ -62,6 +63,11 @@ public class HomeActivity extends AbstractWebViewActivity {
             public void help() {
                 startActivity(new Intent(HomeActivity.this, RegisterFormActivity.class));
 
+            }
+
+            @JavascriptInterface
+            public void feedback() {
+                startActivity(new Intent(HomeActivity.this, FeedbackActivity.class));
             }
 
             @JavascriptInterface

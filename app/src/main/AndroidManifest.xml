@@ -43,10 +43,7 @@
                 android:name=".activity.user.register.form.CameraActivity"
                 android:label=""
                 android:screenOrientation="portrait"/>
-        <activity
-                android:name=".SignupActivity"
-                android:label=""
-                android:screenOrientation="portrait"/>
+
         <activity
                 android:name=".MainActivity"
                 android:label=""

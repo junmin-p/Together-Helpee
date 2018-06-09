@@ -44,8 +44,6 @@ public class RegisterDoneActivity extends AbstractWebViewActivity {
     private class AsyncInit extends AsyncTask<String, Void, User> {
         @Override
         protected User doInBackground(String... params) {
-
-
             User loggedUser = userService.getLoggedUser(params[0]);
 
             return loggedUser;

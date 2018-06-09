@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import com.example.junmp.togetherhelpee.activity.home.HomeActivity;
 
 public class EndActivity extends AppCompatActivity {
     Button btn_home;
@@ -23,7 +24,7 @@ public class EndActivity extends AppCompatActivity {
         btn_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toMain = new Intent(EndActivity.this, MainActivity.class);
+                Intent toMain = new Intent(EndActivity.this, HomeActivity.class);
                 startActivity(toMain);
                 finish();
             }
