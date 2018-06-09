@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.webkit.*;
 import com.example.junmp.togetherhelpee.R;
 import com.example.junmp.togetherhelpee.activity.common.AbstractWebViewActivity;
+import com.example.junmp.togetherhelpee.activity.user.UserActivity;
 import com.example.junmp.togetherhelpee.activity.user.register.form.FaceFormActivity;
 import com.example.junmp.togetherhelpee.activity.volunteer.request.form.RegisterFormActivity;
 import com.example.junmp.togetherhelpee.common.constante.Server;
@@ -20,7 +21,7 @@ public class HomeActivity extends AbstractWebViewActivity {
     private UserService userService = new UserService();
 
     private User user;
-
+    private int volunteerId = 0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,11 +31,12 @@ public class HomeActivity extends AbstractWebViewActivity {
         webView.setWebViewClient(new WebViewClient() {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-
                 refreshLayout.setRefreshing(false);
-
             }
         });
+
+        Intent intent = getIntent();
+        volunteerId = intent.getIntExtra("volunteerId" , 0);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -59,13 +61,18 @@ public class HomeActivity extends AbstractWebViewActivity {
             @JavascriptInterface
             public void help() {
                 startActivity(new Intent(HomeActivity.this, RegisterFormActivity.class));
-                finish();
+
             }
 
             @JavascriptInterface
             public void register() {
                 startActivity(new Intent(HomeActivity.this, FaceFormActivity.class));
-                finish();
+
+            }
+
+            @JavascriptInterface
+            public void userHome() {
+                startActivity(new Intent(HomeActivity.this, UserActivity.class));
             }
         }, "Home");
     }
@@ -82,7 +89,7 @@ public class HomeActivity extends AbstractWebViewActivity {
             if (user == null)
                 showWebView(Server.WEB_VIEW_ROOT);
             else
-                showWebView(Server.WEB_VIEW_ROOT + "/" + user.getId());
+                showWebView(Server.WEB_VIEW_ROOT + "/" + user.getId() + "?volunteerId="+ volunteerId);
 
             bindJavascript();
         }

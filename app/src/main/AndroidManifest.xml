@@ -150,6 +150,11 @@
                 android:name=".Call2Activity"
                 android:label=""
                 android:screenOrientation="portrait"/>
+
+        <activity
+                android:name=".activity.user.UserActivity"
+                android:label=""
+                android:screenOrientation="portrait"/>
         <activity
                 android:name=".activity.splash.SplashActivity"
                 android:label=""
@@ -159,7 +164,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".common.ui.popup.FcmPopup"
+        <activity android:name=".activity.popup.FcmPopupActivity"
                   android:label=""
                   android:theme="@android:style/Theme.DeviceDefault.Light.Dialog">
         </activity>

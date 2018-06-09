@@ -1,4 +1,4 @@
-package com.example.junmp.togetherhelpee.common.ui.popup;
+package com.example.junmp.togetherhelpee.activity.popup;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,17 +11,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.example.junmp.togetherhelpee.MainActivity;
 import com.example.junmp.togetherhelpee.R;
 import com.example.junmp.togetherhelpee.activity.home.HomeActivity;
-import com.example.junmp.togetherhelpee.common.constante.Server;
 import com.example.junmp.togetherhelpee.common.util.device.DeviceUtil;
 import com.example.junmp.togetherhelpee.domain.user.User;
 import com.example.junmp.togetherhelpee.domain.user.UserService;
 import com.example.junmp.togetherhelpee.domain.volunteer.Volunteer;
 import com.example.junmp.togetherhelpee.domain.volunteer.VolunteerService;
 
-public class FcmPopup extends Activity {
+public class FcmPopupActivity extends Activity {
     private VolunteerService volunteerService = new VolunteerService();
     private UserService userService = new UserService();
     private TextView message_txt;
@@ -63,7 +61,7 @@ public class FcmPopup extends Activity {
     private class AsyncInit extends AsyncTask<String, Void, Volunteer> {
         @Override
         protected Volunteer doInBackground(String... params) {
-            User user = userService.getLoggedUser(DeviceUtil.getPhoneNumber(FcmPopup.this));
+            User user = userService.getLoggedUser(DeviceUtil.getPhoneNumber(FcmPopupActivity.this));
             Volunteer activeOne = volunteerService.getActiveOne(user.getId());
             volunteerService.accept(activeOne.getVolunteerId());
             return activeOne;
@@ -73,6 +71,7 @@ public class FcmPopup extends Activity {
         protected void onPostExecute(Volunteer volunteer) {
 
             Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
+            intent.putExtra("volunteerId" , id);
             startActivity(intent);
             finish();
         }

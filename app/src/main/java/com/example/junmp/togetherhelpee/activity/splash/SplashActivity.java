@@ -34,7 +34,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
+        new NetworkCall().execute();
     }
 
     private PermissionListener permissionlistener = new PermissionListener() {
@@ -60,6 +60,7 @@ public class SplashActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+
             Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
