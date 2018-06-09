@@ -6,9 +6,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
+
 import com.example.junmp.togetherhelpee.R;
 import com.example.junmp.togetherhelpee.activity.home.HomeActivity;
 import com.example.junmp.togetherhelpee.common.util.device.DeviceUUIDFactory;
+import com.example.junmp.togetherhelpee.common.util.device.DeviceUtil;
 import com.example.junmp.togetherhelpee.common.util.push.PushUtil;
 import com.example.junmp.togetherhelpee.domain.device.DeviceService;
 import com.gun0912.tedpermission.PermissionListener;
@@ -53,7 +55,7 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
 
-            deviceService.save(new DeviceUUIDFactory(getApplicationContext()).getDeviceUuid(), PushUtil.getToken());
+            deviceService.save(new DeviceUUIDFactory(getApplicationContext()).getDeviceUuid(), PushUtil.getToken() , DeviceUtil.getPhoneNumber(SplashActivity.this));
             return "done";
         }
 

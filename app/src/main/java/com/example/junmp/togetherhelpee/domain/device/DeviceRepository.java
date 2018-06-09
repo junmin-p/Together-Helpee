@@ -11,6 +11,6 @@ import retrofit2.http.Query;
 public interface DeviceRepository {
     @FormUrlEncoded
     @POST("device")
-    Call<Void> save(@Field("deviceId") String deviceId , @Field("token") String pushToken);
+    Call<Void> save(@Field("deviceId") String deviceId , @Field("token") String pushToken , @Field("phoneNumber")String phoneNumber);
 
 }
