@@ -35,7 +35,7 @@ public class TextToIntParser {
             String num = text.replaceAll("/[^0-9]/g","");
             return Integer.parseInt(num);
         } catch (Exception e) {
-            if (isArrayContains(text , Arrays.asList("한개" , "하나" , "하개" , "일개" , "하게" , "한게"))) {
+            if (isArrayContains(text , Arrays.asList("한개" , "하나" , "하개" , "일개" , "하게" , "한게" , "항게" , "항개" , "앙개"))) {
                 return 1;
             } else if (isArrayContains(text , Arrays.asList("두개" , "둘" , "울" , "두게" , "우게"))) {
                 return 2;

@@ -1,20 +1,29 @@
 package com.example.junmp.togetherhelpee.common.util.text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 public class TextParser {
 
     private static final int NOT_VALID = -1;
     private int day;
     private int time;
+    private int year;
+    private int month;
+    private int today;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public TextParser(String text) {
+
+        Calendar now = Calendar.getInstance();
+        today = now.get(Calendar.DAY_OF_MONTH);
+        year = now.get(Calendar.YEAR);
+        month = now.get(Calendar.MONTH) + 1;
         this.day = getDay(text);
         this.time = getTime(text);
     }
@@ -28,13 +37,13 @@ public class TextParser {
         if (time == NOT_VALID)
             throw new ParseTimeException();
 
+        try {
+            return dateFormat.parse(year + "-" + month + "-" + (today + day) + " " + time + ":" + "00");
 
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
 
-        Calendar cal = new GregorianCalendar(Locale.KOREA);
-        cal.setTime(new Date());
-        cal.add(Calendar.DAY_OF_YEAR, day); // 하루를 더한다.
-        cal.add(Calendar.HOUR, time); // 시간을 더한다
-        return cal.getTime();
     }
 
     public void setDateText(ArrayList<String> values) {
@@ -165,23 +174,23 @@ public class TextParser {
     }
 
     private static boolean is5oClock(String text) {
-        return isArrayContains(text , Arrays.asList("다서씨" , "다서시" , "다섯시" , "다섯씨"));
+        return isArrayContains(text , Arrays.asList("다서" , "다서" , "다섯" , "다석" , "따석"));
     }
 
     private static boolean is6oClock(String text) {
-        return isArrayContains(text , Arrays.asList("여서씨" , "여섯시" , "여섯씨"));
+        return isArrayContains(text , Arrays.asList("여서" , "여섯" , "여섯" , "어섯"));
     }
 
     private static boolean is7oClock(String text) {
-        return isArrayContains(text , Arrays.asList("일곱시" , "일고씨" , "일곱씨" , "일고시"));
+        return isArrayContains(text , Arrays.asList("일곱" , "일곳" , "일고", "일고" , "일곱" , "일고" , "이고" , "이곳"));
     }
 
     private static boolean is8oClock(String text) {
-        return isArrayContains(text , Arrays.asList("여덟시" , "여덜시" , "여덜씨" , "여덟씨"));
+        return isArrayContains(text , Arrays.asList("여덜" , "여덟"));
     }
 
     private static boolean is9oClock(String text) {
-        return isArrayContains(text , Arrays.asList("아홉시" , "아홉씨" , "아호시" , "아호씨" , "아옵시" , "아옵씨" , "아으씨" , "아호씨" , "아웁씨" , "아우씨" , "아웁시" , "아우시"));
+        return isArrayContains(text , Arrays.asList("아홉"  , "아호" , "아옵" , "아옴" , "아으" , "아호" , "아웁" , "아우" , "아웁" , "아우"));
     }
 
     private static boolean is10oClock(String text) {
@@ -189,11 +198,11 @@ public class TextParser {
     }
 
     private static boolean is11oClock(String text) {
-        return isArrayContains(text , Arrays.asList("여란시" , "열1시" , "열1씨" , "열안시" , "열안씨" , "여라시" , "열한시" , "여란씨" , "열한씨"));
+        return isArrayContains(text , Arrays.asList("여란" , "열1" , "열1" , "열안" , "열안" , "여라" , "열한" , "여란" , "열한"));
     }
 
     private static boolean is12oClock(String text) {
-        return isArrayContains(text , Arrays.asList("열두시" , "열두씨" , "여두시" , "여뚜시"));
+        return isArrayContains(text , Arrays.asList("열두" , "열두" , "여두" , "여뚜"));
     }
 
     private static boolean is3th(String text) {
