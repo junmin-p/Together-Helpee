@@ -186,7 +186,7 @@ public class TextParser {
     }
 
     private static boolean is8oClock(String text) {
-        return isArrayContains(text , Arrays.asList("여덜" , "여덟"));
+        return isArrayContains(text , Arrays.asList("여덜" , "여덟" , "어덜"));
     }
 
     private static boolean is9oClock(String text) {
@@ -194,7 +194,7 @@ public class TextParser {
     }
 
     private static boolean is10oClock(String text) {
-        return isArrayContains(text , Arrays.asList("열시" , "열씨"));
+        return isArrayContains(text , Arrays.asList("열시" , "열씨" , "얼시" , "멀씨" , "멀시" , "10시" , "10씨"));
     }
 
     private static boolean is11oClock(String text) {
