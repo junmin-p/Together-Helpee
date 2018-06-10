@@ -48,7 +48,7 @@ public class FeedbackActivity extends AbstractWebViewActivity {
         micIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
         micIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
         feedbackForm = new FeedbackForm();
-        showWebView(Server.WEB_VIEW_ROOT + "/user/volunteer/" +volunteerId+ "/done");
+        showWebView(Server.WEB_VIEW_ROOT + "/volunteer/" +volunteerId+ "/feedback");
         bindJavascript();
     }
 

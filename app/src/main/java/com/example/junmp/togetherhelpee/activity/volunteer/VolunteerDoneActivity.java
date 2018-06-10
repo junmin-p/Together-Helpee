@@ -16,7 +16,7 @@ public class VolunteerDoneActivity extends AbstractWebViewActivity {
         setContentView(R.layout.activity_volunteer_request_done);
         super.initWebview(R.id.webview);
         int volunteerId = getIntent().getIntExtra("volunteerId" , 0);
-        showWebView(Server.WEB_VIEW_ROOT + "/user/volunteer/" +volunteerId+ "/done");
+        showWebView(Server.WEB_VIEW_ROOT + "/volunteer/" +volunteerId+ "/done");
         bindJavascript();
     }
 
