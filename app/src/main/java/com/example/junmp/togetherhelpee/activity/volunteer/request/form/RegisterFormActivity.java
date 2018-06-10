@@ -51,9 +51,11 @@ public class RegisterFormActivity extends AbstractWebViewActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_volunteer_register_webview);
         super.initWebview(R.id.webview);
+        currentStep = REQUEST_START_AT;
         micIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         micIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
         micIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");

@@ -7,9 +7,9 @@ import java.io.IOException;
 public class FeedbackService {
     private FeedbackRepository feedbackRepository = RetrofitBuilder.builder().create(FeedbackRepository.class);
 
-    public void save(FeedbackForm form) {
+    public void save(String volunteerId , FeedbackForm form) {
         try {
-            this.feedbackRepository.save(form).execute();
+            this.feedbackRepository.save(volunteerId , form).execute();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

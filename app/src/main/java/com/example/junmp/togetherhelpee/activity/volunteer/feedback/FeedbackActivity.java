@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class FeedbackActivity extends AbstractWebViewActivity {
 
     private Intent micIntent;
-    private int volunteerId;
+    private String volunteerId;
     private static final int REQUEST_MESSAGE = 1;
     private static final int REQUEST_STAR_COUNT = 2;
     private static final int REQUEST_DONE = 3;
@@ -41,9 +41,10 @@ public class FeedbackActivity extends AbstractWebViewActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentStep = REQUEST_MESSAGE;
         setContentView(R.layout.activity_volunteer_request_done);
         super.initWebview(R.id.webview);
-        volunteerId = getIntent().getIntExtra("volunteerId" , 0);
+        volunteerId = getIntent().getStringExtra("volunteerId");
         micIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         micIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
         micIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
@@ -56,11 +57,6 @@ public class FeedbackActivity extends AbstractWebViewActivity {
     private void bindJavascript() {
         webView.addJavascriptInterface(new Object() {
 
-            @JavascriptInterface
-            public void clickHome() {
-                startActivity(new Intent(FeedbackActivity.this , HomeActivity.class));
-                finish();
-            }
 
             @JavascriptInterface
             public void clickMic() {
@@ -72,8 +68,11 @@ public class FeedbackActivity extends AbstractWebViewActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (currentStep == REQUEST_STAR_COUNT && IS_RETRY_STAR_COUNT) {
-            showMic("다시 한번 이야기 해 주세요.  한개 두개 처럼 자세히 부탁드려요", REQUEST_STAR_COUNT);
+
+        if (currentStep == REQUEST_STAR_COUNT && IS_RETRY_STAR_COUNT == false) {
+            showMic("평점을 주세요. 아주 잘했으면 '다섯개' , 잘했으면 '네개' , 보통이면 '세개' , 못했다면 '두개' , 매우 못했다면 '한개 라고 말씀해주세요 ", REQUEST_STAR_COUNT);
+        } else if (currentStep == REQUEST_STAR_COUNT && IS_RETRY_STAR_COUNT) {
+            showMic("다시 한번 이야기 해 주세요.  한개 두개 세개 네개 다섯개로 말해주세요", REQUEST_STAR_COUNT);
         } else if (currentStep == REQUEST_DONE) {
             new AsyncSaveFeedback().execute();
         }
@@ -82,7 +81,7 @@ public class FeedbackActivity extends AbstractWebViewActivity {
     private class AsyncSaveFeedback extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... param) {
-            feedbackService.save(feedbackForm);
+            feedbackService.save(volunteerId , feedbackForm);
             return null;
         }
 
