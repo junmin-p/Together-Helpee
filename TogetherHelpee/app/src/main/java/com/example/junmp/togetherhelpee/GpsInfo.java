@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 public class GpsInfo extends Service implements LocationListener {
 
@@ -60,7 +61,7 @@ public class GpsInfo extends Service implements LocationListener {
                 ContextCompat.checkSelfPermission(
                         mContext, android.Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
-
+            Log.d("fasdf","Fdsad");
             return null;
         }
 

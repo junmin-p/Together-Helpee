@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -60,6 +61,8 @@ public class Call4Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_call4);
 
         Intent from1 = getIntent();
@@ -164,10 +167,6 @@ public class Call4Activity extends AppCompatActivity {
                         postRequest pR = new postRequest();
                         pR.execute("http://210.89.191.125/helpee/volunteer");
 
-                        Toast.makeText(
-                                getApplicationContext(),
-                                "당신의 위치 - \n위도: " + latitude + "\n경도: " + longitude,
-                                Toast.LENGTH_LONG).show();
                     } else {
                         // GPS 를 사용할수 없으므로
                         gps.showSettingsAlert();
@@ -405,8 +404,8 @@ public class Call4Activity extends AppCompatActivity {
 
                 helperId = item.getString("userId");
 
-                getReserve = new getReserve();
-                getReserve.execute("http://210.89.191.125/helpee/reservation");
+                getReserve2 = new getReserve2();
+                getReserve2.execute("http://210.89.191.125/helpee/volunteerId/");
             }
 
         } catch (JSONException e) {
@@ -454,7 +453,7 @@ public class Call4Activity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String serverURL = params[0]+"?latitude="+latitude+"&&longitude="+longitude+"&&date="+dest_date+"%"+dest_time;
+            String serverURL = params[0]+phone_num;
 
             Log.d("Asd",serverURL);
             try {

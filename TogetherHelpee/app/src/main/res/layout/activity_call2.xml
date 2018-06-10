@@ -4,67 +4,80 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#BCF1ED"
     tools:context=".Call2Activity">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="10pt"
-        android:paddingHorizontal="10pt"
-        android:gravity="center_horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/text_guide"
-        android:textSize="10pt"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        android:text="언제 도움이 필요하신가요? (시간)"/>
-    <Button
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="네"
-        android:textSize="15pt"
-        android:textStyle="bold"
-        android:paddingVertical="10pt"
-        android:background="@drawable/button_border1"
-        android:textColor="#000000"
-        android:id="@+id/btn_yes"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/btn_no"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-    <Button
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="뒤로"
-        android:textSize="15pt"
-        android:textStyle="bold"
-        android:paddingVertical="10pt"
-        android:background="@drawable/button_border2"
-        android:textColor="#000000"
-        android:id="@+id/btn_no"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/btn_yes"
-        app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="500px"
-        android:paddingVertical="10pt"
-        android:gravity="center_horizontal"
-        android:src="@drawable/mic"
-        android:id="@+id/btn_call"
-        app:layout_constraintTop_toBottomOf="@id/text_guide"
-        android:clickable="true"
-        />
-    <TextView
-        android:id="@+id/textView"
-        android:paddingVertical="100px"
-        android:paddingHorizontal="10pt"
-        android:textSize="10pt"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/btn_no"
-        android:gravity="center_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="900px"
+        android:layout_height="1300px"
+        android:background="#ffffff"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10pt"
+            android:paddingHorizontal="10pt"
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/text_guide"
+            android:textSize="10pt"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:text="언제 도움이 필요하신가요? (시간)"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="네"
+            android:textSize="15pt"
+            android:textStyle="bold"
+            android:paddingVertical="10pt"
+            android:background="@drawable/button_border1"
+            android:textColor="#000000"
+            android:id="@+id/btn_yes"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/btn_no"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="뒤로"
+            android:textSize="15pt"
+            android:textStyle="bold"
+            android:paddingVertical="10pt"
+            android:background="@drawable/button_border2"
+            android:textColor="#000000"
+            android:id="@+id/btn_no"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/btn_yes"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="500px"
+            android:paddingVertical="10pt"
+            android:layout_marginTop="80px"
+            android:gravity="center_horizontal"
+            android:src="@drawable/request"
+            android:id="@+id/btn_call"
+            app:layout_constraintTop_toBottomOf="@id/text_guide"
+            android:clickable="true"
+            />
+        <TextView
+            android:id="@+id/textView"
+            android:paddingVertical="100px"
+            android:paddingHorizontal="10pt"
+            android:textSize="10pt"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/btn_no"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.constraint.ConstraintLayout>
+
 
 </android.support.constraint.ConstraintLayout>

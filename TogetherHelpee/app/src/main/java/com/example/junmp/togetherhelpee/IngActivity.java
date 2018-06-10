@@ -3,11 +3,13 @@ package com.example.junmp.togetherhelpee;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -38,6 +40,8 @@ public class IngActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_ing);
 
         Toast.makeText(getApplicationContext(),"현재 도움을 받으시고 있으시군요? 봉사자가 종료하면 자동으로 다음화면으로 넘어갑니다.",Toast.LENGTH_LONG).show();
@@ -49,6 +53,10 @@ public class IngActivity extends AppCompatActivity {
             phone_num = getId.getStringExtra("phonenum");
         }
 
+        Intent intent2 = new Intent(getApplicationContext(), processTimerReceiver2.class);
+        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(), 0, intent2, 0);
+        AlarmManager alarmManager2 = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager2.cancel(pendingIntent2);
 
         int repeatTime = 10;  //Repeat alarm time in seconds
         AlarmManager processTimer = (AlarmManager)getSystemService(ALARM_SERVICE);

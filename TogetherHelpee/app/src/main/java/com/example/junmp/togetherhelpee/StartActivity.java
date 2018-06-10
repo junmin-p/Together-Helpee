@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +43,8 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_start);
 
         Toast.makeText(getApplicationContext(),"하단의 봉사시작 버튼을 클릭하시면 봉사활동이 시작됩니다!",Toast.LENGTH_LONG).show();
@@ -91,10 +94,33 @@ public class StartActivity extends AppCompatActivity {
         }
         long diff = dest.getTime() - current.getTime();
         long diffSeconds = diff / 1000;
+        long hour = 0;
+        long min = 0;
+        if( diffSeconds >= 3600){
+             hour = diffSeconds/3600;
+             diffSeconds = diffSeconds - hour*3600;
+             if(diffSeconds >= 60){
+                 min = diffSeconds/60;
+             }
+             else{
+                 min = 0;
+             }
+        }
+        else{
+            hour = 0;
+        }
+
 
         if(diffSeconds >= 0){
-            btn_start.setText("아직 시작시간이 되지 않았습니다.");
-            btn_start.setEnabled(false);
+            if(hour == 0){
+                btn_start.setText("봉사 시작 "+min+"분 전입니다");
+            }
+            else{
+                btn_start.setText("봉사 시작 "+hour+"시간 "+min+"분 전입니다");
+            }
+        }
+        else{
+            btn_start.setText("봉사 시작");
         }
 
         getName = new getName();
@@ -103,13 +129,8 @@ public class StartActivity extends AppCompatActivity {
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(btn_start.isEnabled()){
-                    putStart = new putStart();
-                    putStart.execute("http://210.89.191.125/helpee/volunteer/start");
-                }
-                else{
-                    btn_start.setText("아직 시작시간이 되지 않았습니다.");
-                }
+                putStart = new putStart();
+                putStart.execute("http://210.89.191.125/helpee/volunteer/start");
             }
         });
     }
@@ -204,6 +225,7 @@ public class StartActivity extends AppCompatActivity {
                 JSONObject item = jsonArray.getJSONObject(i);
 
                 helper_name = item.getString("name");
+                txt_time.setText(helper_name+" 학생과 만나셨군요");
             }
 
         } catch (JSONException e) {

@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -62,6 +63,8 @@ public class PartnerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_partner);
 
         Intent fromCall = getIntent();
@@ -130,7 +133,7 @@ public class PartnerActivity extends AppCompatActivity {
                 }
                 else{
                     putReject = new putReject();
-                    putRequest.execute("http://210.89.191.125/helpee/volunteer/reject");
+                    putReject.execute("http://210.89.191.125/helpee/volunteer/reject");
                 }
             }
         });
@@ -327,7 +330,7 @@ public class PartnerActivity extends AppCompatActivity {
 
                 txt_name.setText("이름 : "+helper_name);
                 txt_career.setText("봉사경력 : "+admit_time+"시간");
-                txt_score.setText("평점 : "+String.format("%.2f",helper_score)+"점");
+                txt_score.setText("평점 : "+String.format("%.2f",helper_score)+"점 / 5.00점");
                 new DownloadImageTask(img_profile).execute(img_src);
             }
 

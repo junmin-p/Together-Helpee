@@ -80,6 +80,11 @@
                 <action android:name="processTimerReceiver" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".processTimerReceiver2">
+            <intent-filter>
+                <action android:name="processTimerReceiver2" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".FeedbackActivity"

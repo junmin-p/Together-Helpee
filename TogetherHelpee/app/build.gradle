@@ -38,6 +38,7 @@ dependencies {
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'
     implementation 'com.google.android.gms:play-services-maps:15.0.0'
     implementation 'com.google.android.gms:play-services-location:15.0.0'
+    implementation 'gun0912.ted:tedpermission:2.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

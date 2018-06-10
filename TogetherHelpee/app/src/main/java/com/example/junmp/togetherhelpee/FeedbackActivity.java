@@ -1,5 +1,6 @@
 package com.example.junmp.togetherhelpee;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -20,11 +21,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,7 +53,7 @@ public class FeedbackActivity extends AppCompatActivity {
     ImageView icon4;
     ImageView icon5;
     ImageView btn_mic;
-    ImageView btn_play;
+    Button btn_play;
     Button btn_submit;
 
     int volunteerId = 0;
@@ -62,7 +67,6 @@ public class FeedbackActivity extends AppCompatActivity {
     private int is_record = 0;
     private int is_play = 0;
 
-
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1;
     String phone_num;
 
@@ -71,6 +75,8 @@ public class FeedbackActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_feedback);
 
         Intent intent = new Intent(getApplicationContext(), processTimerReceiver.class);
@@ -82,6 +88,25 @@ public class FeedbackActivity extends AppCompatActivity {
         volunteerId = vi.getIntExtra("volunteerId",0);
         Log.d("fdsa",String.valueOf(volunteerId));
 
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                Toast.makeText(FeedbackActivity.this, "권한 허가", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(FeedbackActivity.this, "권한 거부\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        TedPermission.with(this)
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .check();
+
         Toast.makeText(getApplicationContext(), "하트를 클릭하여 봉사자의 점수를 메겨주세요. 이후 바로 중앙의 마이크 버튼을 클릭하여 녹음을 진행해주시고 녹음을 마치시려면 다시한번 마이크버튼을, 재생하시려면 하단의 플레이버튼을, 그대로 제출하시려면 최하단의 제출버튼을 클릭해주세요.", Toast.LENGTH_LONG).show();
 
         txt_score = findViewById(R.id.txt_score);
@@ -92,6 +117,7 @@ public class FeedbackActivity extends AppCompatActivity {
         icon5 = findViewById(R.id.icon5);
         btn_mic = findViewById(R.id.img_mic);
         btn_play = findViewById(R.id.btn_play);
+        btn_play.setVisibility(View.INVISIBLE);
         btn_submit = findViewById(R.id.btn_submit);
 
 
@@ -186,12 +212,14 @@ public class FeedbackActivity extends AppCompatActivity {
                     try{
                         Toast.makeText(getApplicationContext(),
                                 "녹음을 시작합니다. 한번더 누르시면 녹음을 마칩니다.", Toast.LENGTH_LONG).show();
+                        btn_mic.setImageResource(R.drawable.recording);
                         recorder.prepare();
                         recorder.start();
+                        btn_play.setVisibility(View.VISIBLE);
                     }catch (Exception ex){
                         Log.e("SampleAudioRecorder", "Exception : ", ex);
                         is_record = 0;
-                        btn_mic.setImageResource(R.drawable.mic);
+                        btn_mic.setImageResource(R.drawable.request);
                     }
                 }
 
@@ -200,7 +228,7 @@ public class FeedbackActivity extends AppCompatActivity {
                         return;
 
                     is_record = 0;
-                    btn_mic.setImageResource(R.drawable.mic);
+                    btn_mic.setImageResource(R.drawable.request);
 
                     recorder.stop();
                     recorder.reset();
@@ -221,21 +249,18 @@ public class FeedbackActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(is_play == 0){
                     is_play = 1;
-                    btn_play.setImageResource(R.drawable.pause);
                     try{
                         playAudio(RECORDED_FILE);
 
                         Toast.makeText(getApplicationContext(), "녹음파일이 재생됩니다.", Toast.LENGTH_SHORT).show();
                     } catch(Exception e){
                         is_play = 0;
-                        btn_play.setImageResource(R.drawable.play);
                         e.printStackTrace();
                     }
                 }
                 else{
                     if(player != null){
                         is_play = 0;
-                        btn_play.setImageResource(R.drawable.play);
                         playbackPosition = player.getCurrentPosition();
                         player.pause();
                         Toast.makeText(getApplicationContext(), "녹음파일 재생이 중지됩니다.",Toast.LENGTH_SHORT).show();

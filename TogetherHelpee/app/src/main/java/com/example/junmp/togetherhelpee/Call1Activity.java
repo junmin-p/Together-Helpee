@@ -1,8 +1,11 @@
 package com.example.junmp.togetherhelpee;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -19,6 +22,7 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +30,8 @@ import android.widget.Toast;
 
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +52,10 @@ import java.util.HashMap;
 import static java.lang.Integer.valueOf;
 
 public class Call1Activity extends AppCompatActivity {
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+    private boolean permissionToRecordAccepted = false;
+    private String[] permissions = {Manifest.permission.RECORD_AUDIO};
+
     String idByTelephonyManager;
 
     checkUser checkUser;
@@ -78,12 +88,15 @@ public class Call1Activity extends AppCompatActivity {
     getWait getWait;
     int haveRegisted = 0;
 
-    ProgressDialog pd;
+    ProgressDialog pd = null;
 
     int wheretogo = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_call1);
 
@@ -91,22 +104,18 @@ public class Call1Activity extends AppCompatActivity {
 
         wheretogo = from.getIntExtra("from", 0);
 
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+        try {
             TelephonyManager mgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            idByTelephonyManager = mgr.getDeviceId();
-
-            try{
-                phone_num = mgr.getLine1Number();//mgr.getLine1Number();
-                phone_num = phone_num.replace("+82", "0");
-            }catch(Exception e){
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                return;
             }
+            idByTelephonyManager = mgr.getDeviceId();
+            Log.d("abc", "Abc");
+            phone_num = mgr.getLine1Number();//mgr.getLine1Number();
+            phone_num = phone_num.replace("+82", "0");
+            Log.d("abc", phone_num);
+        } catch (Exception e) {
         }
-        else {
-            Log.d("phony", "Current app does not have READ_PHONE_STATE permission");
-            ActivityCompat.requestPermissions(Call1Activity.this, new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_READ_PHONE_STATE_PERMISSION);
-        }
-
-        phone_num = "01013245346";
 
         textView = (TextView) findViewById(R.id.textView);
 
@@ -115,19 +124,31 @@ public class Call1Activity extends AppCompatActivity {
         getWait = new getWait();
         getWait.execute("http://210.89.191.125/helpee/volunteer/");
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.RECORD_AUDIO)
-                != PackageManager.PERMISSION_GRANTED) {
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.RECORD_AUDIO)) {
-
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.RECORD_AUDIO}, MY_PERMISSIONS_RECORD_AUDIO
-                );
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                Toast.makeText(Call1Activity.this, "권한 허가", Toast.LENGTH_SHORT).show();
+                TelephonyManager mgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                idByTelephonyManager = mgr.getDeviceId();
+                phone_num = mgr.getLine1Number();//mgr.getLine1Number();
+                phone_num = phone_num.replace("+82", "0");
             }
-        }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(Call1Activity.this, "권한 거부\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        TedPermission.with(this)
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                .setPermissions(Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE)
+                .check();
 
         intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
@@ -164,9 +185,6 @@ public class Call1Activity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-
     }
 
     private RecognitionListener recognitionListener = new RecognitionListener() {
@@ -196,17 +214,20 @@ public class Call1Activity extends AppCompatActivity {
 
         @Override
         public void onError(int i) {
-            pd.dismiss();
+            if(pd != null){
+                pd.dismiss();
+            }
             textView.setText("예시) 8월 17일");
             Toast.makeText(Call1Activity.this,"너무 늦게 말하면 오류뜹니다",Toast.LENGTH_SHORT).show();
             flag_speech = 0;
 
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public void onResults(Bundle bundle) {
-            pd.dismiss();
+            if(pd != null){
+                pd.dismiss();
+            }
             String key = "";
             key = SpeechRecognizer.RESULTS_RECOGNITION;
             ArrayList<String> mResult = bundle.getStringArrayList(key);
@@ -649,6 +670,10 @@ public class Call1Activity extends AppCompatActivity {
                 }
                 return;
             }
+            case MY_PERMISSIONS_RECORD_AUDIO: {
+                permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                break;
+            }
 
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -831,12 +856,12 @@ public class Call1Activity extends AppCompatActivity {
                 }
             } else {
                 Log.d("ASD",result);
-                Intent toFace = new Intent(Call1Activity.this, FaceActivity.class);
-                toFace.putExtra("from", "first");
-                toFace.putExtra("phonenum", phone_num);
-                toFace.putExtra("deviceKey",idByTelephonyManager);
+                Intent toSplash = new Intent(Call1Activity.this, SplashActivity.class);
+                toSplash.putExtra("from", "first");
+                toSplash.putExtra("phonenum", phone_num);
+                toSplash.putExtra("deviceKey",idByTelephonyManager);
 
-                startActivity(toFace);
+                startActivity(toSplash);
                 finish();
             }
 

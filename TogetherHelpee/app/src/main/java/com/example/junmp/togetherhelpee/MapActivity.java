@@ -2,6 +2,8 @@ package com.example.junmp.togetherhelpee;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,6 +25,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,6 +53,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +66,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -74,6 +80,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     double latitude;
     double longitude;
 
+    putLoc putLoc;
     getHelper getHelper;
     String mJsonString;
 
@@ -105,25 +112,53 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
     private int searchFlag=1;
 
+    private double latitude_my;
+    private double longitude_my;
+    private LatLng myplace;
+
+    SupportMapFragment mapFragment;
+
     Timer timer = new Timer();
     TimerTask refresh_location = new TimerTask() {
         public void run() {
-            finish();
-            overridePendingTransition(0, 0);
-            startActivity(getIntent());
-            overridePendingTransition(0, 0);
+            provider = LocationManager.GPS_PROVIDER;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                checkMyPermissionLocation();
+            } else {
+                initGoogleMapLocation();
+            }
         }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_map);
 
         refresh = (ImageView)findViewById(R.id.refresh);
         btn_stop = findViewById(R.id.btn_stop);
 
         provider = LocationManager.GPS_PROVIDER;
+
+        PermissionListener permissionlistener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                Toast.makeText(MapActivity.this, "권한 허가", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                Toast.makeText(MapActivity.this, "권한 거부\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        TedPermission.with(this)
+                .setPermissionListener(permissionlistener)
+                .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                .setPermissions(Manifest.permission.INTERNET,Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+                .check();
 
         Intent from = getIntent();
 
@@ -135,10 +170,20 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         }
         volunteerId = from.getIntExtra("volunteerId",0);
 
-        getHelper = new getHelper();
-        getHelper.execute("http://210.89.191.125/helpee/helper/name/");
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
 
-        timer.schedule(refresh_location, 15000, 15000);
+        mapFragment.getMapAsync(this);
+
+        timer.schedule(refresh_location, 0, 10000);
+
+        int repeatTime = 10;  //Repeat alarm time in seconds
+        AlarmManager processTimer2 = (AlarmManager)getSystemService(ALARM_SERVICE);
+        Intent intent2 = new Intent(this, processTimerReceiver2.class);
+        intent2.putExtra("phonenum",phone_num);
+        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(this, 0,  intent2, PendingIntent.FLAG_UPDATE_CURRENT);
+//Repeat alarm every second
+        processTimer2.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),repeatTime*1000, pendingIntent2);
 
         refresh.setOnClickListener(new View.OnClickListener()
         {
@@ -257,20 +302,11 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
                 String name = item.getString("name");
 
-                btn_stop.setText(name+"님을 만났어요");
-
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    checkMyPermissionLocation();
-                } else {
-                    initGoogleMapLocation();
-                }
+                btn_stop.setText(name+"학생을 만났다면 눌러주세요");
 
 
                 // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.map);
-                mapFragment.getMapAsync(this);
+
             }
 
         } catch (JSONException e) {
@@ -280,34 +316,16 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        mMap = null;
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
-        if (!isPermission) {
-            callPermission();
-            Log.d("Fdasfsaf","dfafdsafsas");
-            return;
-        }
+        getHelper = new getHelper();
+        getHelper.execute("http://210.89.191.125/helpee/helper/name/");
 
-        gps = new GpsInfo(MapActivity.this);
-        // GPS 사용유무 가져오기
-        if (gps.isGetLocation()) {
-            double latitude_my = gps.getLatitude();
-            double longitude_my = gps.getLongitude();
-
-            Log.d("Fdasfsaf",latitude_my+"");
-            Log.d("Fdasfsaf",longitude_my+"");
-
-            LatLng startplace = new LatLng(latitude_my, longitude_my);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startplace, 14));
-            mMap.setOnMarkerClickListener(this);
-        } else {
-            // GPS 를 사용할수 없으므로
-            gps.showSettingsAlert();
-            Log.d("Fdasfsaf","dfas");
-        }
-
-
+        LatLng startplace = new LatLng(latitude_my, longitude_my);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startplace, 30));
+        mMap.setOnMarkerClickListener(this);
     }
 
     private void callPermission() {
@@ -374,12 +392,15 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             //Permission Check
             PermissionSettingUtils.requestPermission(this);
         } else {
-            //권한을 받았다면 위치찾기 세팅을 시작한다
+            provider = LocationManager.GPS_PROVIDER;
             initGoogleMapLocation();
         }
     }
 
     private void initGoogleMapLocation() {
+        getHelper = new getHelper();
+        getHelper.execute("http://210.89.191.125/helpee/helper/name/");
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         /**
          * Location Setting API를
@@ -393,13 +414,18 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             public void onLocationResult(LocationResult result) {
                 super.onLocationResult(result);
                 //mCurrentLocation = locationResult.getLastLocation();
+                mMap.clear();
+
                 mCurrentLocation = result.getLocations().get(0);
 
-                Log.d("qwe","qwe");
-                Log.d("loc", String.valueOf(mCurrentLocation.getAltitude()));
+                latitude_my = mCurrentLocation.getLatitude();
+                longitude_my = mCurrentLocation.getLongitude();
+
+                Log.d("Fdasfsaf",latitude_my+"");
+                Log.d("Fdasfsaf",longitude_my+"");
 
 
-                LatLng myplace = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+                myplace = new LatLng(latitude_my, longitude_my);
 
                 Marker mymarker;
 
@@ -409,7 +435,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                         .title("내 위치"));
                 mymarker.showInfoWindow();
 
-
+                Log.d("qwe","qwe");
+                Log.d("loc", String.valueOf(mCurrentLocation.getAltitude()));
 
                 String helpeeid = helperId;
                 LatLng place = new LatLng(latitude,longitude);
@@ -431,7 +458,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 //  myMarker.setTag(1000);
                 //  myMarker.showInfoWindow();
                 //    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myplace, 14));
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myplace, 14));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myplace, 30));
 
                 /**
                  * 지속적으로 위치정보를 받으려면
@@ -573,15 +600,40 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
             timer = new Timer();
             refresh_location = new TimerTask() {
                 public void run() {
-                    finish();
-                    overridePendingTransition(0, 0);
-                    startActivity(getIntent());
-                    overridePendingTransition(0, 0);
+                    provider = LocationManager.GPS_PROVIDER;
+                    initGoogleMapLocation();
                 }
             };
-            timer.schedule(refresh_location, 15000, 15000);
+            timer.schedule(refresh_location, 0, 10000);
         }
 
         super.onResume();
+    }
+
+    class putLoc extends AsyncTask<String, Void, String> {
+        RequestHandler rh = new RequestHandler();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String UPLOAD_URL = params[0];
+            HashMap<String, String> data = new HashMap<>();
+            data.put("userId", phone_num);
+            data.put("latitude", String.valueOf(latitude_my));
+            data.put("longitude", String.valueOf(longitude_my));
+
+            String result = rh.sendPutRequest(UPLOAD_URL, data);
+
+            return result;
+        }
     }
 }

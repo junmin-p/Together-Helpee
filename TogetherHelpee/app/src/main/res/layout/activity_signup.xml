@@ -5,74 +5,86 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#BCF1ED"
     tools:context=".SignupActivity">
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="600px"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/img_preview"/>
     <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/img_preview"
-        android:id="@+id/layout_name">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="150px"
-            android:textStyle="bold"
-            android:textSize="12pt"
-            android:text="이름을 말씀해주세요"
-            android:id="@+id/txt_name"
-            app:layout_constraintHorizontal_weight="3"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/btn_name"
-            android:paddingVertical="10pt"
-            android:paddingHorizontal="10pt"/>
+        android:layout_width="900px"
+        android:layout_height="1300px"
+        android:background="#ffffff"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical">
         <ImageView
-            android:layout_width="0dp"
-            android:layout_height="150px"
-            app:layout_constraintHorizontal_weight="1"
-            android:src="@drawable/mic"
-            android:id="@+id/btn_name"
-            app:layout_constraintLeft_toRightOf="@id/txt_name"
-            app:layout_constraintRight_toRightOf="parent"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="600px"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/img_preview"/>
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/img_preview"
+            android:id="@+id/layout_name">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="12pt"
+                android:text="이름을 말씀해주세요"
+                android:id="@+id/txt_name"
+                app:layout_constraintHorizontal_weight="3"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/btn_name"
+                android:paddingVertical="10pt"
+                android:paddingHorizontal="10pt"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="150px"
+                app:layout_constraintHorizontal_weight="1"
+                android:src="@drawable/mic"
+                android:id="@+id/btn_name"
+                app:layout_constraintLeft_toRightOf="@id/txt_name"
+                app:layout_constraintRight_toRightOf="parent"
+                />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/layout_name">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="12pt"
+                android:text="연령을 입력해주세요"
+                android:id="@+id/txt_age"
+                app:layout_constraintHorizontal_weight="3"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/btn_age"
+                android:paddingVertical="10pt"
+                android:paddingHorizontal="10pt"/>
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="150px"
+                app:layout_constraintHorizontal_weight="1"
+                android:id="@+id/btn_age"
+                app:layout_constraintLeft_toRightOf="@id/txt_age"
+                app:layout_constraintRight_toRightOf="parent"
+                />
+        </android.support.constraint.ConstraintLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="가입"
+            android:textSize="15pt"
+            android:textStyle="bold"
+            android:paddingVertical="10pt"
+            android:layout_marginTop="100px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/btn_signup"/>
     </android.support.constraint.ConstraintLayout>
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/layout_name">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="150px"
-            android:textStyle="bold"
-            android:textSize="12pt"
-            android:text="연령을 입력해주세요"
-            android:id="@+id/txt_age"
-            app:layout_constraintHorizontal_weight="3"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/btn_age"
-            android:paddingVertical="10pt"
-            android:paddingHorizontal="10pt"/>
-        <Spinner
-            android:layout_width="0dp"
-            android:layout_height="150px"
-            app:layout_constraintHorizontal_weight="1"
-            android:id="@+id/btn_age"
-            app:layout_constraintLeft_toRightOf="@id/txt_age"
-            app:layout_constraintRight_toRightOf="parent"
-            />
-    </android.support.constraint.ConstraintLayout>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="가입"
-        android:textSize="15pt"
-        android:textStyle="bold"
-        android:paddingVertical="10pt"
-        android:layout_marginTop="100px"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:id="@+id/btn_signup"/>
 
 </android.support.constraint.ConstraintLayout>

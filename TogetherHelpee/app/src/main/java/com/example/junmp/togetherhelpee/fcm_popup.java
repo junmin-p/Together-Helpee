@@ -2,6 +2,8 @@ package com.example.junmp.togetherhelpee;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,12 +45,12 @@ public class fcm_popup extends Activity {
 
 
     //신청 버튼 클릭
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public void mOnRegister(View v){
         //데이터 전달하기
         Intent intent = new Intent(getApplicationContext(),Call1Activity.class);
         startActivity(intent);
-
-        finish();
+        finishAffinity();
     }
 
 
