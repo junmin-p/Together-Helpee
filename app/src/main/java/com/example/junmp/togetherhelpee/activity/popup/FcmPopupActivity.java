@@ -13,10 +13,7 @@ import android.widget.TextView;
 
 import com.example.junmp.togetherhelpee.R;
 import com.example.junmp.togetherhelpee.activity.home.HomeActivity;
-import com.example.junmp.togetherhelpee.common.util.device.DeviceUtil;
-import com.example.junmp.togetherhelpee.domain.user.User;
 import com.example.junmp.togetherhelpee.domain.user.UserService;
-import com.example.junmp.togetherhelpee.domain.volunteer.Volunteer;
 import com.example.junmp.togetherhelpee.domain.volunteer.VolunteerService;
 
 public class FcmPopupActivity extends Activity {
@@ -24,7 +21,7 @@ public class FcmPopupActivity extends Activity {
     private UserService userService = new UserService();
     private TextView message_txt;
     private String message;
-    private String id;
+    private String volunteerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +37,10 @@ public class FcmPopupActivity extends Activity {
 
         Intent intent = getIntent();
         message = intent.getStringExtra("msg");
-        id = intent.getStringExtra("id");
+        volunteerId = intent.getStringExtra("volunteerId");
 
         Log.d("fcmpop",message);
-        Log.d("fcmid",id);
+        Log.d("fcmid", volunteerId);
 
         message_txt = (TextView)findViewById(R.id.fcm_txt);
         message_txt.setText(message);
@@ -55,24 +52,40 @@ public class FcmPopupActivity extends Activity {
     //신청 버튼 클릭
     public void mOnRegister(View v){
         //데이터 전달하기
-        new AsyncInit().execute();
+        new AsyncConfirm().execute();
     }
 
-    private class AsyncInit extends AsyncTask<String, Void, Volunteer> {
+    private class AsyncConfirm extends AsyncTask<Void, Void, Void> {
         @Override
-        protected Volunteer doInBackground(String... params) {
-            User user = userService.getLoggedUser(DeviceUtil.getPhoneNumber(FcmPopupActivity.this));
-            Volunteer activeOne = volunteerService.getActiveOne(user.getId());
-            volunteerService.accept(activeOne.getVolunteerId());
-            return activeOne;
+        protected Void doInBackground(Void... params) {
+            volunteerService.accept(Integer.parseInt(volunteerId));
+            return null;
         }
 
         @Override
-        protected void onPostExecute(Volunteer volunteer) {
-
+        protected void onPostExecute(Void result) {
             Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
-            intent.putExtra("volunteerId" , id);
+            intent.putExtra("volunteerId" , volunteerId);
             startActivity(intent);
+            finish();
+        }
+    }
+
+    private class AsyncNo extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            volunteerService.reject(Integer.parseInt(volunteerId));
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            Intent intent = new Intent();
+            intent.putExtra("result", "Close Popup");
+            setResult(RESULT_OK, intent);
+
+            //액티비티(팝업) 닫기
             finish();
         }
     }
@@ -80,13 +93,7 @@ public class FcmPopupActivity extends Activity {
 
     //확인 버튼 클릭
     public void mOnClose(View v){
-        //데이터 전달하기
-        Intent intent = new Intent();
-        intent.putExtra("result", "Close Popup");
-        setResult(RESULT_OK, intent);
-
-        //액티비티(팝업) 닫기
-        finish();
+        new AsyncNo().execute();
     }
 
 

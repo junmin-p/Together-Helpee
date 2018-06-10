@@ -5,12 +5,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.webkit.*;
-import com.example.junmp.togetherhelpee.FeedbackActivity;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
 import com.example.junmp.togetherhelpee.R;
 import com.example.junmp.togetherhelpee.activity.common.AbstractWebViewActivity;
 import com.example.junmp.togetherhelpee.activity.user.UserActivity;
 import com.example.junmp.togetherhelpee.activity.user.register.form.FaceFormActivity;
+import com.example.junmp.togetherhelpee.activity.volunteer.feedback.FeedbackActivity;
 import com.example.junmp.togetherhelpee.activity.volunteer.request.form.RegisterFormActivity;
 import com.example.junmp.togetherhelpee.common.constante.Server;
 import com.example.junmp.togetherhelpee.common.util.device.DeviceUtil;
@@ -29,6 +32,7 @@ public class HomeActivity extends AbstractWebViewActivity {
         setContentView(R.layout.activity_home_webview);
         super.initWebview(R.id.home_index);
         final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipe_refresh);
+
         webView.setWebViewClient(new WebViewClient() {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
@@ -66,8 +70,10 @@ public class HomeActivity extends AbstractWebViewActivity {
             }
 
             @JavascriptInterface
-            public void feedback() {
-                startActivity(new Intent(HomeActivity.this, FeedbackActivity.class));
+            public void feedback(String volunteerId) {
+                Intent intent = new Intent(HomeActivity.this, FeedbackActivity.class);
+                intent.putExtra("volunteerId" , volunteerId);
+                startActivity(intent);
             }
 
             @JavascriptInterface

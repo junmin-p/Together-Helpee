@@ -75,6 +75,8 @@ public class RegisterFormActivity extends AbstractWebViewActivity {
             showMic("다시 한번 이야기 해 주세요.  한시 , 두시 처럼 자세히 부탁드려요", REQUEST_END_AT);
         } else if (currentStep == REQUEST_MESSAGE) {
             showMic("무엇을 도와드릴까요?", REQUEST_MESSAGE);
+        } else if (currentStep == REQUEST_DONE) {
+            new AsyncRegister().execute(form);
         }
     }
 
@@ -171,7 +173,7 @@ public class RegisterFormActivity extends AbstractWebViewActivity {
         else if (currentStep == REQUEST_MESSAGE && requestCode == REQUEST_MESSAGE) {
             form.setMessage(sttResults.get(0));
             currentStep = REQUEST_DONE;
-            new AsyncRegister().execute(form);
+
         }
     }
 

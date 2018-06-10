@@ -19,4 +19,7 @@ public interface VolunteerRepository {
 
     @PUT("volunteer/{volunteerId}/accept")
     Call<Void> accept(@Path("volunteerId") int volunteerId);
+
+    @PUT("volunteer/{volunteerId}/reject")
+    Call<Void> reject(@Path("volunteerId") int volunteerId);
 }

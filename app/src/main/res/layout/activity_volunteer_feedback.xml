@@ -5,27 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#de5532"
-    tools:context=".MainActivity">
+    tools:context=".activity.volunteer.feedback.FeedbackActivity">
 
-    <TextView
-        android:id="@+id/textName"
+    <WebView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="마이크를 누른후 이야기 하세요"
-        android:textSize="35dp" />
+        android:layout_height="match_parent"
+        android:id="@+id/webview"
+        />
 
-
-    <ImageView
-        android:id="@+id/img_mic"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        app:srcCompat="@drawable/record" />
-
-    <Button
-        android:id="@+id/btn_next"
-        android:layout_width="match_parent"
-        android:layout_height="69dp"
-        android:text="다음 (dummy)" />
 
 </LinearLayout>

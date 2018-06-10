@@ -52,6 +52,17 @@
         <service android:name=".GpsInfo"/>
 
         <activity
+            android:name=".activity.volunteer.VolunteerDoneActivity"
+            android:label=""
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".activity.volunteer.feedback.FeedbackActivity"
+            android:label=""
+            android:screenOrientation="portrait"></activity>
+
+
+        <activity
                 android:name=".MatchActivity"
                 android:label=""
                 android:screenOrientation="portrait"/>

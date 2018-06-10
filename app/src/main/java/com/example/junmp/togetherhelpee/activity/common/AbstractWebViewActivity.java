@@ -9,6 +9,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import com.example.junmp.togetherhelpee.R;
 
+import java.lang.reflect.Method;
+
 public abstract class AbstractWebViewActivity extends AppCompatActivity {
     protected WebView webView;
 
@@ -19,8 +21,9 @@ public abstract class AbstractWebViewActivity extends AppCompatActivity {
         settings.setJavaScriptEnabled(true);
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
-        settings.setSupportZoom(true);
+        settings.setSupportZoom(false);
         settings.setBuiltInZoomControls(false);
+
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setDomStorageEnabled(true);
@@ -32,6 +35,7 @@ public abstract class AbstractWebViewActivity extends AppCompatActivity {
         } else {
             webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
+
     }
 
     protected void showWebView(String url) {

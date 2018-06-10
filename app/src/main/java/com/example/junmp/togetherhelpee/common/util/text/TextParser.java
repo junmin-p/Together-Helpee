@@ -1,7 +1,5 @@
 package com.example.junmp.togetherhelpee.common.util.text;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -29,6 +27,8 @@ public class TextParser {
 
         if (time == NOT_VALID)
             throw new ParseTimeException();
+
+
 
         Calendar cal = new GregorianCalendar(Locale.KOREA);
         cal.setTime(new Date());
@@ -60,18 +60,24 @@ public class TextParser {
     private static int getDay(String text) {
         int day = NOT_VALID;
 
+        try {
 
-        if (isToday(text)) {
-            day = 0;
-        } else if (isTomorrow(text)) {
-            day = 1;
-        } else if (is2st(text)) {
-            day = 2;
-        } else if (is3th(text)) {
-            day = 3;
+            String num = text.replaceAll("/[^0-9]/g","");
+            day = Integer.parseInt(num);
+            return day;
+        } catch (Exception ex) {
+            if (isToday(text)) {
+                day = 0;
+            } else if (isTomorrow(text)) {
+                day = 1;
+            } else if (is2st(text)) {
+                day = 2;
+            } else if (is3th(text)) {
+                day = 3;
+            }
+
+            return day;
         }
-
-        return day;
     }
 
     /**
@@ -93,7 +99,8 @@ public class TextParser {
         int time = NOT_VALID;
 
         try {
-            time = Integer.parseInt(text.split("시")[0]);
+            String num = text.replaceAll("/[^0-9]/g","");
+            time = Integer.parseInt(num);
             if (isPm(text))
                 return time + 12;
             else

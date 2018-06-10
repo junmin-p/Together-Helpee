@@ -10,14 +10,6 @@ public class VolunteerService {
     private VolunteerRepository volunteerRepository = RetrofitBuilder.builder().create(VolunteerRepository.class);
 
 
-    public Volunteer getActiveOne(String userId) {
-        try {
-            return volunteerRepository.getActiveOne(userId).execute().body();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public Helper findRecommendHelper(int id) {
         try {
             return volunteerRepository.findRecommendHelper(id).execute().body();
@@ -37,6 +29,14 @@ public class VolunteerService {
     public void accept(int volunteerId) {
         try {
             volunteerRepository.accept(volunteerId).execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void reject(int volunteerId) {
+        try {
+            volunteerRepository.reject(volunteerId).execute();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
