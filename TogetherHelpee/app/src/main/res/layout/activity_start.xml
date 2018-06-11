@@ -19,7 +19,7 @@
             android:id="@+id/txt_time"/>
         <TextView
             android:layout_marginTop="150px"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -27,6 +27,7 @@
             android:textSize="14pt"
             android:textColor="#000000"
             android:paddingVertical="10pt"
+            android:gravity="center_horizontal"
             android:text="따뜻한 봉사 되시길 바랍니다"
             android:id="@+id/txt_helper"/>
         <ImageView
