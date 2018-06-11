@@ -76,6 +76,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     String phone_num;
     String helperId;
     int volunteerId;
+    String helperName;
 
     double latitude;
     double longitude;
@@ -145,7 +146,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                Toast.makeText(MapActivity.this, "권한 허가", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -175,15 +175,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
         mapFragment.getMapAsync(this);
 
-        timer.schedule(refresh_location, 0, 10000);
-
-        int repeatTime = 10;  //Repeat alarm time in seconds
-        AlarmManager processTimer2 = (AlarmManager)getSystemService(ALARM_SERVICE);
-        Intent intent2 = new Intent(this, processTimerReceiver2.class);
-        intent2.putExtra("phonenum",phone_num);
-        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(this, 0,  intent2, PendingIntent.FLAG_UPDATE_CURRENT);
-//Repeat alarm every second
-        processTimer2.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),repeatTime*1000, pendingIntent2);
+        timer.schedule(refresh_location, 0, 5000);
 
         refresh.setOnClickListener(new View.OnClickListener()
         {
@@ -301,7 +293,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 longitude = item.getDouble("longitude");
 
                 String name = item.getString("name");
-
+                helperName = name;
                 btn_stop.setText(name+"학생을 만났다면 눌러주세요");
 
 
@@ -421,6 +413,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                 latitude_my = mCurrentLocation.getLatitude();
                 longitude_my = mCurrentLocation.getLongitude();
 
+                putLoc = new putLoc();
+                putLoc.execute("http://210.89.191.125/helpee/real-matching/location");
+
                 Log.d("Fdasfsaf",latitude_my+"");
                 Log.d("Fdasfsaf",longitude_my+"");
 
@@ -446,7 +441,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
 
                 marker =mMap.addMarker(new MarkerOptions()
                         .position(place)
-                        .title(helpeeid));
+                        .title(helperName+":"+helpeeid));
                 marker.showInfoWindow();
 
 
@@ -604,7 +599,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                     initGoogleMapLocation();
                 }
             };
-            timer.schedule(refresh_location, 0, 10000);
+            timer.schedule(refresh_location, 0, 5000);
         }
 
         super.onResume();

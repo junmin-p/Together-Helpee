@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#BCF1ED"
+    android:background="@drawable/background"
     tools:context=".ErrorActivity">
     <android.support.constraint.ConstraintLayout
         android:layout_width="900px"
         android:layout_height="1300px"
-        android:background="#ffffff"
+        android:background="#55000000"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

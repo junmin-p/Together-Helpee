@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#BCF1ED"
+    android:background="@drawable/background"
     tools:context=".EndActivity">
     <android.support.constraint.ConstraintLayout
         android:layout_width="900px"
         android:layout_height="1300px"
-        android:background="#ffffff"
+        android:background="#55000000"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="12pt"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
             android:text="봉사를 성공적으로 받으셨군요?"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="12pt"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
             android:text="이용해주셔서 감사합니다."
             app:layout_constraintTop_toBottomOf="@+id/text1"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -43,8 +43,8 @@
         <ImageView
             android:layout_marginTop="100px"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/volunteers"
+            android:layout_height="800px"
+            android:src="@drawable/endpage"
             app:layout_constraintTop_toBottomOf="@+id/text2"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>

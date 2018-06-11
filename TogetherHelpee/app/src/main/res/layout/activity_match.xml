@@ -5,12 +5,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#BCF1ED"
+    android:background="@drawable/background"
     tools:context=".MatchActivity">
     <android.support.constraint.ConstraintLayout
         android:layout_width="900px"
         android:layout_height="1300px"
-        android:background="#ffffff"
+        android:background="#55000000"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -46,7 +46,7 @@
                     android:layout_marginTop="10pt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#000000"
+                    android:textColor="#ffffff"
                     android:textSize="11pt"
                     android:text="요청 일자: "
                     android:id="@+id/txt_date"/>
@@ -64,7 +64,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#000000"
+                    android:textColor="#ffffff"
                     android:textSize="11pt"
                     android:text="요청 기타사항: "
                     android:id="@+id/txt_content"/>

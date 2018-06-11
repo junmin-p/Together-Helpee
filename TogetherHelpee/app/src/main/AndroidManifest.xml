@@ -17,7 +17,7 @@
     ;
     <application
         android:allowBackup="true"
-        android:icon="@drawable/icon"
+        android:icon="@drawable/thumnail"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -37,11 +37,6 @@
             android:name=".Call1Activity"
             android:label=""
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".FaceActivity"
@@ -112,11 +107,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".fcm_popup"
-            android:label=""
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
-        <activity android:name=".PartnerActivity" />
+        <activity android:name=".PartnerActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
         <activity android:name=".MapActivity" />
-        <activity android:name=".GPS_popup" />
+        <activity android:name=".GPS_popup"/>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -129,6 +125,15 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <activity android:name=".FirstActivity"
+            android:screenOrientation="portrait" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

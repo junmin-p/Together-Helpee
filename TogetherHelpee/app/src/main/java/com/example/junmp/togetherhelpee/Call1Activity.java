@@ -92,6 +92,9 @@ public class Call1Activity extends AppCompatActivity {
 
     int wheretogo = 0;
 
+    Button btn_next;
+    Button btn_back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,7 +131,6 @@ public class Call1Activity extends AppCompatActivity {
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                Toast.makeText(Call1Activity.this, "권한 허가", Toast.LENGTH_SHORT).show();
                 TelephonyManager mgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                     return;
@@ -147,7 +149,7 @@ public class Call1Activity extends AppCompatActivity {
         TedPermission.with(this)
                 .setPermissionListener(permissionlistener)
                 .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                .setPermissions(Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE)
+                .setPermissions(Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
                 .check();
 
         intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -164,11 +166,13 @@ public class Call1Activity extends AppCompatActivity {
         btn_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btn_next.setVisibility(View.VISIBLE);
+                btn_back.setVisibility(View.VISIBLE);
                 mRecognizer.startListening(intent);
             }
         });
 
-        Button btn_next = findViewById(R.id.btn_yes);
+        btn_next = findViewById(R.id.btn_yes);
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -178,13 +182,16 @@ public class Call1Activity extends AppCompatActivity {
 
             }
         });
-        Button btn_back = findViewById(R.id.btn_no);
+        btn_back = findViewById(R.id.btn_no);
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                mRecognizer.startListening(intent);
             }
         });
+
+        btn_next.setVisibility(View.INVISIBLE);
+        btn_back.setVisibility(View.INVISIBLE);
     }
 
     private RecognitionListener recognitionListener = new RecognitionListener() {
@@ -242,9 +249,9 @@ public class Call1Activity extends AppCompatActivity {
             if(flag_speech==1) {
                 messageCheck();
 
-                textView.setText("\'"+dest_date+"\' 이 날짜를 원하시나요?");
-            }
-            Toast.makeText(getApplicationContext(), textView.getText().toString(),Toast.LENGTH_LONG).show();
+                textView.setText("\'"+dest_date+"\'\n이 날짜가 맞나요?");
+            }/*
+            Toast.makeText(getApplicationContext(), textView.getText().toString(),Toast.LENGTH_LONG).show();*/
         }
 
         @Override
@@ -403,9 +410,8 @@ public class Call1Activity extends AppCompatActivity {
             super.onPostExecute(result);
 
             Log.d("Asd",result);
-            if (result.equals("[]")){
-                Toast.makeText(getApplicationContext(), R.string.guide, Toast.LENGTH_LONG).show();
-                Toast.makeText(getApplicationContext(), "예시) 8월 17일", Toast.LENGTH_SHORT).show();
+            if (result.equals("[]")){/*
+                Toast.makeText(getApplicationContext(), "예시) 8월 17일", Toast.LENGTH_SHORT).show();*/
                 haveRegisted = 0;
             }
             else {
@@ -845,7 +851,6 @@ public class Call1Activity extends AppCompatActivity {
                     Toast.makeText(Call1Activity.this,"먼저 마이크 버튼을 누르시고 도움받으실 내용을 말씀해주세요.",Toast.LENGTH_LONG).show();
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),"봉사종류와 예상소요시간 선택화면으로 넘어갑니다.",Toast.LENGTH_SHORT).show();
                     Intent toCall2 = new Intent(Call1Activity.this, Call2Activity.class);
 
                     toCall2.putExtra("phonenum", phone_num);

@@ -12,7 +12,7 @@ public class ErrorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_error);
-        Toast.makeText(getApplicationContext(),"네트워크 오류입니다. 네트워크 상태를 확인해주세요!",Toast.LENGTH_LONG).show();
+        setContentView(R.layout.activity_error);/*
+        Toast.makeText(getApplicationContext(),"네트워크 오류입니다. 네트워크 상태를 확인해주세요!",Toast.LENGTH_LONG).show();*/
     }
 }

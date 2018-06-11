@@ -49,6 +49,9 @@ public class Call2Activity extends AppCompatActivity {
 
     ProgressDialog pd;
 
+    Button btn_next;
+    Button btn_back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,11 +97,13 @@ public class Call2Activity extends AppCompatActivity {
         btn_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btn_next.setVisibility(View.VISIBLE);
+                btn_back.setVisibility(View.VISIBLE);
                 mRecognizer.startListening(intent);
             }
         });
 
-        Button btn_next = findViewById(R.id.btn_yes);
+        btn_next = findViewById(R.id.btn_yes);
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,7 +121,7 @@ public class Call2Activity extends AppCompatActivity {
             }
         });
 
-        Button btn_back = findViewById(R.id.btn_no);
+        btn_back = findViewById(R.id.btn_no);
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,6 +130,9 @@ public class Call2Activity extends AppCompatActivity {
                 finish();
             }
         });
+
+        btn_next.setVisibility(View.INVISIBLE);
+        btn_back.setVisibility(View.INVISIBLE);
     }
 
     private RecognitionListener recognitionListener = new RecognitionListener() {
@@ -179,9 +187,9 @@ public class Call2Activity extends AppCompatActivity {
             if(flag_speech==1) {
                 messageCheck();
 
-                textView.setText("\'"+dest_time+"\' 이 시간을 원하시나요?");
-            }
-            Toast.makeText(getApplicationContext(), textView.getText().toString(),Toast.LENGTH_LONG).show();
+                textView.setText("\'"+dest_time+"\'\n이 시간이 맞나요?");
+            }/*
+            Toast.makeText(getApplicationContext(), textView.getText().toString(),Toast.LENGTH_LONG).show();*/
         }
 
         @Override
@@ -220,12 +228,12 @@ public class Call2Activity extends AppCompatActivity {
         for (int i=0; i<words.length; i++) {
             if(words[i].equals("자정")){
                 time_flag = 1;
-                result_time = "오후 12시";
+                result_time = "오전 12시";
                 break;
             }
             if(words[i].equals("정호") || words[i].equals("정오") || words[i].equals("정우") || words[i].equals("정후")){
                 time_flag = 1;
-                result_time = "오전 12시";
+                result_time = "오후 12시";
                 break;
             }
             if (temp_a == 0 && (words[i].equals("오전") || words[i].equals("오후"))) {
@@ -269,7 +277,6 @@ public class Call2Activity extends AppCompatActivity {
         }
         else {
             textView.setText("예시) 오후 2시 (오전, 오후를 꼭 말씀해주세요!)");
-            Toast.makeText(Call2Activity.this,"다시 한번 말씀해주세요. 시간정보가 정확하지 않습니다.",Toast.LENGTH_SHORT).show();
         }
 
         if (time_flag == 0){
@@ -310,6 +317,13 @@ public class Call2Activity extends AppCompatActivity {
             dest_min = valueOf(dest_min_str.split("분")[0]);
         }
 
+        if(am_pm == 12 && dest_hour == 24){
+            dest_hour = 12;
+        }
+        if(am_pm == 0 && dest_hour == 12){
+            dest_hour = 0;
+        }
+
         if(dest_hour<10 && dest_min<10){
             dest_time = "0"+dest_hour+":"+"0"+dest_min;
         }
@@ -322,6 +336,7 @@ public class Call2Activity extends AppCompatActivity {
         else{
             dest_time = dest_hour+":"+dest_min;
         }
+
     }
 
 }

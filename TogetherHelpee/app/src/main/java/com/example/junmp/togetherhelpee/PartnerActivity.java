@@ -149,8 +149,8 @@ public class PartnerActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Toast.makeText(getApplicationContext(),"요청을 수락합니다.", Toast.LENGTH_SHORT).show();
+            super.onPostExecute(s);/*
+            Toast.makeText(getApplicationContext(),"요청을 수락합니다.", Toast.LENGTH_SHORT).show();*/
 
             long current_time = System.currentTimeMillis();
             SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

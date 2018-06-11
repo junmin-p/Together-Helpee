@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#BCF1ED"
+    android:background="@drawable/background"
     tools:context=".FeedbackActivity">
 
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="900px"
         android:layout_height="1300px"
-        android:background="#ffffff"
+        android:background="#55000000"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
             android:background="#00000000"
             android:id="@+id/title"
             android:text="느낀점을 말씀해주세요"
@@ -88,6 +88,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:textSize="12pt"
+            android:textColor="#ffffff"
             android:text="점수: 5점 (1점~5점)"
             android:id="@+id/txt_score"/>
 
@@ -107,7 +108,7 @@
             android:text="누르고 말씀해주세요"
             app:layout_constraintTop_toBottomOf="@id/img_mic"
             android:textSize="13pt"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
             android:id="@+id/textView1"
             android:gravity="center_horizontal"
             android:paddingVertical="8pt"/>

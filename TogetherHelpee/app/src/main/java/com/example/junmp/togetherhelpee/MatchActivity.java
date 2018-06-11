@@ -52,8 +52,8 @@ public class MatchActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_match);
-
-        Toast.makeText(getApplicationContext(),"우측하단의 버튼을 클릭하면 도움요청이 취소되고, 도움을 주겠다는 봉사자가 자원하면 좌측하단의 수락버튼이 나타납니다.",Toast.LENGTH_LONG).show();
+/*
+        Toast.makeText(getApplicationContext(),"우측하단의 버튼을 클릭하면 도움요청이 취소되고, 도움을 주겠다는 봉사자가 자원하면 좌측하단의 수락버튼이 나타납니다.",Toast.LENGTH_LONG).show();*/
         Intent fromCall = getIntent();
         type = fromCall.getStringExtra("type");
         if(type.equals("outside")){
@@ -230,8 +230,8 @@ public class MatchActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Toast.makeText(getApplicationContext(),"요청이 취소됩니다.", Toast.LENGTH_SHORT).show();
+            super.onPostExecute(s);/*
+            Toast.makeText(getApplicationContext(),"요청이 취소됩니다.", Toast.LENGTH_SHORT).show();*/
             Intent toCall = new Intent(MatchActivity.this, Call1Activity.class);
             toCall.putExtra("phonenum", phone_num);
             startActivity(toCall);

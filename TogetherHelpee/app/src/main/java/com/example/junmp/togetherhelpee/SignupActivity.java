@@ -68,7 +68,6 @@ public class SignupActivity extends AppCompatActivity {
         btn_name = findViewById(R.id.btn_name);
         txt_name = findViewById(R.id.txt_name);
 
-        Toast.makeText(getApplicationContext(), "사진을 다시찍으려면 우측상단의 버튼을, 그대로 가입하시려면 하단의 가입버튼을 눌러주세요.", Toast.LENGTH_LONG).show();
 
         final Spinner yearSpinner = (Spinner)findViewById(R.id.btn_age);
         ArrayAdapter yearAdapter = ArrayAdapter.createFromResource(this,

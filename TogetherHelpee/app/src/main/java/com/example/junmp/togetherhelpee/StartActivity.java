@@ -2,6 +2,8 @@ package com.example.junmp.togetherhelpee;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +26,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class StartActivity extends AppCompatActivity {
     int volunteerId;
@@ -40,6 +44,80 @@ public class StartActivity extends AppCompatActivity {
     putStart putStart;
 
     String mJsonString;
+
+    String dest_time;
+
+    final Handler handler = new Handler()
+    {
+        public void handleMessage(Message msg)
+        {
+            long current_time = System.currentTimeMillis();
+            SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String str = dayTime.format(new Date(current_time));
+
+            Date current = null;
+            Date dest = null;
+            try {
+                current = dayTime.parse(str);
+                dest = dayTime.parse(dest_time);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            long diff = dest.getTime() - current.getTime();
+            long diffSeconds = diff / 1000;
+            long day = 0;
+            long hour = 0;
+            long min = 0;
+            long last = diffSeconds;
+            if( diffSeconds >= 86400){
+                day = diffSeconds / 86400;
+                diffSeconds = diffSeconds - day*86400;
+            }
+            if( diffSeconds >= 3600){
+                hour = diffSeconds/3600;
+                diffSeconds = diffSeconds - hour*3600;
+                if(diffSeconds >= 60){
+                    min = diffSeconds/60;
+                }
+                else{
+                    min = 0;
+                }
+            }
+            else{
+                hour = 0;
+                min = diffSeconds/60;
+            }
+
+            Log.d("fasdf", String.valueOf(hour));
+            Log.d("fasdf", String.valueOf(min));
+
+
+            if(last >= 0){
+                if(day == 0){
+                    if(hour == 0){
+                        txt_helper.setText("따뜻한 봉사 되시길 바랍니다\n\n봉사 시작 "+String.valueOf(min)+"분 전입니다");
+                    }
+                    else{
+                        txt_helper.setText("따뜻한 봉사 되시길 바랍니다\n\n봉사 시작 "+String.valueOf(hour)+"시간 "+String.valueOf(min)+"분 전입니다");
+                    }
+                }
+                else{
+                    txt_helper.setText("따뜻한 봉사 되시길 바랍니다\n\n봉사 시작 "+String.valueOf(day)+"일 "+String.valueOf(hour)+"시간 "+String.valueOf(min)+"분 전입니다");
+                }
+            }
+            else{
+                txt_helper.setText("따뜻한 봉사 되시길 바랍니다\n\n봉사 시작시간이 되었습니다");
+            }
+        }
+    };
+
+    Timer timer = new Timer();
+    TimerTask refresh_location = new TimerTask() {
+        public void run() {
+            Message message = handler.obtainMessage();
+            handler.sendMessage(message);
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +160,7 @@ public class StartActivity extends AppCompatActivity {
         SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String str = dayTime.format(new Date(current_time));
 
-        String dest_time = date+" "+time;
+        dest_time = date+" "+time;
 
         Date current = null;
         Date dest = null;
@@ -94,34 +172,51 @@ public class StartActivity extends AppCompatActivity {
         }
         long diff = dest.getTime() - current.getTime();
         long diffSeconds = diff / 1000;
+        long day = 0;
         long hour = 0;
         long min = 0;
+        long last = diffSeconds;
+        if( diffSeconds >= 86400){
+            day = diffSeconds / 86400;
+            diffSeconds = diffSeconds - day*86400;
+        }
         if( diffSeconds >= 3600){
-             hour = diffSeconds/3600;
-             diffSeconds = diffSeconds - hour*3600;
-             if(diffSeconds >= 60){
-                 min = diffSeconds/60;
-             }
-             else{
-                 min = 0;
-             }
+            hour = diffSeconds/3600;
+            diffSeconds = diffSeconds - hour*3600;
+            if(diffSeconds >= 60){
+                min = diffSeconds/60;
+            }
+            else{
+                min = 0;
+            }
         }
         else{
             hour = 0;
+            min = diffSeconds/60;
         }
 
+        Log.d("fasdf", String.valueOf(hour));
+        Log.d("fasdf", String.valueOf(min));
 
-        if(diffSeconds >= 0){
-            if(hour == 0){
-                btn_start.setText("봉사 시작 "+min+"분 전입니다");
+
+        if(last >= 0){
+            if(day == 0){
+                if(hour == 0){
+                    txt_helper.setText("따뜻한 봉사 되시길 바랍니다\n\n봉사 시작 "+String.valueOf(min)+"분 전입니다");
+                }
+                else{
+                    txt_helper.setText("따뜻한 봉사 되시길 바랍니다\n\n봉사 시작 "+String.valueOf(hour)+"시간 "+String.valueOf(min)+"분 전입니다");
+                }
             }
             else{
-                btn_start.setText("봉사 시작 "+hour+"시간 "+min+"분 전입니다");
+                txt_helper.setText("따뜻한 봉사 되시길 바랍니다\n\n봉사 시작 "+String.valueOf(day)+"일 "+String.valueOf(hour)+"시간 "+String.valueOf(min)+"분 전입니다");
             }
         }
         else{
-            btn_start.setText("봉사 시작");
+            txt_helper.setText("따뜻한 봉사 되시길 바랍니다\n\n봉사 시작시간이 되었습니다");
         }
+
+        timer.schedule(refresh_location, 60000, 60000);
 
         getName = new getName();
         getName.execute("http://210.89.191.125/helpee/helper/name/");
@@ -261,5 +356,31 @@ public class StartActivity extends AppCompatActivity {
 
             return result;
         }
+    }
+
+    @Override
+    public void onPause() {
+        timer.cancel();
+        timer.purge();
+        refresh_location.cancel();
+        refresh_location=null;
+        timer = null;
+
+        super.onPause();
+    }
+
+    public void onResume(){
+        if(timer == null && refresh_location == null){
+            timer = new Timer();
+            refresh_location = new TimerTask() {
+                public void run() {
+                    Message message = handler.obtainMessage();
+                    handler.sendMessage(message);
+                }
+            };
+            timer.schedule(refresh_location, 0, 60000);
+        }
+
+        super.onResume();
     }
 }

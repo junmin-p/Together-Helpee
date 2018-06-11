@@ -17,9 +17,9 @@ public class EndActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_end);
-
+/*
         Toast.makeText(getApplicationContext(), "봉사를 성공적으로 받으셨군요? 이용해주셔서 감사합니다. " +
-                "최하단의 버튼을 누르시면 메인화면으로 돌아가 새로운 도움을 요청하실 수 있습니다.", Toast.LENGTH_LONG).show();
+                "최하단의 버튼을 누르시면 메인화면으로 돌아가 새로운 도움을 요청하실 수 있습니다.", Toast.LENGTH_LONG).show();*/
 
         btn_home = findViewById(R.id.btn_home);
 

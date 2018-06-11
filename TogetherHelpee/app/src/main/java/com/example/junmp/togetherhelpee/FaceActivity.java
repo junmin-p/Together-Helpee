@@ -172,8 +172,8 @@ public class FaceActivity extends AppCompatActivity {
         }
         if(intent.getStringExtra("deviceKey")!=null){
             device_Key = intent.getStringExtra("deviceKey");
-        }
-        Toast.makeText(getApplicationContext(),"얼굴 인식 시 자동으로 사진 촬영됩니다.",Toast.LENGTH_SHORT).show();
+        }/*
+        Toast.makeText(getApplicationContext(),"얼굴 인식 시 자동으로 사진 촬영됩니다.",Toast.LENGTH_SHORT).show();*/
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
 

@@ -79,10 +79,10 @@ public class FeedbackActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_feedback);
 
-        Intent intent = new Intent(getApplicationContext(), processTimerReceiver.class);
+        /*Intent intent = new Intent(getApplicationContext(), processTimerReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
+        alarmManager.cancel(pendingIntent);*/
 
         Intent vi = getIntent();
         volunteerId = vi.getIntExtra("volunteerId",0);
@@ -91,7 +91,6 @@ public class FeedbackActivity extends AppCompatActivity {
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                Toast.makeText(FeedbackActivity.this, "권한 허가", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -119,16 +118,17 @@ public class FeedbackActivity extends AppCompatActivity {
         btn_play = findViewById(R.id.btn_play);
         btn_play.setVisibility(View.INVISIBLE);
         btn_submit = findViewById(R.id.btn_submit);
+        btn_submit.setVisibility(View.INVISIBLE);
 
 
         icon1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 icon1.setImageResource(R.drawable.heart);
-                icon2.setImageResource(R.drawable.empty);
-                icon3.setImageResource(R.drawable.empty);
-                icon4.setImageResource(R.drawable.empty);
-                icon5.setImageResource(R.drawable.empty);
+                icon2.setImageResource(R.drawable.black_heart);
+                icon3.setImageResource(R.drawable.black_heart);
+                icon4.setImageResource(R.drawable.black_heart);
+                icon5.setImageResource(R.drawable.black_heart);
                 txt_score.setText("점수: 1점 (1점~5점)");
                 Toast.makeText(getApplicationContext(), "1점을 선택하셨습니다.", Toast.LENGTH_SHORT).show();
                 helpeeScore = 1;
@@ -140,13 +140,13 @@ public class FeedbackActivity extends AppCompatActivity {
             public void onClick(View view) {
                 icon1.setImageResource(R.drawable.heart);
                 icon2.setImageResource(R.drawable.heart);
-                icon3.setImageResource(R.drawable.empty);
-                icon4.setImageResource(R.drawable.empty);
-                icon5.setImageResource(R.drawable.empty);
-                txt_score.setText("점수: 2점 (1점~5점)");
-                Toast.makeText(getApplicationContext(), "2점을 선택하셨습니다.", Toast.LENGTH_SHORT).show();
-                helpeeScore = 2;
-                Toast.makeText(getApplicationContext(), "아래 마이크 버튼을 클릭하여 의견을 남겨주세요!", Toast.LENGTH_SHORT).show();
+                icon3.setImageResource(R.drawable.black_heart);
+                icon4.setImageResource(R.drawable.black_heart);
+                icon5.setImageResource(R.drawable.black_heart);
+                txt_score.setText("점수: 2점 (1점~5점)");/*
+                Toast.makeText(getApplicationContext(), "2점을 선택하셨습니다.", Toast.LENGTH_SHORT).show();*/
+                helpeeScore = 2;/*
+                Toast.makeText(getApplicationContext(), "아래 마이크 버튼을 클릭하여 의견을 남겨주세요!", Toast.LENGTH_SHORT).show();*/
             }
         });
         icon3.setOnClickListener(new View.OnClickListener() {
@@ -155,12 +155,12 @@ public class FeedbackActivity extends AppCompatActivity {
                 icon1.setImageResource(R.drawable.heart);
                 icon2.setImageResource(R.drawable.heart);
                 icon3.setImageResource(R.drawable.heart);
-                icon4.setImageResource(R.drawable.empty);
-                icon5.setImageResource(R.drawable.empty);
-                txt_score.setText("점수: 3점 (1점~5점)");
-                Toast.makeText(getApplicationContext(), "3점을 선택하셨습니다.", Toast.LENGTH_SHORT).show();
-                helpeeScore = 3;
-                Toast.makeText(getApplicationContext(), "아래 마이크 버튼을 클릭하여 의견을 남겨주세요!", Toast.LENGTH_SHORT).show();
+                icon4.setImageResource(R.drawable.black_heart);
+                icon5.setImageResource(R.drawable.black_heart);
+                txt_score.setText("점수: 3점 (1점~5점)");/*
+                Toast.makeText(getApplicationContext(), "3점을 선택하셨습니다.", Toast.LENGTH_SHORT).show();*/
+                helpeeScore = 3;/*
+                Toast.makeText(getApplicationContext(), "아래 마이크 버튼을 클릭하여 의견을 남겨주세요!", Toast.LENGTH_SHORT).show();*/
             }
         });
         icon4.setOnClickListener(new View.OnClickListener() {
@@ -170,11 +170,11 @@ public class FeedbackActivity extends AppCompatActivity {
                 icon2.setImageResource(R.drawable.heart);
                 icon3.setImageResource(R.drawable.heart);
                 icon4.setImageResource(R.drawable.heart);
-                icon5.setImageResource(R.drawable.empty);
-                txt_score.setText("점수: 4점 (1점~5점)");
-                Toast.makeText(getApplicationContext(), "4점을 선택하셨습니다.", Toast.LENGTH_SHORT).show();
-                helpeeScore = 4;
-                Toast.makeText(getApplicationContext(), "아래 마이크 버튼을 클릭하여 의견을 남겨주세요!", Toast.LENGTH_SHORT).show();
+                icon5.setImageResource(R.drawable.black_heart);
+                txt_score.setText("점수: 4점 (1점~5점)");/*
+                Toast.makeText(getApplicationContext(), "4점을 선택하셨습니다.", Toast.LENGTH_SHORT).show();*/
+                helpeeScore = 4;/*
+                Toast.makeText(getApplicationContext(), "아래 마이크 버튼을 클릭하여 의견을 남겨주세요!", Toast.LENGTH_SHORT).show();*/
             }
         });
         icon5.setOnClickListener(new View.OnClickListener() {
@@ -185,10 +185,10 @@ public class FeedbackActivity extends AppCompatActivity {
                 icon3.setImageResource(R.drawable.heart);
                 icon4.setImageResource(R.drawable.heart);
                 icon5.setImageResource(R.drawable.heart);
-                txt_score.setText("점수: 5점 (1점~5점)");
-                Toast.makeText(getApplicationContext(), "5점을 선택하셨습니다.", Toast.LENGTH_SHORT).show();
-                helpeeScore = 5;
-                Toast.makeText(getApplicationContext(), "아래 마이크 버튼을 클릭하여 의견을 남겨주세요!", Toast.LENGTH_SHORT).show();
+                txt_score.setText("점수: 5점 (1점~5점)");/*
+                Toast.makeText(getApplicationContext(), "5점을 선택하셨습니다.", Toast.LENGTH_SHORT).show();*/
+                helpeeScore = 5;/*
+                Toast.makeText(getApplicationContext(), "아래 마이크 버튼을 클릭하여 의견을 남겨주세요!", Toast.LENGTH_SHORT).show();*/
             }
         });
 
@@ -216,6 +216,7 @@ public class FeedbackActivity extends AppCompatActivity {
                         recorder.prepare();
                         recorder.start();
                         btn_play.setVisibility(View.VISIBLE);
+                        btn_submit.setVisibility(View.VISIBLE);
                     }catch (Exception ex){
                         Log.e("SampleAudioRecorder", "Exception : ", ex);
                         is_record = 0;
@@ -234,9 +235,9 @@ public class FeedbackActivity extends AppCompatActivity {
                     recorder.reset();
                     recorder.release();
                     recorder = null;
-
+/*
                     Toast.makeText(getApplicationContext(),
-                            "녹음이 중지되었습니다. 재생해보시려면 아래의 버튼을, 그대로 제출하시려면 최하단의 제출버튼을 클릭해주세요.", Toast.LENGTH_LONG).show();
+                            "녹음이 중지되었습니다. 재생해보시려면 아래의 버튼을, 그대로 제출하시려면 최하단의 제출버튼을 클릭해주세요.", Toast.LENGTH_LONG).show();*/
                     // TODO Auto-generated method stub
                 }
 
@@ -248,6 +249,18 @@ public class FeedbackActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(is_play == 0){
+                    if(is_record == 1){
+                        if(recorder == null)
+                            return;
+
+                        is_record = 0;
+                        btn_mic.setImageResource(R.drawable.request);
+
+                        recorder.stop();
+                        recorder.reset();
+                        recorder.release();
+                        recorder = null;
+                    }
                     is_play = 1;
                     try{
                         playAudio(RECORDED_FILE);
