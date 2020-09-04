@@ -23,27 +23,27 @@ This is an application for the elderly who is helped.</p>
         <p>긴급요청 필요시 푸시알림을 통해 즉시 수락 가능</p>
 <H2>2. Flow</H2>
 <H3>어플리케이션 메뉴얼</H3>
-<img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/flow.png"></img>
+<p align="center"><img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/flow.png"></img></p>
 <H3>Use Case</H3>
-<img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app1.png"></img>
+<p align="center"><img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app1.png"></img></p>
 <p>이 화면은 메인화면이며 마이크 버튼을 누르고 도움 받을 날짜를 말할 수 있다. 마이크 버튼을 누르고 말한 내용 중 날짜가 존재한다면 아래에 다른 기능들이 활성화되며, 그 전에는 마이크 버튼만 누를 수 있도록 되어있다.</p>
-<img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app2.png"></img>
+<p align="center"><img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app2.png"></img></p>
 <p>이 화면은 마이크를 누르고 날짜를 말한 이후의 화면이다. 말한 내용은 “오늘”이라고 말하여 당일 날짜가 출력되었으며 이 날짜가 맞다면 “네” 버튼을 누를 수 있다. “아니요” 버튼을 누르면 음성입력을 다시 할 수 있으며 “네” 버튼을 누르면 다음 화면으로 넘어간다.</p>
-<img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app3.png"></img>
+<p align="center"><img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app3.png"></img></p>
 <p>이 화면은 날짜를 입력한 이후의 화면이다. 날짜 입력과 마찬가지의 방식으로 이루어지며 시간을 입력하도록 하였다. 시간을 “오후 11시 반”이라고 말한 화면이다. “뒤로” 버튼을 누르면 다시 날짜를 입력할 수 있고 “네” 버튼을 누르면 다음화면으로 넘어간다.</p>
-<img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app4.png"></img>
+<p align="center"><img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app4.png"></img></p>
 <p>이 화면은 시간을 입력한 이후의 화면이다. 시간 입력과 마찬가지의 방식으로 이루어지며 목적을 입력하도록 하였다. 목적을 “제주도까지 데려다 주세요”라고 말한 화면이다. “뒤로” 버튼을 누르면 다시 시간을 입력할 수 있고 “네” 버튼을 누르면 다음화면으로 넘어간다.</p>
-<img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app5.png"></img>
+<p align="center"><img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app5.png"></img></p>
 <p>이 화면은 도움 받을 내용을 모두 입력한 다음 화면이다. 요청사항으로 말한 내용이 화면에 출력되고 이 내용은 모두 디비에 저장된 상태이다. 이를 도와주겠다고 자원하는 봉사자가 나타나기 전까지 이 화면은 유지되며 “요청 취소” 버튼을 통해 현재 요청한 도움을 취소하고 새로운 도움을 요청할 수 있다.</p>
-<img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app6.png"></img>
+<p align="center"><img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app6.png"></img></p>
 <p>이 화면은 봉사자 어플리케이션에서 신청한 직후 화면이다. 사진처럼 푸시 알림 형태로 알림이 뜨고 “확인” 버튼을 누르면 어플리케이션이 시작되고 상대방을 확인할 수 있다. “취소” 버튼을 누르면 단순히 푸시알림 메세지를 끄고 핸드폰으로 하던 작업을 이어갈 수 있다.</p>
-<img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app7.png"></img>
+<p align="center"><img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app7.png"></img></p>
 <p>이 화면은 봉사시간 1시간 전 화면이다. 봉사가 시작되기 1시간 전부터 상대방의 위치를 사진과 같이 볼 수 있으며 상대방을 만났다면 하단의 “정소영학생을 만났다면 눌러주세요” 버튼을 누르면 된다. 학생 이름은 자동으로 출력되며 봉사를 미리 시작하고 싶은 경우에도 눌러도 무방하다.</p>
-<img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app8.png"></img>
+<p align="center"><img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app8.png"></img></p>
 <p>이 화면은 봉사자가 출발하여 봉사자 어플리케이션에서 “출발” 버튼을 누른 직후 화면이다. 봉사자가 출발을 했는지 안했는지 여부를 알 수 있도록 푸시 알림을 받는 형태로 알아볼 수 있다.</p>
-<img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app9.png"></img>
+<p align="center"><img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app9.png"></img></p>
 <p>이 화면은 봉사 시작 1시간 전 화면에서 “학생을 만났다면 눌러주세요” 버튼을 누르고 난 다음 화면이다. 이 화면에서 봉사를 시작할 수 있으며 버튼을 누른 순간부터 봉사자의 위치나, 시간이 기록되어 증빙 자료로 사용된다. “시작하기” 버튼을 누르면 봉사 중인 상태로 간주하고 어떠한 기능도 시행되지 않으며 봉사자 어플리케이션에서 “종료하기” 버튼을 눌러야만 봉사가 종료된다.</p>
-<img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app10.png"></img>
+<p align="center"><img src="https://github.com/jun-m-park/Together-Helpee/blob/master/mockup/app10.png"></img></p>
 <p>이 화면은 봉사자 어플리케이션에서 “봉사 종료” 버튼을 누른 직후의 화면이다. 어르신용 어플리케이션에 푸시알림이 뜨고 “확인” 버튼을 누르면 어플리케이션이 실행된다. 봉사가 종료되었음으로 봉사 시작 후부터의 시간이 기록되어 봉사자에게 인증시간을 부여하여 준다.</p>
 
 <H2>Stack</H2>
